@@ -472,3 +472,9 @@ composer.lock
 *.css.map
 *.sass.map
 *.scss.map
+
+
+##### LMS Project
+.env
+docker-compose.yml
+node_modules
