@@ -5,24 +5,29 @@ services:
     build:
       context: ./backend
       dockerfile: DOCKERFILE
-    command: python server.py
+    command: python main.py
     ports:
       - 5000:5000
     depends_on:
       - db
+    restart: always
     volumes:
       - "./backend:/backend"
     environment:
       - "FLASK_ENV=development"
       - "DB_USER=postgres"
-      - "DB_PASSWORD=P@ssw0rd"
+      - "DB_PASSWORD=password"
+      - "DB_NAME=postgres"
+      - "DB_HOST=db"
+      - "DB_PORT=5432"
 
   db:
     image: postgres:13
+    restart: always
     ports:
       - "5432:5432"
     environment:
       - "POSTGRES_USER=postgres"
-      - "POSTGRES_PASSWORD=P@ssw0rd"
+      - "POSTGRES_PASSWORD=password"
     volumes:
       - "./database.sql:/docker-entrypoint-initdb.d/database.sql"

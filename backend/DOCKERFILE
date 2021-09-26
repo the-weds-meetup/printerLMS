@@ -1,6 +1,13 @@
 FROM python:3-slim
 
 WORKDIR /backend
-ADD .  /backend
 
-RUN pip install -r requirements.txt
+COPY requirements.txt .
+
+RUN apt-get update \
+  && apt-get -y install libpq-dev gcc \
+  && pip install psycopg2 \
+  && pip install -r requirements.txt
+
+
+COPY . .
