@@ -2,19 +2,23 @@ version: "3.9"
 
 services:
   webserver:
-    image: php:8.0-apache
+    build:
+      context: ./src/backend
+      dockerfile: DOCKERFILE
+    command: python server.py
     ports:
-      - 3000:80
+      - 5000:5000
     depends_on:
       - db
     volumes:
-      - "${MOODLE_DOCKER_WWWROOT}:/var/www/html"
+      - "./src/backend:/backend"
     environment:
+      - "FLASK_ENV=development"
       - "DB_USER=superuser"
       - "DB_PASSWORD=P@ssw0rd"
 
   db:
     image: postgres:13
-     environment: 
+    environment:
       - "POSTGRES_USER=superuser"
       - "POSTGRES_PASSWORD=P@ssw0rd"
