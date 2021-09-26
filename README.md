@@ -10,6 +10,8 @@
 
 1. [Node.js v14](https://nodejs.org/en/download/)
 
+1. [Vue CLI](https://cli.vuejs.org/guide/installation.html)
+
 ### Instructions
 
 Run the following commands

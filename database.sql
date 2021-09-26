@@ -39,7 +39,7 @@ CREATE TABLE department (
 CREATE TABLE learner (
     id SERIAL PRIMARY KEY,
     email text UNIQUE,
-    password text,
+    password text NOT NULL,
     first_name text NOT NULL,
     middle_name text,
     last_name text NOT NULL,

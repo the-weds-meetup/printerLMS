@@ -31,3 +31,15 @@ services:
       - "POSTGRES_PASSWORD=password"
     volumes:
       - "./database.sql:/docker-entrypoint-initdb.d/database.sql"
+
+  webapp:
+    build:
+      context: ./webapp
+      dockerfile: DOCKERFILE
+    ports:
+      - 3000:8080
+    depends_on:
+      - db
+    restart: always
+    volumes:
+      - "./webapp:/webapp"

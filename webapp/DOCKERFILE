@@ -1,0 +1,20 @@
+FROM node:14-slim
+
+WORKDIR /webapp
+
+COPY package.json .
+COPY yarn.lock .
+
+RUN yarn global add @vue/cli && \
+  yarn global add serve
+
+RUN yarn install
+
+COPY . .
+
+# development
+CMD ["yarn", "serve"]
+
+# production
+# RUN yarn build 
+# CMD ["serve -s dist"]
