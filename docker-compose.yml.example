@@ -3,7 +3,7 @@ version: "3.9"
 services:
   webserver:
     build:
-      context: ./src/backend
+      context: ./backend
       dockerfile: DOCKERFILE
     command: python server.py
     ports:
@@ -11,14 +11,18 @@ services:
     depends_on:
       - db
     volumes:
-      - "./src/backend:/backend"
+      - "./backend:/backend"
     environment:
       - "FLASK_ENV=development"
-      - "DB_USER=superuser"
+      - "DB_USER=postgres"
       - "DB_PASSWORD=P@ssw0rd"
 
   db:
     image: postgres:13
+    ports:
+      - "5432:5432"
     environment:
-      - "POSTGRES_USER=superuser"
+      - "POSTGRES_USER=postgres"
       - "POSTGRES_PASSWORD=P@ssw0rd"
+    volumes:
+      - "./database.sql:/docker-entrypoint-initdb.d/database.sql"
