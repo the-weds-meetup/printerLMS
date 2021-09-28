@@ -41,7 +41,6 @@ class Learner(db.Model):
         return {
             "id": self.id,
             "email": self.email,
-            "password": self.password,
             "first_name": self.first_name,
             "middle_name": self.middle_name,
             "last_name": self.last_name,
