@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "dev": "yarn install && yarn serve",
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint"
@@ -27,15 +28,16 @@
     "@vue/cli-service": "~4.5.0",
     "@vue/compiler-sfc": "^3.0.0",
     "babel-eslint": "^10.1.0",
+    "css-loader": "^5.2.7",
     "eslint": "^7.32.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-prettier": "^4.0.0",
     "eslint-plugin-simple-import-sort": "^7.0.0",
     "eslint-plugin-vue": "^7.0.0",
-    "node-sass": "^6.0.1",
     "prettier": "^2.4.1",
+    "postcss": "^8.3.8",
     "sass": "^1.26.11",
-    "sass-loader": "^12.1.0"
+    "sass-loader": "^10.1.1"
   },
   "browserslist": [
     "> 1%",
