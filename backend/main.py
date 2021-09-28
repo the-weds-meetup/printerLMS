@@ -22,7 +22,7 @@ def index():
 
 @app.route("/api/test/user/<int:user_id>")
 def get_user(user_id):
-    return test.test(user_id)
+    return test.get_user_full_name(user_id)
 
 
 @app.route("/api/auth/login", methods=["POST"])
