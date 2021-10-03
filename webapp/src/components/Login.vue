@@ -1,5 +1,5 @@
 <template>
-  <div class="login-form">
+  <div id="login" class="login-form">
     <h1 class="mt-5 mb-5">All-in-One LMS</h1>
     <input
       v-model.trim="email"
@@ -18,7 +18,7 @@
       Login
     </button>
 
-    <p>Message is: {{ email }} {{ password }}</p>
+    <p v-if="isError" class="mt-3 text-danger">{{ error }}</p>
   </div>
 </template>
 
@@ -26,29 +26,38 @@
 import axios from 'axios';
 
 export default {
+  el: '#login',
   name: 'Login',
   data() {
     return {
       email: '',
       password: '',
+      isError: false,
+      error: '',
     };
   },
   methods: {
-    handleLogin: async (email, password) => {
+    async handleLogin(email, password) {
       // Create JSON object to receive the auth
-      console.log(email);
+      if (email == '' || password == '') {
+        this.isError = true;
+        this.error = 'Empty fields';
+        return;
+      }
+
       const user = await axios
         .post('/api/auth/login', {
           email: email,
           password: password,
         })
         .then((response) => {
+          this.isError = false;
           return response.data;
         })
         .catch((error) => {
-          console.error(error);
+          this.isError = true;
+          this.error = error.response.data.result.message;
         });
-      console.log(user);
     },
   },
 };
