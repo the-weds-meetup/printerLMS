@@ -16,6 +16,7 @@ db = SQLAlchemy(app)
 
 
 @app.route("/")
+@app.route("/api")
 def index():
     return "Hello World!"
 
