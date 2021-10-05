@@ -59,6 +59,14 @@ CREATE TABLE administrator (
     user_id integer REFERENCES learner(id)
 );
 
+create TABLE login_session (
+  id SERIAL PRIMARY KEY,
+  user_id integer REFERENCES learner(id),
+  token text NOT NULL,
+  creation_date text NOT NULL,
+  expiry_date text NOT NULL
+);
+
 
 -- Create Enrolment and Learner_Course_Completion
 

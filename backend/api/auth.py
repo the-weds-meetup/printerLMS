@@ -1,4 +1,6 @@
-from model import Learner
+from main import db
+from model.Learner import Learner
+from model.LoginSession import LoginSession
 from flask import jsonify
 
 """
@@ -10,17 +12,21 @@ Returns:
 
 
 def login(username: str, password: str):
-    learner = Learner.Learner.query.filter_by(email=username, password=password).first()
+    learner = Learner.query.filter_by(email=username, password=password).first()
 
     if learner is None:
         error_type = "Login"
         message = "Invalid Email or Password"
         return throw_error(type=error_type, message=message)
 
+    session = LoginSession(learner.id)
+    db.session.add(session)
+    db.session.commit()
+
     status_code = 200
     response = {
         "success": True,
-        "result": {"type": "Login", "records": [learner.serialise()]},
+        "result": {"type": "Login", "records": [session.serialise()]},
     }
 
     return jsonify(response), status_code
