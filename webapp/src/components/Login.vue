@@ -36,6 +36,14 @@ export default {
       error: '',
     };
   },
+  created() {
+    if (
+      window.localStorage.getItem('session_token') &&
+      window.localStorage.getItem('token_expiry')
+    ) {
+      window.location.replace('/');
+    }
+  },
   methods: {
     async handleLogin(email, password) {
       // Create JSON object to receive the auth
@@ -45,14 +53,23 @@ export default {
         return;
       }
 
-      const user = await axios
+      await axios
         .post('/api/auth/login', {
           email: email,
           password: password,
         })
         .then((response) => {
           this.isError = false;
-          return response.data;
+          const auth = response.data.result.records[0];
+          const expiry_seconds = Date.parse(auth.expiry_date);
+
+          // Save to localstorage, so that it can be used to identify users
+          window.localStorage.setItem('session_token', auth.token);
+          window.localStorage.setItem('token_expiry', expiry_seconds);
+          console.log(expiry_seconds);
+
+          // redirect to dashboard
+          window.location.replace('/');
         })
         .catch((error) => {
           this.isError = true;

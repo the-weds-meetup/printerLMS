@@ -1,17 +1,30 @@
 <template>
   <div class="container-fluid">
-    <Login />
+    <HelloWorld />
   </div>
 </template>
 
 <script>
 // @ is an alias to /src
-import Login from '@/components/Login.vue';
+import HelloWorld from '@/components/HelloWorld.vue';
 
 export default {
   name: 'Home',
   components: {
-    Login,
+    HelloWorld,
+  },
+  created() {
+    // if credentials not found, redirect to login screen
+    // if expired, redirect to login screen
+    if (
+      !window.localStorage.getItem('session_token') ||
+      !window.localStorage.getItem('token_expiry') ||
+      Date.now() >= parseInt(window.localStorage.getItem('token_expiry'))
+    ) {
+      window.localStorage.clear();
+      window.location.replace('/login');
+    }
+    console.log('hi');
   },
 };
 </script>
