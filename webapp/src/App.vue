@@ -1,12 +1,21 @@
 <template>
   <div id="nav">
     <router-link to="/">Home</router-link> |
+<<<<<<< HEAD
     <router-link to="/assigntrainers">Assign Trainers</router-link>
   </div>
   <router-view/>
 </template>
 
 <style>
+=======
+    <router-link to="/login">Login</router-link>
+  </div>
+  <router-view />
+</template>
+
+<style lang="scss">
+>>>>>>> main
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
