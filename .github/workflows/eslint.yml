@@ -10,14 +10,13 @@ jobs:
         with:
           node-version: 14
 
-      - name: Navigate to webapp dir
-        run: cd ./webapp
-
       - name: Install Dependencies
         run: yarn install
+        working-directory: ./webapp
 
       - name: Run linter
         run: yarn lint
+        working-directory: ./webapp
 
   lint_backend:
     runs-on: ubuntu-latest
