@@ -1,31 +1,16 @@
 <template>
-<<<<<<< HEAD
-  <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
-=======
   <div class="container-fluid">
     <HelloWorld />
->>>>>>> main
   </div>
 </template>
 
 <script>
 // @ is an alias to /src
-<<<<<<< HEAD
 import HelloWorld from '@/components/HelloWorld.vue'
-=======
-import HelloWorld from '@/components/HelloWorld.vue';
->>>>>>> main
 
 export default {
   name: 'Home',
   components: {
-<<<<<<< HEAD
-    HelloWorld
-  }
-}
-=======
     HelloWorld,
   },
   created() {
@@ -42,5 +27,4 @@ export default {
     console.log('hi');
   },
 };
->>>>>>> main
 </script>
