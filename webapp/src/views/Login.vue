@@ -13,5 +13,13 @@ export default {
   components: {
     Login,
   },
+  created() {
+    if (
+      window.localStorage.getItem('session_token') &&
+      window.localStorage.getItem('token_expiry')
+    ) {
+      window.location.replace('/');
+    }
+  },
 };
 </script>
