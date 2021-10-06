@@ -49,7 +49,7 @@ CREATE TABLE learner (
 CREATE TABLE trainer (
     id SERIAL PRIMARY KEY,
     user_id integer REFERENCES learner(id),
-    course_id integer REFERENCES class(id),
+    course_id integer REFERENCES course(id),
     class_id integer REFERENCES class(class_id),
     UNIQUE(user_id, course_id, class_id)
 );
@@ -221,6 +221,12 @@ INSERT INTO course (name, description)
   VALUES ('Programming for Xerox WorkCentre with Card Access and Integration', 'Now with tools!');
 INSERT INTO course (name, description)
   VALUES ('Fundamentals of Electrical Wirings', 'Bzzzt!');
+
+-- CLASSES
+INSERT INTO class(course_id, class_id, max_capacity, current_capacity, class_start_date, class_end_date, enrolment_start_date, enrolment_end_date)
+  VALUES (1, 1, 40, 0, '2021-10-05T14:48:00.000Z', '2021-11-05T14:48:00.000Z', '2021-09-05T14:48:00.000Z', '2011-09-07T14:48:00.000Z');
+INSERT INTO class(course_id, class_id, max_capacity, current_capacity, class_start_date, class_end_date, enrolment_start_date, enrolment_end_date)
+  VALUES (2, 2, 30, 0, '2021-10-05T14:48:00.000Z', '2021-11-05T14:48:00.000Z', '2021-09-05T14:48:00.000Z', '2011-09-07T14:48:00.000Z');
 
 -- COURSE PREREQUISITE
 INSERT INTO course_prerequisite (course_id, prerequisite_course_id)
