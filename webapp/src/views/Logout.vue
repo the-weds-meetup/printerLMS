@@ -21,7 +21,6 @@ export default {
       .then(() => {
         // remove everything
         window.localStorage.clear();
-
         // navigate to login after 5 secs
         setTimeout(function () {
           window.location.replace('/login');
