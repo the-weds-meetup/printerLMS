@@ -1,0 +1,35 @@
+name: Lint
+on: [pull_request]
+jobs:
+  lint_webapp:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Use Node.js v14
+        uses: actions/setup-node@v2
+        with:
+          node-version: 14
+
+      - name: Navigate to webapp dir
+        run: cd ./webapp
+
+      - name: Install Dependencies
+        run: yarn install
+
+      - name: Run linter
+        run: yarn lint
+
+  lint_python:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Use Python 3
+        uses: actions/setup-python@v2
+        with:
+          python-version: "3.9"
+
+      - name: Install Black package
+        run: pip install black
+
+      - name: Lint backend with Black
+        run: black ./backend
