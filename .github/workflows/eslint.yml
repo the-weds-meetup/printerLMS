@@ -19,17 +19,12 @@ jobs:
       - name: Run linter
         run: yarn lint
 
-  lint_webserver:
+  lint_backend:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Use Python 3
-        uses: actions/setup-python@v2
+
+      - name: Use python package Black
+        uses: psf/black@stable
         with:
-          python-version: "3.9"
-
-      - name: Install Black package
-        run: pip install black
-
-      - name: Lint backend with Black
-        run: black ./backend
+          src: "./backend"
