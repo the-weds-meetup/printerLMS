@@ -1,4 +1,4 @@
-FROM node:14-slim
+FROM node:14-alpine
 
 WORKDIR /webapp
 
@@ -8,12 +8,10 @@ COPY yarn.lock .
 RUN yarn global add @vue/cli && \
   yarn global add serve
 
-RUN yarn install
-
 COPY . .
 
 # development
-CMD ["yarn", "serve"]
+CMD ["yarn", "dev"]
 
 # production
 # RUN yarn build 

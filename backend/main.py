@@ -16,13 +16,28 @@ db = SQLAlchemy(app)
 
 
 @app.route("/")
+@app.route("/api")
 def index():
     return "Hello World!"
 
 
-@app.route("/user/<int:user_id>")
+@app.route("/api/test/user/<int:user_id>")
 def get_user(user_id):
-    return test.test(user_id)
+    return test.get_user_full_name(user_id)
+
+
+@app.route("/api/auth/login", methods=["POST"])
+def login():
+    request_data = request.get_json()
+
+    try:
+        email = request_data["email"]
+        password = request_data["password"]
+        return auth.login(email, password)
+
+    except Exception as e:
+        print(e)
+        return auth.throw_error(type="Login", message=str(e), status_code=400)
 
 
 if __name__ == "__main__":
