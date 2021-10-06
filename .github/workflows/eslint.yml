@@ -15,7 +15,7 @@ jobs:
         working-directory: ./webapp
 
       - name: Run linter
-        run: yarn lint
+        run: yarn lint --no-fix
         working-directory: ./webapp
 
   lint_backend:
