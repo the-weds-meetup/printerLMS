@@ -61,7 +61,7 @@
         },
         methods:{
             assignTrainer: function(){
-                axios.post('http://localhost:5000/trainer', {
+                axios.post('http://localhost:5000/api/trainer/assign_trainer', {
                     user_id: this.user_id,
                     course_id: this.course_id,
                     class_id: this.class_id,
@@ -75,13 +75,13 @@
         },
         mounted: function(){
             //for now, we assume all learners in the engineer department can be trainers
-            axios.get('http://localhost:5000/learners/' + this.department_id)
+            axios.get('http://localhost:5000/api/learners/get_trainers/' + this.department_id)
                 .then(response => {
                     this.trainers = response.data.data;
                 })
                 .catch(error => alert(error));
             
-            axios.get('http://localhost:5000/courses')
+            axios.get('http://localhost:5000/api/course/get_courses')
                 .then(response => {
                     this.courses = response.data.data;
                 })
@@ -91,7 +91,7 @@
         //get classes according to course selected
         watch: {
             course_id: function(){
-                axios.get('http://localhost:5000/classes/' + parseInt(this.course_id))
+                axios.get('http://localhost:5000/api/classes/get_classes_by_course/' + parseInt(this.course_id))
                 .then(response => {
                     this.classes = response.data.data;
                     //reset class_id whenever a new course is selected
