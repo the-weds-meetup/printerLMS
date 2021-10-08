@@ -51,6 +51,24 @@ const routes = [
     name: 'Logout',
     component: () => import('../views/Auth/Logout.vue'),
   },
+  {
+    path: '/createclass',
+    name: 'Createclass',
+    // route level code-splitting
+    // this generates a separate chunk (about.[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+    component: () =>
+      import(/* webpackChunkName: "about" */ '../views/Createclass.vue'),
+  },
+  {
+    path: '/viewclass',
+    name: 'Viewclass',
+    // route level code-splitting
+    // this generates a separate chunk (about.[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+    component: () =>
+      import(/* webpackChunkName: "about" */ '../views/Viewclass.vue'),
+  },
 ];
 
 const router = createRouter({
