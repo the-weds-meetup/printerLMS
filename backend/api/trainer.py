@@ -21,6 +21,7 @@ def assign_trainer(user_id: int, course_id: int, class_id: int):
     status_code = 201
     response = {
         "success": True,
+        "message": "Trainer record is successfully created",
         "result": {"type": "Trainer", "records": [trainer.serialise()]},
     }
     return jsonify(response), status_code

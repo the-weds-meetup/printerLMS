@@ -60,7 +60,15 @@ def assign_trainer():
         class_id = data["class_id"]
         return trainer.assign_trainer(user_id, course_id, class_id)
     except Exception:
-        return jsonify({"message": "Unable to commit to database."}), 500
+        return (
+            jsonify(
+                {
+                    "success": False,
+                    "message": "Error occured, unable to commit to database",
+                }
+            ),
+            500,
+        )
 
 
 @app.route("/api/test/user/<int:user_id>")
