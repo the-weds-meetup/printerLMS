@@ -6,12 +6,12 @@
 
 <script>
 // @ is an alias to /src
-import AssignTrainers from '@/components/AssignTrainers.vue'
+import AssignTrainers from '@/components/AssignTrainers.vue';
 
 export default {
   name: 'AssignTrainersView',
   components: {
     AssignTrainers,
-  }
+  },
 };
 </script>
