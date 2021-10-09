@@ -1,7 +1,8 @@
 from flask import Flask
-from flask import request
+from flask import request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from os import environ
+from model import Learner
 
 
 app = Flask(__name__)
