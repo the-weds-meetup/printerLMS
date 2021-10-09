@@ -1,17 +1,18 @@
+from flask import jsonify
+
 from main import db
 from model.Learner import Learner
 from model.LoginSession import LoginSession
-from flask import jsonify
-
-"""
-Checks if user record exists and if password is valid
-Returns:
-  @success: return user record if username exists, and password is correct
-  @error: status_code 500 if username does not exist or password is incorrect
-"""
+from api.error import throw_error
 
 
 def login(username: str, password: str):
+    """
+    Checks if user record exists and if password is valid
+    Returns:
+      @success: return user record if username exists, and password is correct
+      @error: status_code 500 if username does not exist or password is incorrect
+    """
     learner = Learner.query.filter_by(email=username, password=password).first()
 
     if learner is None:
