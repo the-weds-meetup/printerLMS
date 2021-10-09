@@ -243,6 +243,22 @@ def manual_enroll_learner(class_id):
         print(e, flush=True)
         return auth.throw_error(type="enroll_class", message=str(e), status_code=400)
 
+@app.route("/api/learners")
+def learners():
+    search_first_name = request.args.get('first_name')
+    if search_first_name:
+        learner_list = Learner.Learner.query.filter(Learner.Learner.name.contains(search_first_name))
+    else:
+        learner_list = Learner.Learner.query.all()
+    
+    
+    return jsonify(
+        {
+            "data": [learner.to_dict() for learner in learner_list]
+        }
+    ), 200
+
+
 
 @cross_origin(origins="http://localhost:8080")
 @app.route("/api/class", methods=["GET"])
