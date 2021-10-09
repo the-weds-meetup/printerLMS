@@ -52,3 +52,16 @@ class Learner(db.Model):
         if self.middle_name != None:
             return "{} {} {}".format(self.first_name, self.middle_name, self.last_name)
         return "{} {}".format(self.first_name, self.last_name)
+
+
+    def to_dict(self):
+        """
+        'to_dict' converts the object into a dictionary,
+        in which the keys correspond to database columns
+        """
+        columns = self.__mapper__.column_attrs.keys()
+        result = {}
+        for column in columns:
+            result[column] = getattr(self, column)
+        return result
+
