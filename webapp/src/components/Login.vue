@@ -59,7 +59,6 @@ export default {
           // Save to localstorage, so that it can be used to identify users
           window.localStorage.setItem('session_token', auth.token);
           window.localStorage.setItem('token_expiry', expiry_seconds);
-          console.log(expiry_seconds);
 
           // redirect to dashboard
           window.location.replace('/');
