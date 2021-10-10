@@ -27,6 +27,8 @@
 </template>
 
 <script>
+import axios from 'axios';
+
 export default {
   name: 'Home',
   data() {
@@ -82,7 +84,8 @@ export default {
 <style lang="scss" scoped>
 @import '~bootstrap/scss/bootstrap';
 
-h1 {
+h1,
+p {
   text-align: center;
 }
 
