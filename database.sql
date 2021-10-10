@@ -238,4 +238,12 @@ INSERT INTO class(course_id, class_id, max_capacity, current_capacity, class_sta
 
 -- COURSE PREREQUISITE
 INSERT INTO course_prerequisite (course_id, prerequisite_course_id)
-  VALUES (1, 4)
+  VALUES (1, 4);
+
+-- LEARNER COURSE COMPLETION
+INSERT INTO learner_course_completion(user_id, course_id, class_id, completion_date)
+  VALUES (4, 1, 1, '2020-10-05T14:48:00.000Z');
+INSERT INTO learner_course_completion(user_id, course_id, class_id, completion_date)
+  VALUES (5, 1, 1, '2020-10-05T14:48:00.000Z');
+INSERT INTO learner_course_completion(user_id, course_id, class_id, completion_date)
+  VALUES (5, 2, 2, '2020-10-05T14:48:00.000Z');
