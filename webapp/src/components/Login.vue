@@ -73,6 +73,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import '~bootstrap/scss/bootstrap';
+
 .login-form {
   margin: 0 auto;
   height: 100%;
