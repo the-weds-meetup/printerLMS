@@ -1,7 +1,10 @@
 <template>
   <div class="dashboard">
-    <NavBar :email="email" :full-name="fullName" :is-admin="isAdmin" />
-    <HelloWorld />
+    <SideNav :email="email" :full-name="fullName" :is-admin="isAdmin" />
+    <main>
+      <TopNav title="Dashboard" />
+      <h3>Work in Progress</h3>
+    </main>
   </div>
 </template>
 
@@ -9,14 +12,14 @@
 // @ is an alias to /src
 import axios from 'axios';
 
-import HelloWorld from '@/components/HelloWorld.vue';
-import NavBar from '@/components/NavBar/NavBar.vue';
+import SideNav from '@/components/Navigation/SideNav.vue';
+import TopNav from '@/components/Navigation/TopNav.vue';
 
 export default {
   name: 'Home',
   components: {
-    HelloWorld,
-    NavBar,
+    SideNav,
+    TopNav,
   },
   data() {
     return {
@@ -56,9 +59,15 @@ export default {
 
 <style lang="scss" scoped>
 .dashboard {
-  width: 100vh;
+  width: 100vw;
   height: 100vh;
   display: flex;
   flex-direction: row;
+}
+
+main {
+  width: calc(100vw - 350px);
+  display: flex;
+  flex-direction: column;
 }
 </style>

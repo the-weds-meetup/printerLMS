@@ -1,5 +1,5 @@
 <template>
-  <nav class="navigation">
+  <nav class="side-nav">
     <Profile :email="email" :full-name="fullName" />
 
     <div id="nav">
@@ -14,10 +14,10 @@
 </template>
 
 <script>
-import Profile from '@/components/NavBar/components/Profile.vue';
+import Profile from './Profile.vue';
 
 export default {
-  name: 'NavBar',
+  name: 'SideNav',
   components: {
     Profile,
   },
@@ -43,7 +43,7 @@ export default {
 @import '~bootstrap/scss/bootstrap';
 @import '~bootstrap/scss/_variables.scss';
 
-.navigation {
+.side-nav {
   width: 350px;
   padding: 0 24px;
   box-sizing: border-box;
@@ -67,7 +67,6 @@ export default {
   width: 100%;
   box-sizing: border-box;
   text-align: left;
-  font-weight: bold;
   color: $gray-900;
   padding: 8px 12px;
   border-radius: 4px;

@@ -1,9 +1,11 @@
 <template>
   <div class="profile">
-    <div class="image">{{ fullName.charAt(0) }}</div>
+    <div class="image">
+      <h3>{{ fullName.charAt(0) }}</h3>
+    </div>
     <div class="description">
-      <p>{{ email }}</p>
       <p>{{ fullName }}</p>
+      <p id="email">{{ email }}</p>
     </div>
   </div>
 </template>
@@ -50,6 +52,10 @@ export default {
     color: $white;
   }
 
+  h3 {
+    margin: 0;
+  }
+
   .description {
     padding-top: 20px;
 
@@ -58,6 +64,10 @@ export default {
       margin: 0;
       margin-bottom: 4px;
     }
+  }
+
+  #email {
+    color: $gray-600;
   }
 }
 </style>
