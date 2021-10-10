@@ -1,8 +1,5 @@
-"""
-Learner.py
-"""
-
 from main import db
+from model.Administrator import Administrator
 
 
 class Learner(db.Model):
@@ -44,10 +41,18 @@ class Learner(db.Model):
             "first_name": self.first_name,
             "middle_name": self.middle_name,
             "last_name": self.last_name,
+            "full_name": self.fullName(),
             "department_id": self.department_id,
+            "is_admin": self.isAdmin(),
         }
 
     def fullName(self):
         if self.middle_name != None:
             return "{} {} {}".format(self.first_name, self.middle_name, self.last_name)
         return "{} {}".format(self.first_name, self.last_name)
+
+    def isAdmin(self):
+        admin = Administrator.query.filter_by(user_id=self.id)
+        if admin == None:
+            return False
+        return True

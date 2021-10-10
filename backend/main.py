@@ -65,6 +65,18 @@ def logout():
         return auth.throw_error(type="Logout", message=str(e), status_code=400)
 
 
+@app.route("/api/learner", methods=["POST"])
+def getLearner():
+    request_data = request.get_json()
+    try:
+        session = request_data["token"]
+        return learner.getLearner(token=session)
+
+    except Exception as e:
+        print(e)
+        return auth.throw_error(type="Learner", message=str(e), status_code=400)
+
+
 if __name__ == "__main__":
     from api import *
 
