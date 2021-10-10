@@ -50,8 +50,8 @@ class LoginSession(db.Model):
         return diff.microseconds <= 0
 
     """
-    Mark token as expired when user signs out
+    Set token as expired when user signs out
     """
 
-    def updateExpiryDate(self):
+    def expireToken(self):
         self.expiry_date = datetime.datetime.now().isoformat() + "Z"

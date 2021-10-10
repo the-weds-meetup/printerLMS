@@ -40,6 +40,19 @@ def login():
         return auth.throw_error(type="Login", message=str(e), status_code=400)
 
 
+@app.route("/api/auth/logout", methods=["POST"])
+def logout():
+    request_data = request.get_json()
+
+    try:
+        session = request_data["token"]
+        return auth.logout(session)
+
+    except Exception as e:
+        print(e)
+        return auth.throw_error(type="Logout", message=str(e), status_code=400)
+
+
 if __name__ == "__main__":
     from api import *
 
