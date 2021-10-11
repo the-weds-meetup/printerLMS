@@ -1,0 +1,12 @@
+main {
+  width: calc(100vw - 300px);
+  display: flex;
+  flex-direction: column;
+}
+
+.body {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: row;
+}

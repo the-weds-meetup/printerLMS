@@ -1,5 +1,5 @@
 <template>
-  <div class="dashboard">
+  <div class="body">
     <router-view />
 
     <SideNav :email="email" :full-name="fullName" :is-admin="isAdmin" />
@@ -40,16 +40,5 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.dashboard {
-  width: 100vw;
-  height: 100vh;
-  display: flex;
-  flex-direction: row;
-}
-
-main {
-  width: calc(100vw - 350px);
-  display: flex;
-  flex-direction: column;
-}
+@use '@/assets/styles/shared';
 </style>
