@@ -25,13 +25,11 @@ const routes = [
     path: '/me',
     name: 'Profile',
     component: () => import('../views/Profile/Profile.vue'),
-    children: [
-      {
-        path: 'course',
-        name: 'MyCourses',
-        component: () => import('../views/Profile/Course.vue'),
-      },
-    ],
+  },
+  {
+    path: '/me/course',
+    name: 'MyCourses',
+    component: () => import('../views/Profile/Course.vue'),
   },
   {
     path: '/login',

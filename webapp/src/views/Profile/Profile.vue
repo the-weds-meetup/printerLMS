@@ -1,7 +1,5 @@
 <template>
   <div class="body">
-    <router-view />
-
     <SideNav :email="email" :full-name="fullName" :is-admin="isAdmin" />
     <main>
       <TopNav title="Profile" />
