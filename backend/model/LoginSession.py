@@ -1,11 +1,8 @@
-"""
-LoginSession.py
-"""
-
 from main import db
 from uuid import uuid4
 import dateutil.parser
 import datetime
+import pytz
 
 
 class LoginSession(db.Model):
@@ -39,19 +36,17 @@ class LoginSession(db.Model):
             "expiry_date": self.expiry_date,
         }
 
-    """
-    Checks if token is expired
-    """
-
     def isExpired(self):
-        diff = datetime.datetime.now() - dateutil.parser.parse(self.expiry_date)
+        """
+        Checks if token is expired
+        """
+        diff = datetime.datetime.now(pytz.utc) - dateutil.parser.parse(self.expiry_date)
 
         # less than 0 ms, current time is bigger than expiry_date
         return diff.microseconds <= 0
 
-    """
-    Set token as expired when user signs out
-    """
-
     def expireToken(self):
+        """
+        Set token as expired when user signs out
+        """
         self.expiry_date = datetime.datetime.now().isoformat() + "Z"
