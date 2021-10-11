@@ -1,27 +1,47 @@
 import { createRouter, createWebHistory } from 'vue-router';
 
-import Home from '../views/Home.vue';
-
 const routes = [
   {
     path: '/',
-    name: 'Home',
-    component: Home,
+    name: 'Dashboard',
+    component: () => import('../views/Dashboard.vue'),
   },
   {
-    path: '/about',
-    name: 'About',
-    component: () => import('../views/About.vue'),
+    path: '/catalog',
+    name: 'Course Catalog',
+    component: () => import('../views/Course/CourseCatalog.vue'),
+  },
+  {
+    path: '/admin',
+    name: 'Admin',
+    component: () => import('../views/Admin.vue'),
+  },
+  {
+    path: '/messages',
+    name: 'Messages',
+    component: () => import('../views/Messages.vue'),
+  },
+  {
+    path: '/me',
+    name: 'Profile',
+    component: () => import('../views/Profile/Profile.vue'),
+    children: [
+      {
+        path: 'course',
+        name: 'MyCourses',
+        component: () => import('../views/Profile/Course.vue'),
+      },
+    ],
   },
   {
     path: '/login',
     name: 'Login',
-    component: () => import('../views/Login.vue'),
+    component: () => import('../views/Auth/Login.vue'),
   },
   {
     path: '/logout',
     name: 'Logout',
-    component: () => import('../views/Logout.vue'),
+    component: () => import('../views/Auth/Logout.vue'),
   },
 ];
 

@@ -5,8 +5,8 @@
     <div id="nav">
       <router-link to="/">Dashboard</router-link>
       <router-link to="/me/course">My Courses</router-link>
-      <router-link to="/course/catalog">Course Catalog</router-link>
-      <router-link to="/message">Messages</router-link>
+      <router-link to="/catalog">Course Catalog</router-link>
+      <router-link to="/messages">Messages</router-link>
       <router-link v-if="isAdmin" to="/admin">Site Administration</router-link>
       <router-link to="/logout">Logout</router-link>
     </div>
