@@ -4,6 +4,11 @@ main {
   flex-direction: column;
 }
 
+#content {
+  padding: 1.5em 1em 0  1em;
+  overflow-y: auto;
+}
+
 .body {
   width: 100vw;
   height: 100vh;

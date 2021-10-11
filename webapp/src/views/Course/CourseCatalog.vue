@@ -4,7 +4,13 @@
     <main>
       <TopNav title="Course Catalog" />
       <div id="content">
-        <p v-for="course in courses" :key="course.id">{{ course.name }}</p>
+        <OverviewCard
+          v-for="course in courses"
+          :key="course.id"
+          :title="course.name"
+          :course-id="course.id"
+          :description="course.description"
+        />
       </div>
     </main>
   </div>
@@ -15,6 +21,7 @@
 import axios from 'axios';
 
 import { checkSessionToken } from '@/assets/js/authentication.js';
+import OverviewCard from '@/components/Course/OverviewCard.vue';
 import SideNav from '@/components/Navigation/SideNav.vue';
 import TopNav from '@/components/Navigation/TopNav.vue';
 
@@ -23,6 +30,7 @@ export default {
   components: {
     SideNav,
     TopNav,
+    OverviewCard,
   },
   data() {
     return {
