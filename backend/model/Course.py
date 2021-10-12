@@ -2,13 +2,12 @@ from main import db
 
 
 class Course(db.Model):
-    def __init__(self, name: str, description: str, is_retired: bool):
-        __tablename__ = "course"
+    __tablename__ = "course"
 
-        id = db.Column(db.Integer, primary_key=True)
-        name = db.Column(db.String())
-        description = db.Column(db.String())
-        is_retired = db.Column(db.Boolean, default=False, nullable=False)
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String())
+    description = db.Column(db.String())
+    is_retired = db.Column(db.Boolean, default=False, nullable=False)
 
     def __init__(
         self,
@@ -36,7 +35,7 @@ class Course(db.Model):
         for column in columns:
             result[column] = getattr(self, column)
         return result
-    
+
     def serialise(self):
         return {
             "id": self.id,
@@ -44,4 +43,3 @@ class Course(db.Model):
             "description": self.description,
             "is_retired": self.is_retired,
         }
-
