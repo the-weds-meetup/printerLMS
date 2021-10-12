@@ -50,6 +50,16 @@ def learners(department_id):
     return trainer.get_trainers(department_id)
 
 
+@app.route("/api/learners/get_trainers_by_id/<int:id>")
+def learners_by_user_id(id):
+    return trainer.get_trainers_by_id(id)
+
+
+@app.route("/api/learners/get_trainers_by_id/<int:user_id>")
+def assigned_trainers(user_id):
+    return trainer.get_assigned_trainer(user_id)
+
+
 @app.route("/api/trainer/assign_trainer", methods=["POST"])
 def assign_trainer():
     data = request.get_json()
@@ -66,9 +76,13 @@ def assign_trainer():
                     "success": False,
                     "message": "Error occured, unable to commit to database",
                 }
-            ),
-            500,
-        )
+            )
+        ), 500
+
+
+@app.route("/api/learnercompletion/get_learners_by_course/<int:course_id>")
+def learners_by_course(course_id):
+    return learnercompletion.get_learners_by_course(course_id)
 
 
 @app.route("/api/test/user/<int:user_id>")
