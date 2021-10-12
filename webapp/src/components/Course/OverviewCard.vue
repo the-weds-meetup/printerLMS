@@ -1,5 +1,5 @@
 <template>
-  <div class="card" @click.self.prevent="">
+  <a class="card" :href="/course/ + courseId">
     <div class="card-top">
       <h6>{{ title }}</h6>
       <p class="card-body">{{ description }}</p>
@@ -8,7 +8,7 @@
       <p v-if="numOfClass === 1">{{ numOfClass }} class available</p>
       <p v-else>{{ numOfClass }} classes available</p>
     </div>
-  </div>
+  </a>
 </template>
 
 <script>
@@ -48,6 +48,8 @@ export default {
 
   display: flex;
   align-content: space-between;
+  text-decoration: none;
+  color: black;
 
   h6 {
     margin: 0;

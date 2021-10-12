@@ -59,16 +59,12 @@ class Class(db.Model):
         }
 
     def get_trainer(self):
-        trainer: Trainer = Trainer.query.filter_by(
-            course_id=self.course_id, class_id=self.class_id
-        ).first()
+        trainer: Trainer = Trainer.query.filter_by(class_id=self.id).first()
 
         return trainer
 
     def add_trainer(self, user_id):
-        trainer: Trainer = Trainer.query.filter_by(
-            course_id=self.course_id, class_id=self.class_id
-        ).first()
+        trainer: Trainer = Trainer.query.filter_by(class_id=self.id).first()
 
         try:
             if trainer == None:

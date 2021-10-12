@@ -15,13 +15,55 @@ def getCourseCatalog(is_retired=False):
     serialised_courses = []
     for course in courses:
         seralise = course.to_dict()
-        seralise["current_class_enroll"] = len(course.get_class_ongoing_enrolment())
+        enrolment = []
+
+        for a_class in course.get_class_enrolment():
+            enrolment.append(a_class.serialise())
+
+        seralise["class"] = {"enrolling": enrolment}
         serialised_courses.append(seralise)
 
     status_code = 200
     response = {
         "success": True,
         "result": {"type": "Course", "records": serialised_courses},
+    }
+
+    return jsonify(response), status_code
+
+
+def getCourse(course_id: int):
+    """
+    Get course and ongoing and upcoming classes
+    """
+    course: Course = Course.query.filter_by(id=course_id).first()
+
+    if course is None:
+        error_type = "Course"
+        message = "Invalid course id"
+        return throw_error(type=error_type, message=message)
+
+    print(course)
+
+    status_code = 200
+    seralise = course.to_dict()
+    enrolment = []
+    ongoing = []
+
+    for a_class in course.get_class_enrolment():
+        enrolment.append(a_class.serialise())
+
+    for a_class in course.get_class_ongoing():
+        ongoing.append(a_class.serialise())
+
+    seralise["class"] = {
+        "enrolling": enrolment,
+        "ongoing": ongoing,
+    }
+
+    response = {
+        "success": True,
+        "result": {"type": "Course", "records": seralise},
     }
 
     return jsonify(response), status_code
