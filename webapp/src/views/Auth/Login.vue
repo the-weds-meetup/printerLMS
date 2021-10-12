@@ -1,34 +1,36 @@
 <template>
-  <form @submit.prevent>
-    <div class="form-group login-form">
-      <h1 class="mt-5 mb-5">All-in-One LMS</h1>
-      <input
-        v-model.trim="email"
-        class="form-control mb-3"
-        placeholder="Email"
-        type="email"
-      />
-      <input
-        v-model="password"
-        type="password"
-        class="form-control mb-3"
-        placeholder="Password"
-      />
+  <div class="container-fluid">
+    <form @submit.prevent>
+      <div class="form-group login-form">
+        <h1 class="mt-5 mb-5">All-in-One LMS</h1>
+        <input
+          v-model.trim="email"
+          class="form-control mb-3"
+          placeholder="Email"
+          type="email"
+        />
+        <input
+          v-model="password"
+          type="password"
+          class="form-control mb-3"
+          placeholder="Password"
+        />
 
-      <button class="btn btn-primary" @click="handleLogin(email, password)">
-        Login
-      </button>
+        <button class="btn btn-primary" @click="handleLogin(email, password)">
+          Login
+        </button>
 
-      <p v-if="isError" class="mt-3 text-danger">{{ error }}</p>
-    </div>
-  </form>
+        <p v-if="isError" class="mt-3 text-danger">{{ error }}</p>
+      </div>
+    </form>
+  </div>
 </template>
 
 <script>
 import axios from 'axios';
 
 export default {
-  name: 'Login',
+  name: 'Home',
   data() {
     return {
       email: '',
@@ -36,6 +38,14 @@ export default {
       isError: false,
       error: '',
     };
+  },
+  created() {
+    if (
+      window.localStorage.getItem('session_token') &&
+      window.localStorage.getItem('token_expiry')
+    ) {
+      window.location.replace('/');
+    }
   },
   methods: {
     async handleLogin(email, password) {
@@ -59,7 +69,6 @@ export default {
           // Save to localstorage, so that it can be used to identify users
           window.localStorage.setItem('session_token', auth.token);
           window.localStorage.setItem('token_expiry', expiry_seconds);
-          console.log(expiry_seconds);
 
           // redirect to dashboard
           window.location.replace('/');
@@ -72,8 +81,14 @@ export default {
   },
 };
 </script>
-
 <style lang="scss" scoped>
+@import '~bootstrap/scss/bootstrap';
+
+h1,
+p {
+  text-align: center;
+}
+
 .login-form {
   margin: 0 auto;
   height: 100%;
