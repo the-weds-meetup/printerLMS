@@ -10,6 +10,7 @@
           :title="course.name"
           :course-id="course.id"
           :description="course.description"
+          :num-of-class="course.current_class_enroll"
         />
       </div>
     </main>
