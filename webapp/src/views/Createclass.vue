@@ -71,12 +71,13 @@ export default{
     },
     methods:{
       submitform(){
-        console.log("Class created and updated to database!") 
+        /* console.log("Class created and updated to database!") */
         event.preventDefault();
-        axios.post('http://localhost:5000/api/class', {
+        axios.post('http://localhost:5000/api/model/class', {
           course_id: this.course_id,
           class_id: this.class_id,
           max_capacity: this.max_capacity,
+          current_capacity: this.current_capacity,
           start_date: this.start_date,
           end_date: this.end_date,
           enrolment_start_date: this.enrolment_start_date,
