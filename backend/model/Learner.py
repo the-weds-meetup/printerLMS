@@ -52,7 +52,7 @@ class Learner(db.Model):
         return "{} {}".format(self.first_name, self.last_name)
 
     def isAdmin(self):
-        admin = Administrator.query.filter_by(user_id=self.id)
+        admin = Administrator.query.filter_by(user_id=self.id).first()
         if admin == None:
             return False
         return True

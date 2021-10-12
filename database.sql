@@ -18,9 +18,8 @@ CREATE TABLE course_prerequisite (
 CREATE TABLE class (
     id SERIAL PRIMARY KEY,
     course_id integer REFERENCES course(id),
-    class_id integer UNIQUE,
+    class_id integer NOT NULL,
     max_capacity integer NOT NULL,
-    current_capacity integer DEFAULT 0,
     class_start_date text NOT NULL,
     class_end_date text NOT NULL,
     enrolment_start_date text NOT NULL,
@@ -49,9 +48,8 @@ CREATE TABLE learner (
 CREATE TABLE trainer (
     id SERIAL PRIMARY KEY,
     user_id integer REFERENCES learner(id),
-    course_id integer REFERENCES class(id),
-    class_id integer REFERENCES class(class_id),
-    UNIQUE(user_id, course_id, class_id)
+    class_id integer REFERENCES class(id),
+    UNIQUE(user_id, class_id)
 );
 
 CREATE TABLE administrator (
@@ -73,22 +71,20 @@ create TABLE login_session (
 CREATE TABLE enrolment (
     id SERIAL PRIMARY KEY,
     user_id integer REFERENCES learner(id),
-    course_id integer REFERENCES course(id),
-    class_id integer REFERENCES class(class_id),
+    class_id integer REFERENCES class(id),
     enrolment_date text NOT NULL,
     is_approved boolean DEFAULT false,
     is_withdrawn boolean DEFAULT false,
     course_progress real DEFAULT '0'::real,
-    UNIQUE (user_id, course_id, class_id)
+    UNIQUE (user_id, class_id)
 );
 
 CREATE TABLE learner_course_completion (
   id SERIAL PRIMARY KEY,
   user_id integer REFERENCES learner(id),
-  course_id integer REFERENCES course(id),
-  class_id integer REFERENCES class(class_id),
+  class_id integer REFERENCES class(id),
   completion_date text NOT NULL,
-  UNIQUE (user_id, course_id, class_id)
+  UNIQUE (user_id, class_id)
 );
 
 
@@ -96,20 +92,18 @@ CREATE TABLE learner_course_completion (
 
 CREATE TABLE lesson (
   id SERIAL PRIMARY KEY,
-  course_id integer REFERENCES course(id),
-  class_id integer REFERENCES class(class_id),
+  class_id integer REFERENCES class(id),
   lesson_id integer UNIQUE,
   lesson_order integer,
-  UNIQUE (course_id, class_id, lesson_id)
+  UNIQUE (class_id, lesson_id)
 );
 
 CREATE TABLE learner_lesson_progress (
   id SERIAL PRIMARY KEY,
   user_id integer REFERENCES learner(id),
-  course_id integer REFERENCES course(id),
-  class_id integer REFERENCES class(class_id),
+  class_id integer REFERENCES class(id),
   lesson_id integer REFERENCES lesson(lesson_id),
-  UNIQUE (user_id, course_id, class_id, lesson_id)
+  UNIQUE (user_id, class_id, lesson_id)
 );
 
 /**
@@ -117,8 +111,7 @@ TODO: FOR FUTURE
 
 CREATE TABLE course_material (
   id SERIAL PRIMARY KEY,
-  course_id integer REFERENCES course(id),
-  class_id integer REFERENCES class(class_id),
+  class_id integer REFERENCES class(id),
   lesson_id integer REFERENCES lesson(lesson_id),
 );
 
@@ -141,12 +134,10 @@ CREATE TABLE course_material_hyperlink (
 
 CREATE TABLE quiz (
   id SERIAL PRIMARY KEY,
-  course_id integer REFERENCES course(id),
-  class_id integer REFERENCES class(class_id),
+  class_id integer REFERENCES class(id),
   timer integer,
   passing_score_percentage real DEFAULT 0,
-  is_graded boolean DEFAULT false,
-  UNIQUE (course_id, class_id)
+  is_graded boolean DEFAULT false
 );
 
 CREATE TABLE quiz_ungraded (
@@ -232,4 +223,16 @@ INSERT INTO course (name, description)
 
 -- COURSE PREREQUISITE
 INSERT INTO course_prerequisite (course_id, prerequisite_course_id)
-  VALUES (1, 4)
+  VALUES (1, 4);
+
+-- CLASS
+INSERT INTO class (course_id, class_id, max_capacity, class_start_date, class_end_date, enrolment_start_date, enrolment_end_date)
+  VALUES (
+    1,
+    1,
+    20,
+    '2021-10-17T16:00:00.000Z',
+    '2021-11-05T16:00:00.000Z',
+    '2021-10-04T00:00:00.000Z',
+    '2021-10-15T04:00:00.000Z'
+  );

@@ -14,7 +14,9 @@ def getCourseCatalog(is_retired=False):
 
     serialised_courses = []
     for course in courses:
-        serialised_courses.append(course.to_dict())
+        seralise = course.to_dict()
+        seralise["current_class_enroll"] = len(course.get_class_ongoing_enrolment())
+        serialised_courses.append(seralise)
 
     status_code = 200
     response = {
