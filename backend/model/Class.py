@@ -77,3 +77,5 @@ class Class(db.Model):
 
         except Exception as e:
             print(e)
+
+

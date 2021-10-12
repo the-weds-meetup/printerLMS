@@ -148,6 +148,28 @@ def enroll_learner(class_id):
         print(e)
         return auth.throw_error(type="enroll_class", message=str(e), status_code=400)
 
+@app.route("/api/model/class")
+def classes():
+    class_list = Class.query.all()
+    return jsonify(
+        {
+            "data": [Class.to_dict()
+                     for Class in class_list]
+        }
+    ), 200
+
+
+@app.route("/api/model/class", methods=['POST'])
+def create_class():
+    data = request.get_json()
+    if not all(key in data.keys() for
+               key in ('course_id', 'class_id',
+                       'start_date', 'end_date',
+                        'enrolment_start_date','enrolment_end_date')):
+        return jsonify({
+            "message": "Incorrect JSON object provided."
+        }), 500
+
 
 if __name__ == "__main__":
     from api import *
