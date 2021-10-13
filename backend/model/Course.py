@@ -8,7 +8,7 @@ from model.Class import Class
 
 
 class Course(db.Model):
-    tablename = "course"
+    __tablename__ = "course"
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String())

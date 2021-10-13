@@ -3,7 +3,7 @@ from model.Trainer import Trainer
 
 
 class Class(db.Model):
-    tablename = "class"
+    __tablename__ = "class"
     __table_args__ = (db.UniqueConstraint("course_id", "class_id"),)
 
     id = db.Column(db.Integer, primary_key=True)

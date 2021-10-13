@@ -52,6 +52,16 @@ def get_course_catalog():
         return auth.throw_error(type="Course", message=str(e), status_code=400)
 
 
+@app.route("/api/course/<int:course_id>")
+def get_course(course_id):
+    try:
+        return course.getCourse(course_id=course_id)
+
+    except Exception as e:
+        print(e)
+        return auth.throw_error(type="Course", message=str(e), status_code=400)
+
+
 @app.route("/api/auth/logout", methods=["POST"])
 def logout():
     request_data = request.get_json()

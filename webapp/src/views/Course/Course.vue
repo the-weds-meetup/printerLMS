@@ -2,9 +2,12 @@
   <div class="body">
     <SideNav :email="email" :full-name="fullName" :is-admin="isAdmin" />
     <main>
-      <TopNav title="Course Catalog" />
-      <div id="content">
-        {{ $route.params.id }}
+      <TopNav title="Course" />
+      <div v-if="isDataFetched" id="content">
+        <div class="description">
+          <h1>{{ course.name }}</h1>
+          <p>{{ course.description }}</p>
+        </div>
       </div>
     </main>
   </div>
@@ -29,6 +32,8 @@ export default {
       email: '',
       fullName: '',
       isAdmin: false,
+      isDataFetched: false,
+      course: undefined,
     };
   },
   async created() {
@@ -39,18 +44,36 @@ export default {
     });
   },
   async mounted() {
-    const data = await axios
+    await axios
       .get('/api/course/' + this.$route.params.id)
-      .then((response) => response.data.result.records)
+      .then((response) => {
+        const data = response.data.result.records;
+        this.course = data;
+        this.isDataFetched = true;
+      })
       .catch((error) => {
         console.error(error);
-        return [];
+        return undefined;
       });
-    console.log(data);
   },
 };
 </script>
 
 <style lang="scss" scoped>
 @use '@/assets/styles/shared';
+@import '~bootstrap/scss/bootstrap';
+@import '~bootstrap/scss/_variables.scss';
+
+#content {
+  h1 {
+    font-size: 1.6em;
+    font-weight: 600;
+    margin-bottom: 24px;
+  }
+
+  p {
+    color: $gray-800;
+    font-size: 1.1em;
+  }
+}
 </style>

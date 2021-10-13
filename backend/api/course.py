@@ -43,10 +43,9 @@ def getCourse(course_id: int):
         message = "Invalid course id"
         return throw_error(type=error_type, message=message)
 
-    print(course)
-
     status_code = 200
-    seralise = course.to_dict()
+    serialise = course.to_dict()
+
     enrolment = []
     ongoing = []
 
@@ -56,14 +55,14 @@ def getCourse(course_id: int):
     for a_class in course.get_class_ongoing():
         ongoing.append(a_class.serialise())
 
-    seralise["class"] = {
+    serialise["class"] = {
         "enrolling": enrolment,
         "ongoing": ongoing,
     }
 
     response = {
         "success": True,
-        "result": {"type": "Course", "records": seralise},
+        "result": {"type": "Course", "records": serialise},
     }
 
     return jsonify(response), status_code
