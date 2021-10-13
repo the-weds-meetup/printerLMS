@@ -3,6 +3,7 @@ from typing import List
 
 from main import db
 from model.Course import Course
+from model.CoursePrereq import CoursePreq
 from api.error import throw_error
 
 
@@ -48,6 +49,7 @@ def getCourse(course_id: int):
 
     enrolment = []
     ongoing = []
+    prereqs = []
 
     for a_class in course.get_class_enrolment():
         enrolment.append(a_class.serialise())
@@ -60,9 +62,32 @@ def getCourse(course_id: int):
         "ongoing": ongoing,
     }
 
+    for prereq_course in get_prereq_courses(course_id):
+        prereqs.append(
+            {
+                "id": prereq_course.id,
+                "name": prereq_course.name,
+            }
+        )
+
+    serialise["prerequisites"] = prereqs
+
     response = {
         "success": True,
         "result": {"type": "Course", "records": serialise},
     }
 
     return jsonify(response), status_code
+
+
+def get_prereq_courses(course_id: int):
+    prereqs_list: List[CoursePreq] = CoursePreq.query.filter_by(
+        course_id=course_id, is_active=True
+    ).all()
+    prereq_courses: List[Course] = []
+
+    for prereq in prereqs_list:
+        print(prereq)
+        prereq_courses.append(prereq.get_prereq_course())
+
+    return prereq_courses
