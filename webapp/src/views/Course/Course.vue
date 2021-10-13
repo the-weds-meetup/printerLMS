@@ -8,6 +8,29 @@
           <h1>{{ course.name }}</h1>
           <p>{{ course.description }}</p>
         </div>
+        <div class="prereq">
+          <button
+            class="btn btn-primary"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#collapsePreq"
+            aria-expanded="false"
+            aria-controls="collapsePreq"
+            @click="togglePrereqButton()"
+          >
+            <span v-if="!isPrereqShown">Show</span>
+            <span v-else>Hide</span>
+            Course Pre-requisites
+          </button>
+          <div id="collapsePreq" class="collapse">
+            <p v-if="course.prerequisites.length === 0">nothing</p>
+            <ol v-else>
+              <li v-for="precourse in course.prerequisites" :key="precourse.id">
+                {{ precourse.name }}
+              </li>
+            </ol>
+          </div>
+        </div>
       </div>
     </main>
   </div>
@@ -33,6 +56,7 @@ export default {
       fullName: '',
       isAdmin: false,
       isDataFetched: false,
+      isPrereqShown: false,
       course: undefined,
     };
   },
@@ -56,6 +80,11 @@ export default {
         return undefined;
       });
   },
+  methods: {
+    togglePrereqButton() {
+      this.isPrereqShown = !this.isPrereqShown;
+    },
+  },
 };
 </script>
 
@@ -74,6 +103,21 @@ export default {
   p {
     color: $gray-800;
     font-size: 1.1em;
+  }
+}
+
+.description {
+  padding-bottom: 12px;
+}
+
+.prereq {
+  button {
+    font-size: 1.1em;
+    font-weight: 600;
+    margin-bottom: 24px;
+  }
+
+  #collapsePreq {
   }
 }
 </style>
