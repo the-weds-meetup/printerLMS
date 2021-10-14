@@ -198,7 +198,7 @@ INSERT INTO department (name) VALUES ('Engineers');
 
 -- LEARNERS
 INSERT INTO learner (email, password, first_name, last_name, department_id)
-  VALUES ('admin@lms.com', 'p@ssword', 'User', 'User', 1);
+  VALUES ('admin@lms.com', 'p@ssword', 'Phris', 'Coskitt', 1);
 INSERT INTO learner (email, password, first_name, last_name, department_id)
   VALUES ('engineer1@lms.com', 'p@ssword', 'Engineer 1', 'Loh', 2);
 INSERT INTO learner (email, password, first_name, last_name, department_id)
@@ -236,3 +236,7 @@ INSERT INTO class (course_id, class_id, max_capacity, class_start_date, class_en
     '2021-10-04T00:00:00.000Z',
     '2021-10-15T04:00:00.000Z'
   );
+
+-- TRAINER
+INSERT INTO trainer (user_id, class_id)
+  VALUES (2 , 1);

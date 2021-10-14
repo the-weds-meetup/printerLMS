@@ -8,7 +8,9 @@
           <h1>{{ course.name }}</h1>
           <p>{{ course.description }}</p>
         </div>
-        <div class="prereq">
+
+        <!-- Course Pre-req  -->
+        <div v-if="course.prerequisites.length > 0" class="prereq">
           <button
             class="btn btn-primary"
             type="button"
@@ -23,12 +25,33 @@
             Course Pre-requisites
           </button>
           <div id="collapsePreq" class="collapse">
-            <p v-if="course.prerequisites.length === 0">nothing</p>
-            <ol v-else>
+            <ol>
               <li v-for="precourse in course.prerequisites" :key="precourse.id">
                 {{ precourse.name }}
               </li>
             </ol>
+          </div>
+        </div>
+
+        <!-- Ongoing classes  -->
+        <div v-if="course.class.enrolling.length > 0" class="ongoing-class">
+          <div class="header">
+            <h4>{{ course.class.enrolling.length }} classes available</h4>
+            <button v-if="isAdmin" class="btn">+ Add Class</button>
+          </div>
+          <div class="classes">
+            <ClassCard
+              v-for="enroll in course.class.enrolling"
+              :key="enroll.class_id"
+              :class-id="enroll.class_id"
+              :course-id="enroll.course_id"
+              :max-capacity="enroll.max_capacity"
+              :class-start-date="enroll.class_start_date"
+              :class-end-date="enroll.class_end_date"
+              :enrolment-start-date="enroll.enrolment_start_date"
+              :enrolment-end-date="enroll.enrolment_end_date"
+              :trainer="enroll.trainer"
+            />
           </div>
         </div>
       </div>
@@ -41,6 +64,7 @@
 import axios from 'axios';
 
 import { checkSessionToken } from '@/assets/js/authentication.js';
+import ClassCard from '@/components/Course/ClassCard.vue';
 import SideNav from '@/components/Navigation/SideNav.vue';
 import TopNav from '@/components/Navigation/TopNav.vue';
 
@@ -49,6 +73,7 @@ export default {
   components: {
     SideNav,
     TopNav,
+    ClassCard,
   },
   data() {
     return {
@@ -111,13 +136,38 @@ export default {
 }
 
 .prereq {
+  padding-bottom: 16px;
+
   button {
     font-size: 1.1em;
     font-weight: 600;
     margin-bottom: 24px;
   }
+}
 
-  #collapsePreq {
+.ongoing-class {
+  .header {
+    display: flex;
+    flex-direction: row;
+
+    justify-content: space-between;
+    align-items: center;
+
+    h4 {
+      font-size: 1.3em;
+      font-weight: 600;
+      margin: 0;
+    }
+
+    .btn {
+      font-size: 1.1em;
+      font-weight: 600;
+      color: $primary;
+    }
+
+    .btn:hover {
+      text-decoration: underline;
+    }
   }
 }
 </style>

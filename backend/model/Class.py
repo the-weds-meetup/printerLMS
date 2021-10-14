@@ -1,5 +1,6 @@
 from main import db
 from model.Trainer import Trainer
+from model.Learner import Learner
 
 
 class Class(db.Model):
@@ -43,9 +44,10 @@ class Class(db.Model):
     def serialise(self):
         trainer = self.get_trainer()
         if trainer == None:
-            trainer_serialise = None
+            trainer_name = None
         else:
-            trainer_serialise = trainer.serialise()
+            learner: Learner = Learner.query.filter_by(id=trainer.user_id).first()
+            trainer_name = learner.fullName()
 
         return {
             "course_id": self.course_id,
@@ -55,7 +57,7 @@ class Class(db.Model):
             "class_end_date": self.class_end_date,
             "enrolment_start_date": self.enrolment_start_date,
             "enrolment_end_date": self.enrolment_end_date,
-            "trainer": trainer_serialise,
+            "trainer": trainer_name,
         }
 
     def get_trainer(self):
