@@ -2,7 +2,13 @@
   <div class="body">
     <SideNav :email="email" :full-name="fullName" :is-admin="isAdmin" />
     <main>
-      <TopNav title="Course Catalog" />
+      <TopNav
+        v-if="isAdmin"
+        title="Course Catalog"
+        button-title="+ Add a course"
+        :button-action="navigateToAddCourse"
+      />
+      <TopNav v-else title="Course Catalog" />
       <div id="content">
         <OverviewCard
           v-for="course in courses"
@@ -58,6 +64,11 @@ export default {
       });
     this.courses = data;
     console.log(data);
+  },
+  methods: {
+    navigateToAddCourse() {
+      window.location.href = '/course/add';
+    },
   },
 };
 </script>

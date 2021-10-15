@@ -34,12 +34,12 @@
         </div>
 
         <!-- Ongoing classes  -->
-        <div v-if="course.class.enrolling.length > 0" class="ongoing-class">
+        <div class="ongoing-class">
           <div class="header">
             <h4>{{ course.class.enrolling.length }} classes available</h4>
             <button v-if="isAdmin" class="btn">+ Add Class</button>
           </div>
-          <div class="classes">
+          <div v-if="course.class.enrolling.length > 0" class="classes">
             <ClassCard
               v-for="enroll in course.class.enrolling"
               :key="enroll.class_id"
