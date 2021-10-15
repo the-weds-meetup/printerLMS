@@ -17,8 +17,8 @@ def get_classes():
 
 # get classes by course
 def get_classes_by_course(course_id):
-    class_list = Class.query.filter_by(course_id=course_id)
-    if class_list:
+    class_list = Class.query.filter_by(course_id=course_id).all()
+    if len(class_list):
         return jsonify(
             {
                 "code": 200,

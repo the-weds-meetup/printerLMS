@@ -13,8 +13,8 @@ def get_trainers(department_id):
 
 
 def get_trainers_by_id(id):
-    learner_list = Learner.query.filter_by(id=id)
-    if learner_list:
+    learner_list = Learner.query.filter_by(id=id).all()
+    if len(learner_list):
         return jsonify({"data": [learner.serialise() for learner in learner_list]}), 200
     return jsonify({"message": "There are no learners"}), 404
 

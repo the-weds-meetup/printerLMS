@@ -7,8 +7,9 @@ from flask import jsonify
 def get_learners_by_course(course_id):
     learners_complete_list = LearnerCourseCompletion.query.filter_by(
         course_id=course_id
-    )
-    if learners_complete_list:
+    ).all()
+
+    if len(learners_complete_list):
         return (
             jsonify(
                 {
