@@ -25,10 +25,11 @@ def index():
     return "Hello World!"
 
 
-# get all courses
+# get all courses that aren't retired
 @app.route("/api/course/get_courses")
 def courses():
-    return course.get_courses()
+    is_retired = request.args.get("is_retired", default="False")
+    return course.get_courses(is_retired)
 
 
 # get all classes

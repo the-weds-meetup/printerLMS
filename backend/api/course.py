@@ -6,8 +6,8 @@ from model.Course import Course
 from api.error import throw_error
 
 
-def get_courses():
-    course_list = Course.query.all()
+def get_courses(is_retired):
+    course_list = Course.query.filter_by(is_retired=is_retired).all()
     if len(course_list):
         return jsonify(
             {"code": 200, "data": [course.serialise() for course in course_list]}
