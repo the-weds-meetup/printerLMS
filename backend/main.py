@@ -52,6 +52,15 @@ def get_course_catalog():
         return auth.throw_error(type="Course", message=str(e), status_code=400)
 
 
+@app.route("/api/course/all")
+def get_course_all():
+    try:
+        return course.get_all_courses()
+    except Exception as e:
+        print(e)
+        return auth.throw_error(type="Course", message=str(e), status_code=400)
+
+
 @app.route("/api/course/<int:course_id>")
 def get_course(course_id):
     try:

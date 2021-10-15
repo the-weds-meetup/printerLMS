@@ -17,12 +17,10 @@ class Course(db.Model):
 
     def __init__(
         self,
-        id: int,
         name: str,
         description: str,
         is_retired: bool = False,
     ):
-        self.id = id
         self.name = name
         self.description = description
         self.is_retired = is_retired

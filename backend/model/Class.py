@@ -18,7 +18,6 @@ class Class(db.Model):
 
     def __init__(
         self,
-        id: int,
         course_id: int,
         class_id: int,
         max_capacity: int,
@@ -27,7 +26,6 @@ class Class(db.Model):
         enrolment_start_date: str,
         enrolment_end_date: str,
     ):
-        self.id = id
         self.course_id = course_id
         self.class_id = class_id
         self.max_capacity = max_capacity

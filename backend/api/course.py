@@ -80,6 +80,23 @@ def getCourse(course_id: int):
     return jsonify(response), status_code
 
 
+def get_all_courses():
+    """Return non retired courses"""
+    course_list: List[Course] = Course.query.filter_by(is_retired=False).all()
+    courses_serialised = []
+
+    for course in course_list:
+        courses_serialised.append(course.to_dict())
+    status_code = 200
+
+    response = {
+        "success": True,
+        "result": {"type": "Course", "records": courses_serialised},
+    }
+
+    return jsonify(response), status_code
+
+
 def get_prereq_courses(course_id: int):
     prereqs_list: List[CoursePreq] = CoursePreq.query.filter_by(
         course_id=course_id, is_active=True

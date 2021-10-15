@@ -2,50 +2,78 @@
   <div class="body">
     <SideNav :email="email" :full-name="fullName" :is-admin="isAdmin" />
     <main>
-      <TopNav title="Add a New Course" />
+      <TopNav v-if="isAdmin" title="Add a New Course" button-title="Save" />
+      <TopNav v-else title="Add a New Course" />
       <form id="content">
+        <!-- Course Name -->
         <div class="form-group">
-          Course ID:
+          <label for="course-name" class="form-label">Course Name</label>
           <input
-            v-model="id"
-            type="number"
-            placeholder="id"
-            class="form-control"
-          />
-        </div>
-
-        <div class="form-group">
-          Course Name:
-          <input
-            v-model="name"
+            id="course-name"
+            v-model="courseName"
             type="text"
-            placeholder="Name"
+            placeholder="Course Name"
             class="form-control"
           />
         </div>
 
+        <!-- Course Description -->
         <div class="form-group">
-          Course Description:
-          <input
-            v-model="description"
+          <label for="course-description" class="form-label"
+            >Course Description</label
+          >
+          <textarea
+            id="course-description"
+            v-model="courseDescription"
             type="text"
-            placeholder="description"
+            placeholder="A brief description of the course"
             class="form-control"
+            rows="5"
           />
         </div>
 
-        <div class="form-group">
-          Course is retired:
-          <select v-model="is_retired" class="form-control">
-            <option disabled value="">Please select one</option>
-            <option>True</option>
-            <option>False</option>
-          </select>
-        </div>
+        <!-- Retire course -->
+        <fieldset id="retire-course">
+          <label class="form-label">Hide Course?</label>
+          <div class="form-check">
+            <input
+              id="radio-no"
+              class="form-check-input"
+              type="radio"
+              name="retire-course"
+              value="false"
+              checked
+            />
+            <label class="form-check-label" for="radio-no">No</label>
+          </div>
+          <div class="form-check">
+            <input
+              id="radio-yes"
+              class="form-check-input"
+              type="radio"
+              name="retire-course"
+              value="true"
+            />
+            <label class="form-check-label" for="radio-yes">Yes</label>
+          </div>
+        </fieldset>
 
-        <button class="btn btn-primary" @click="SubmitCourse">
-          Enter New Course
-        </button>
+        <!-- Course Prereqs -->
+        <fieldset v-if="courseList.length > 0" id="get-preqs">
+          <label class="form-label">Course Pre-requisites</label>
+
+          <div v-for="course in courseList" :key="course.id" class="form-check">
+            <input
+              :id="'radio-' + course.id"
+              class="form-check-input"
+              type="checkbox"
+              :value="course.id"
+            />
+            <label class="form-check-label" :for="'radio-' + course.id">
+              {{ course.name }}
+            </label>
+          </div>
+        </fieldset>
       </form>
     </main>
   </div>
@@ -70,9 +98,11 @@ export default {
       email: '',
       fullName: '',
       isAdmin: false,
-      isDataFetched: false,
-      isPrereqShown: false,
-      course: undefined,
+      courseName: '',
+      courseDescription: '',
+      isRetire: false,
+      coursePreReqs: [],
+      courseList: [],
     };
   },
   async created() {
@@ -82,6 +112,19 @@ export default {
       this.isAdmin = window.sessionStorage.getItem('learner_isAdmin') == 'true';
     });
   },
+  async mounted() {
+    this.courseList = await axios
+      .get('/api/course/all')
+      .then((response) => {
+        const data = response.data.result.records;
+        console.log(data);
+        return data;
+      })
+      .catch((error) => {
+        console.error(error);
+        return [];
+      });
+  },
   methods: {},
 };
 </script>
@@ -90,4 +133,20 @@ export default {
 @use '@/assets/styles/shared';
 @import '~bootstrap/scss/bootstrap';
 @import '~bootstrap/scss/_variables.scss';
+
+.form-label {
+  font-weight: 600;
+}
+
+.form-group {
+  margin-bottom: 16px;
+}
+
+.form-check {
+  margin-bottom: 8px;
+}
+
+#retire-course {
+  margin-bottom: 16px;
+}
 </style>

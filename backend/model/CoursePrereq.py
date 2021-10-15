@@ -14,12 +14,10 @@ class CoursePreq(db.Model):
 
     def __init__(
         self,
-        id: int,
         course_id: int,
         prerequisite_course_id: int,
         is_active: bool = True,
     ):
-        self.id = id
         self.course_id = course_id
         self.prerequisite_course_id = prerequisite_course_id
         self.is_active = is_active
