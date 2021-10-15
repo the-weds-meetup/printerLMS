@@ -3,6 +3,50 @@
     <SideNav :email="email" :full-name="fullName" :is-admin="isAdmin" />
     <main>
       <TopNav title="Add a New Course" />
+      <form id="content">
+        <div class="form-group">
+          Course ID:
+          <input
+            v-model="id"
+            type="number"
+            placeholder="id"
+            class="form-control"
+          />
+        </div>
+
+        <div class="form-group">
+          Course Name:
+          <input
+            v-model="name"
+            type="text"
+            placeholder="Name"
+            class="form-control"
+          />
+        </div>
+
+        <div class="form-group">
+          Course Description:
+          <input
+            v-model="description"
+            type="text"
+            placeholder="description"
+            class="form-control"
+          />
+        </div>
+
+        <div class="form-group">
+          Course is retired:
+          <select v-model="is_retired" class="form-control">
+            <option disabled value="">Please select one</option>
+            <option>True</option>
+            <option>False</option>
+          </select>
+        </div>
+
+        <button class="btn btn-primary" @click="SubmitCourse">
+          Enter New Course
+        </button>
+      </form>
     </main>
   </div>
 </template>
@@ -46,17 +90,4 @@ export default {
 @use '@/assets/styles/shared';
 @import '~bootstrap/scss/bootstrap';
 @import '~bootstrap/scss/_variables.scss';
-
-#content {
-  h1 {
-    font-size: 1.6em;
-    font-weight: 600;
-    margin-bottom: 24px;
-  }
-
-  p {
-    color: $gray-800;
-    font-size: 1.1em;
-  }
-}
 </style>
