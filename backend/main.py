@@ -65,7 +65,7 @@ def get_course_all():
 @app.route("/api/course/<int:course_id>")
 def get_course(course_id):
     try:
-        return course.getCourse(course_id=course_id)
+        return course.get_course(course_id=course_id)
 
     except Exception as e:
         print(e)
@@ -86,11 +86,11 @@ def logout():
 
 
 @app.route("/api/learner", methods=["POST"])
-def getLearner():
+def get_learner():
     request_data = request.get_json()
     try:
         session = request_data["token"]
-        return learner.getLearner(token=session)
+        return learner.get_learner(token=session)
 
     except Exception as e:
         print(e)
