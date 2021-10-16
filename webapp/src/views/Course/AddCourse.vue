@@ -2,7 +2,12 @@
   <div class="body">
     <SideNav :email="email" :full-name="fullName" :is-admin="isAdmin" />
     <main>
-      <TopNav v-if="isAdmin" title="Add a New Course" button-title="Save" />
+      <TopNav
+        v-if="isAdmin"
+        title="Add a New Course"
+        button-title="Save"
+        :button-action="onSubmit"
+      />
       <TopNav v-else title="Add a New Course" />
       <form id="content">
         <!-- Course Name -->
@@ -10,11 +15,12 @@
           <label for="course-name" class="form-label">Course Name</label>
           <input
             id="course-name"
-            v-model="courseName"
+            v-model.trim="courseName"
             type="text"
             placeholder="Course Name"
             class="form-control"
           />
+          <p v-if="errorName" class="error">{{ errorName }}</p>
         </div>
 
         <!-- Course Description -->
@@ -24,12 +30,13 @@
           >
           <textarea
             id="course-description"
-            v-model="courseDescription"
+            v-model.trim="courseDescription"
             type="text"
             placeholder="A brief description of the course"
             class="form-control"
             rows="5"
           />
+          <p v-if="errorDescription" class="error">{{ errorDescription }}</p>
         </div>
 
         <!-- Retire course -->
@@ -38,6 +45,7 @@
           <div class="form-check">
             <input
               id="radio-no"
+              v-model="isRetire"
               class="form-check-input"
               type="radio"
               name="retire-course"
@@ -49,6 +57,7 @@
           <div class="form-check">
             <input
               id="radio-yes"
+              v-model="isRetire"
               class="form-check-input"
               type="radio"
               name="retire-course"
@@ -65,6 +74,7 @@
           <div v-for="course in courseList" :key="course.id" class="form-check">
             <input
               :id="'radio-' + course.id"
+              v-model="coursePreReqs"
               class="form-check-input"
               type="checkbox"
               :value="course.id"
@@ -100,9 +110,11 @@ export default {
       isAdmin: false,
       courseName: '',
       courseDescription: '',
-      isRetire: false,
+      isRetire: 'false',
       coursePreReqs: [],
       courseList: [],
+      errorName: undefined,
+      errorDescription: undefined,
     };
   },
   async created() {
@@ -117,7 +129,6 @@ export default {
       .get('/api/course/all')
       .then((response) => {
         const data = response.data.result.records;
-        console.log(data);
         return data;
       })
       .catch((error) => {
@@ -125,7 +136,48 @@ export default {
         return [];
       });
   },
-  methods: {},
+  methods: {
+    async onSubmit() {
+      let isNamePassed = false;
+      let isDescriptionPassed = false;
+
+      if (this.courseName.length > 0) {
+        isNamePassed = true;
+        this.errorName = undefined;
+      } else {
+        this.errorName = 'Course Name is required';
+      }
+
+      if (this.courseDescription.length > 0) {
+        isDescriptionPassed = true;
+        this.errorDescription = undefined;
+      } else {
+        this.errorDescription = 'Course Description is required';
+      }
+
+      if (!this.coursePreReqs) {
+        this.coursePreReqs = [];
+      }
+
+      if (isNamePassed && isDescriptionPassed) {
+        await axios
+          .post('/api/course/add', {
+            token: window.localStorage.getItem('session_token'),
+            name: this.courseName,
+            description: this.courseDescription,
+            is_retired: this.isRetire == 'true',
+            prerequisites: this.coursePreReqs,
+          })
+          .then(() => {
+            window.location.href = '/catalog';
+          })
+          .catch((error) => {
+            console.log(error);
+            window.alert(error.response.result.message);
+          });
+      }
+    },
+  },
 };
 </script>
 
@@ -148,5 +200,10 @@ export default {
 
 #retire-course {
   margin-bottom: 16px;
+}
+
+.error {
+  padding-top: 4px;
+  color: $red;
 }
 </style>
