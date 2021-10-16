@@ -7,7 +7,7 @@ class Class(db.Model):
     __tablename__ = "class"
     __table_args__ = (db.UniqueConstraint("course_id", "class_id"),)
 
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True, nullable=True)
     course_id = db.Column(db.Integer, db.ForeignKey("course.id"), nullable=False)
     class_id = db.Column(db.Integer, nullable=False)
     max_capacity = db.Column(db.Integer, nullable=False)
