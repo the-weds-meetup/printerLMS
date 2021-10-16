@@ -3,7 +3,9 @@ from typing import List
 
 from main import db
 from model.Course import Course
-from model.CoursePrereq import CoursePreq
+from model.CoursePreq import CoursePreq
+from model.Learner import Learner
+from model.LoginSession import LoginSession
 from api.error import throw_error
 
 
@@ -78,6 +80,45 @@ def getCourse(course_id: int):
     }
 
     return jsonify(response), status_code
+
+
+def add_course(request_data: dict[str, any]):
+
+    session: LoginSession = LoginSession.query.filter_by(
+        token=request_data["token"]
+    ).first()
+
+    learner: Learner = session.get_learner()
+
+    if learner.isAdmin() == False:
+        return throw_error("Authorisation", "Not Authorised", 403)
+
+    name = request_data["name"]
+    description = request_data["description"]
+    is_retired = request_data["is_retired"]
+    coursePreReqs: List[int] = request_data["prerequisites"]
+
+    course: Course = Course(name, description, is_retired)
+    db.session.add(course)
+    db.session.flush()
+
+    if len(coursePreReqs) > 0:
+        add_course_prereqs(course.id, coursePreReqs)
+
+    db.session.commit()
+
+    response = {
+        "success": True,
+        "result": {"type": "course_add", "msg": "Added a new course"},
+    }
+
+    return jsonify(response), 200
+
+
+def add_course_prereqs(course_id: int, course_prereqs: List[int]):
+    for prereq_id in course_prereqs:
+        pre_reqs: CoursePreq = CoursePreq(course_id, prereq_id)
+        db.session.add(pre_reqs)
 
 
 def get_all_courses():

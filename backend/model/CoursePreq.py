@@ -5,7 +5,7 @@ from model.Course import Course
 class CoursePreq(db.Model):
     __tablename__ = "course_prerequisite"
 
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True, nullable=True)
     course_id = db.Column(db.Integer, db.ForeignKey("course.id"), nullable=False)
     prerequisite_course_id = db.Column(
         db.Integer, db.ForeignKey("course.id"), nullable=False

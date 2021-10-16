@@ -52,6 +52,18 @@ def get_course_catalog():
         return auth.throw_error(type="Course", message=str(e), status_code=400)
 
 
+@app.route("/api/course/add", methods=["POST"])
+def add_course():
+    request_data = request.get_json()
+    token = request_data["token"]
+    isValid = auth.validateToken(token)
+
+    if isValid["status"] == False:
+        return auth.throw_error("course_add", isValid["message"])
+    else:
+        return course.add_course(request_data)
+
+
 @app.route("/api/course/all")
 def get_course_all():
     try:

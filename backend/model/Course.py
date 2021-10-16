@@ -10,7 +10,7 @@ from model.Class import Class
 class Course(db.Model):
     __tablename__ = "course"
 
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True, nullable=True)
     name = db.Column(db.String())
     description = db.Column(db.String())
     is_retired = db.Column(db.Boolean, default=False, nullable=False)

@@ -1,7 +1,7 @@
 __all__ = [
     "Course",
     "Class",
-    "CoursePrereq",
+    "CoursePreq",
     "Learner",
     "Administrator",
     "Trainer",
