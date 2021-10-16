@@ -39,19 +39,6 @@ def login():
         return error.throw_error(type="Login", message=str(e), status_code=400)
 
 
-@app.route("/api/course/catalog")
-def get_course_catalog():
-    # get is_retired 'True' or 'False' so that we can display the data accordingly
-    is_retired = request.args.get("is_retired", default="False")
-
-    try:
-        return course.getCourseCatalog(is_retired == "True")
-
-    except Exception as e:
-        print(e)
-        return auth.throw_error(type="Course", message=str(e), status_code=400)
-
-
 @app.route("/api/course/add", methods=["POST"])
 def add_course():
     request_data = request.get_json()
@@ -66,8 +53,10 @@ def add_course():
 
 @app.route("/api/course/all")
 def get_course_all():
+    # get is_retired 'True' or 'False' so that we can display the data accordingly
+    is_retired = request.args.get("is_retired", default="False")
     try:
-        return course.get_all_courses()
+        return course.get_all_courses(is_retired)
     except Exception as e:
         print(e)
         return auth.throw_error(type="Course", message=str(e), status_code=400)

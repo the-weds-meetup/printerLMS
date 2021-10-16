@@ -9,33 +9,7 @@ from model.LoginSession import LoginSession
 from api.error import throw_error
 
 
-def getCourseCatalog(is_retired=False):
-    """
-    Gets all courses which are either retired or still ongoing
-    """
-    courses: List[Course] = Course.query.filter_by(is_retired=is_retired).all()
-
-    serialised_courses = []
-    for course in courses:
-        seralise = course.to_dict()
-        enrolment = []
-
-        for a_class in course.get_class_enrolment():
-            enrolment.append(a_class.serialise())
-
-        seralise["class"] = {"enrolling": enrolment}
-        serialised_courses.append(seralise)
-
-    status_code = 200
-    response = {
-        "success": True,
-        "result": {"type": "Course", "records": serialised_courses},
-    }
-
-    return jsonify(response), status_code
-
-
-def getCourse(course_id: int):
+def get_course(course_id: int):
     """
     Get course and ongoing and upcoming classes
     """
@@ -46,24 +20,10 @@ def getCourse(course_id: int):
         message = "Invalid course id"
         return throw_error(type=error_type, message=message)
 
-    status_code = 200
     serialise = course.to_dict()
+    serialise["class"] = get_course_classes(course)
 
-    enrolment = []
-    ongoing = []
     prereqs = []
-
-    for a_class in course.get_class_enrolment():
-        enrolment.append(a_class.serialise())
-
-    for a_class in course.get_class_ongoing():
-        ongoing.append(a_class.serialise())
-
-    serialise["class"] = {
-        "enrolling": enrolment,
-        "ongoing": ongoing,
-    }
-
     for prereq_course in get_prereq_courses(course_id):
         prereqs.append(
             {
@@ -79,11 +39,10 @@ def getCourse(course_id: int):
         "result": {"type": "Course", "records": serialise},
     }
 
-    return jsonify(response), status_code
+    return jsonify(response), 200
 
 
 def add_course(request_data: dict[str, any]):
-
     session: LoginSession = LoginSession.query.filter_by(
         token=request_data["token"]
     ).first()
@@ -121,21 +80,35 @@ def add_course_prereqs(course_id: int, course_prereqs: List[int]):
         db.session.add(pre_reqs)
 
 
-def get_all_courses():
+def get_all_courses(is_retired: bool):
     """Return non retired courses"""
-    course_list: List[Course] = Course.query.filter_by(is_retired=False).all()
+    course_list: List[Course] = Course.query.filter_by(is_retired=is_retired).all()
     courses_serialised = []
 
     for course in course_list:
-        courses_serialised.append(course.to_dict())
-    status_code = 200
+        serialise = course.to_dict()
+        serialise["class"] = get_course_classes(course)
+        courses_serialised.append(serialise)
 
     response = {
         "success": True,
         "result": {"type": "Course", "records": courses_serialised},
     }
 
-    return jsonify(response), status_code
+    return jsonify(response), 200
+
+
+def get_course_classes(course: Course):
+    enrolling = []
+    ongoing = []
+
+    for a_class in course.get_class_enrolment():
+        enrolling.append(a_class.serialise())
+
+    for a_class in course.get_class_ongoing():
+        ongoing.append(a_class.serialise())
+
+    return {"enrolling": enrolling, "ongoing": ongoing}
 
 
 def get_prereq_courses(course_id: int):
