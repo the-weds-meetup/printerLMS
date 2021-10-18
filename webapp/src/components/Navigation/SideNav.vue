@@ -44,7 +44,7 @@ export default {
 @import '~bootstrap/scss/_variables.scss';
 
 .side-nav {
-  width: 350px;
+  width: 300px;
   padding: 0 24px;
   box-sizing: border-box;
 

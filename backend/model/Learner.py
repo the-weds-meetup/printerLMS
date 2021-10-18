@@ -5,7 +5,7 @@ from model.Administrator import Administrator
 class Learner(db.Model):
     __tablename__ = "learner"
 
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True, nullable=True)
     email = db.Column(db.String(), unique=True, nullable=False)
     password = db.Column(db.String(), nullable=False)
     first_name = db.Column(db.String(), nullable=False)
@@ -52,7 +52,7 @@ class Learner(db.Model):
         return "{} {}".format(self.first_name, self.last_name)
 
     def isAdmin(self):
-        admin = Administrator.query.filter_by(user_id=self.id)
+        admin = Administrator.query.filter_by(user_id=self.id).first()
         if admin == None:
             return False
         return True

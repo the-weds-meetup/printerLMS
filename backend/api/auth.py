@@ -24,13 +24,12 @@ def login(username: str, password: str):
     db.session.add(session)
     db.session.commit()
 
-    status_code = 200
     response = {
         "success": True,
         "result": {"type": "Login", "records": [session.serialise()]},
     }
 
-    return jsonify(response), status_code
+    return jsonify(response), 200
 
 
 def logout(token: str):
@@ -49,12 +48,11 @@ def logout(token: str):
     session.expireToken()
     db.session.commit()
 
-    status_code = 200
     response = {
         "success": True,
         "result": {"type": "Logout", "message": "Success"},
     }
-    return jsonify(response), status_code
+    return jsonify(response), 200
 
 
 def validateToken(token: str):

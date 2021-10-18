@@ -12,6 +12,16 @@ const routes = [
     component: () => import('../views/Course/CourseCatalog.vue'),
   },
   {
+    path: '/course/add',
+    name: 'Add Course',
+    component: () => import('../views/Course/AddCourse.vue'),
+  },
+  {
+    path: '/course/:id',
+    name: 'Course',
+    component: () => import('../views/Course/Course.vue'),
+  },
+  {
     path: '/admin',
     name: 'Admin',
     component: () => import('../views/Admin.vue'),
@@ -25,13 +35,11 @@ const routes = [
     path: '/me',
     name: 'Profile',
     component: () => import('../views/Profile/Profile.vue'),
-    children: [
-      {
-        path: 'course',
-        name: 'MyCourses',
-        component: () => import('../views/Profile/Course.vue'),
-      },
-    ],
+  },
+  {
+    path: '/me/course',
+    name: 'MyCourses',
+    component: () => import('../views/Profile/Course.vue'),
   },
   {
     path: '/login',
