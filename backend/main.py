@@ -1,9 +1,11 @@
 from flask import Flask
-from flask import request
+from flask import request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from os import environ
+from flask_cors import CORS
 
 app = Flask(__name__)
+CORS(app)
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql+psycopg2://{}:{}@{}/{}".format(
     environ["DB_USER"],
@@ -148,7 +150,7 @@ def enroll_learner(class_id):
         print(e)
         return auth.throw_error(type="enroll_class", message=str(e), status_code=400)
 
-@app.route("/api/model/class")
+@app.route("/api/class/all")
 def classes():
     class_list = Class.query.all()
     return jsonify(
@@ -159,7 +161,7 @@ def classes():
     ), 200
 
 
-@app.route("/api/model/class", methods=['POST'])
+@app.route("/api/class", methods=['POST'])
 def create_class():
     data = request.get_json()
     if not all(key in data.keys() for

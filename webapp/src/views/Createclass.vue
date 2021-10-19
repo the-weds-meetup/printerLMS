@@ -53,6 +53,7 @@
 </template>
 
 <script>
+import axios from "axios"
 
 export default{
     name: 'createclass',
@@ -70,9 +71,9 @@ export default{
     },
     methods:{
       submitform(){
-        /* console.log("Class created and updated to database!") */
+        console.log("Class created and updated to database!") 
         event.preventDefault();
-        axios.post('http://localhost:5000/api/model/class', {
+        axios.post('http://localhost:5000/api/class', {
           course_id: this.course_id,
           class_id: this.class_id,
           max_capacity: this.max_capacity,
