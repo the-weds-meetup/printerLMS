@@ -36,7 +36,6 @@
               Course ID: <input type = "text" v-model ="courseid" placeholder ="Course ID" required> <br><br>
               Class ID: <input type = "text" v-model ="classid" placeholder ="Class ID" required> <br><br>
               Max Capacity: <input type = "number" v-model ="maxcapacity" placeholder = "Max Capacity"> <br><br>
-              Current Capacity: <input type = "number" v-model ="currentcapacity" placeholder = "Current Capacity"> <br><br>
               Start Date: <input type = "datetime-local" v-model ="startdate" placeholder = "Start Date"> <br><br>
               End Date: <input type = "datetime-local" v-model ="enddate" placeholder = "End Date"> <br><br>
               Enrolment Start Date: <input type = "datetime-local" v-model ="enrolstartdate" placeholder = "Enrolment Start Date"> <br><br>
@@ -62,7 +61,6 @@ export default{
         courseid: '',
         classid: '',
         maxcapacity: '',
-        currentcapacity: '',
         startdate: '',
         enddate: '',
         enrolstartdate: '',
@@ -77,7 +75,6 @@ export default{
           course_id: this.course_id,
           class_id: this.class_id,
           max_capacity: this.max_capacity,
-          current_capacity: this.current_capacity,
           start_date: this.start_date,
           end_date: this.end_date,
           enrolment_start_date: this.enrolment_start_date,
