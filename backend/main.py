@@ -2,7 +2,7 @@ from flask import Flask
 from flask import request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from os import environ
-from flask_cors import CORS
+from flask_cors import CORS, cross_origin
 
 app = Flask(__name__)
 CORS(app)
@@ -150,7 +150,7 @@ def enroll_learner(class_id):
         print(e)
         return auth.throw_error(type="enroll_class", message=str(e), status_code=400)
 
-@CrossOrigin(origins= "http://localhost:8080")
+@cross_origin(origins= "http://localhost:8080")
 @app.route("/api/class/all")
 def get_all_class():
     try:
@@ -159,33 +159,12 @@ def get_all_class():
         print(e)
         return auth.throw_error(type="Class", message=str(e), status_code=400)
 
-@CrossOrigin(origins= "http://localhost:8080")
+@cross_origin(origins= "http://localhost:8080")
 @app.route("/api/class", methods=['POST'])
 def add_class():
     request_data = request.get_json()
     return classes.add_class(request_data)
 
-@app.route("/api/model/class")
-def classes():
-    class_list = Class.query.all()
-    return jsonify(
-        {
-            "data": [Class.to_dict()
-                     for Class in class_list]
-        }
-    ), 200
-
-
-@app.route("/api/model/class", methods=['POST'])
-def create_class():
-    data = request.get_json()
-    if not all(key in data.keys() for
-               key in ('course_id', 'class_id',
-                       'start_date', 'end_date',
-                        'enrolment_start_date','enrolment_end_date')):
-        return jsonify({
-            "message": "Incorrect JSON object provided."
-        }), 500
 
 
 if __name__ == "__main__":
