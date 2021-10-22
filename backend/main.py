@@ -105,13 +105,33 @@ def login():
         return error.throw_error(type="Login", message=str(e), status_code=400)
 
 
-@app.route("/api/course/catalog")
-def get_course_catalog():
+@app.route("/api/course/add", methods=["POST"])
+def add_course():
+    request_data = request.get_json()
+    token = request_data["token"]
+    isValid = auth.validateToken(token)
+
+    if isValid["status"] == False:
+        return auth.throw_error("course_add", isValid["message"])
+    else:
+        return course.add_course(request_data)
+
+
+@app.route("/api/course/all")
+def get_course_all():
     # get is_retired 'True' or 'False' so that we can display the data accordingly
     is_retired = request.args.get("is_retired", default="False")
-
     try:
-        return course.getCourseCatalog(is_retired == "True")
+        return course.get_all_courses(is_retired)
+    except Exception as e:
+        print(e)
+        return auth.throw_error(type="Course", message=str(e), status_code=400)
+
+
+@app.route("/api/course/<int:course_id>")
+def get_course(course_id):
+    try:
+        return course.get_course(course_id=course_id)
 
     except Exception as e:
         print(e)
@@ -132,11 +152,11 @@ def logout():
 
 
 @app.route("/api/learner", methods=["POST"])
-def getLearner():
+def get_learner():
     request_data = request.get_json()
     try:
         session = request_data["token"]
-        return learner.getLearner(token=session)
+        return learner.get_learner(token=session)
 
     except Exception as e:
         print(e)

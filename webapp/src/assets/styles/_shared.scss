@@ -1,0 +1,17 @@
+main {
+  width: calc(100vw - 300px);
+  display: flex;
+  flex-direction: column;
+}
+
+#content {
+  padding: 1.5em 1em 0  1em;
+  overflow-y: auto;
+}
+
+.body {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: row;
+}

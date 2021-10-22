@@ -1,1 +1,9 @@
-__all__ = ["Administrator", "Course", "Learner", "LoginSession", "Class", "Trainer"]
+__all__ = [
+    "Course",
+    "Class",
+    "CoursePreq",
+    "Learner",
+    "Administrator",
+    "Trainer",
+    "LoginSession",
+]
