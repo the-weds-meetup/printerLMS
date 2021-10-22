@@ -48,14 +48,8 @@ CREATE TABLE learner (
 CREATE TABLE trainer (
     id SERIAL PRIMARY KEY,
     user_id integer REFERENCES learner(id),
-<<<<<<< HEAD
-    course_id integer REFERENCES course(id),
-    class_id integer REFERENCES class(class_id),
-    UNIQUE(user_id, course_id, class_id)
-=======
     class_id integer REFERENCES class(id),
     UNIQUE(user_id, class_id)
->>>>>>> main
 );
 
 CREATE TABLE administrator (
