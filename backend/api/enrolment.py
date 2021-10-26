@@ -32,6 +32,34 @@ def is_learner_eligible_for_enrolment(learner_id: int, course_id: int):
 
     return len(completed_class) == len(completed_course)
 
+
+def check_learner_course_valid(token: str, course_id: int):
+    session: LoginSession = LoginSession.query.filter_by(token=token).first()
+    learner = session.get_learner()
+
+    if learner is None:
+        return throw_error("Authorisation", "Not Authorised", 403)
+
+    if is_learner_eligible_for_enrolment(learner.id, course_id):
+        response = {
+            "success": True,
+            "results": {
+                "type": "enrolment_status",
+                "msg": "OK",
+            },
+        }
+        return response, 200
+
+    response = {
+        "success": False,
+        "results": {
+            "type": "enrolment_status",
+            "msg": "Does not fulfil pre-requisites",
+        },
+    }
+    return response, 200
+
+
 def add_enrolment(token: str, class_id: int):
     session: LoginSession = LoginSession.query.filter_by(token=token).first()
     the_class: CClass = CClass.query.filter_by(class_id=class_id)
