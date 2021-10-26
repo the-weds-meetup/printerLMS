@@ -2,6 +2,7 @@ from main import db
 from model.Trainer import Trainer
 from model.Learner import Learner
 
+
 class Class(db.Model):
     __tablename__ = "class"
     __table_args__ = (db.UniqueConstraint("course_id", "class_id"),)
@@ -57,6 +58,13 @@ class Class(db.Model):
             "trainer": trainer_name,
         }
 
+    def to_dict(self):
+        columns = self.__mapper__.column_attrs.keys()
+        result = {}
+        for column in columns:
+            result[column] = getattr(self, column)
+        return result
+
     def get_trainer(self):
         trainer: Trainer = Trainer.query.filter_by(class_id=self.id).first()
 
@@ -65,14 +73,20 @@ class Class(db.Model):
     def add_trainer(self, user_id):
         trainer: Trainer = Trainer.query.filter_by(class_id=self.id).first()
 
-        try:
-            if trainer == None:
-                # record dont exist, we shall add it
-                trainer = Trainer(user_id)
-            else:
-                # else overwrite
-                trainer.user_id = user_id
-            db.session.commit()
+        if trainer == None:
+            # record dont exist, we shall add it
+            trainer = Trainer(user_id, self.id)
+        else:
+            # else overwrite
+            trainer.user_id = user_id
 
-        except Exception as e:
-            print(e)
+        db.session.add(trainer)
+        db.session.commit()
+
+        response = {
+            "success": True,
+            "message": "Trainer record is successfully created",
+            "result": {"type": "Trainer", "records": [trainer.serialise()]},
+        }
+
+        return response

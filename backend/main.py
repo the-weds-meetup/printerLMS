@@ -26,10 +26,10 @@ def index():
 
 
 # get all courses that aren't retired
-@app.route("/api/course/get_courses")
-def courses():
-    is_retired = request.args.get("is_retired", default="False")
-    return course.get_courses(is_retired)
+# @app.route("/api/course/get_courses")
+# def courses():
+#     is_retired = request.args.get("is_retired", default="False")
+#     return course.get_courses(is_retired)
 
 
 # get all classes
@@ -51,9 +51,9 @@ def learners(department_id):
     return trainer.get_trainers(department_id)
 
 
-@app.route("/api/learners/get_trainers_by_id/<int:id>")
+@app.route("/api/learner/<int:id>")
 def learners_by_user_id(id):
-    return trainer.get_trainers_by_id(id)
+    return learner.get_learner_by_id(id)
 
 
 @app.route("/api/learners/get_trainers_by_id/<int:user_id>")
@@ -81,9 +81,9 @@ def assign_trainer():
         ), 500
 
 
-@app.route("/api/learnercompletion/get_learners_by_course/<int:course_id>")
-def learners_by_course(course_id):
-    return learnercompletion.get_learners_by_course(course_id)
+@app.route("/api/learnercompletion/<int:class_id>")
+def learners_by_class(class_id):
+    return learnercompletion.get_learners_by_course(class_id)
 
 
 @app.route("/api/test/user/<int:user_id>")
@@ -136,6 +136,28 @@ def get_course(course_id):
     except Exception as e:
         print(e)
         return auth.throw_error(type="Course", message=str(e), status_code=400)
+
+
+@app.route("/api/class/<int:class_id>")
+def get_class(class_id):
+    try:
+        return classes.get_class(class_id=class_id)
+
+    except Exception as e:
+        print(e)
+        return auth.throw_error(type="Course", message=str(e), status_code=400)
+
+
+@app.route("/api/trainer/add", methods=["POST"])
+def add_trainer():
+    data = request.get_json()
+
+    try:
+        user_id = data["user_id"]
+        class_id = data["class_id"]
+        return classes.add_trainer(user_id, class_id)
+    except Exception as e:
+        return auth.throw_error(type="Trainer", message=str(e), status_code=400)
 
 
 @app.route("/api/auth/logout", methods=["POST"])

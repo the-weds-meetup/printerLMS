@@ -4,19 +4,23 @@ from model.LearnerCourseCompletion import LearnerCourseCompletion
 from flask import jsonify
 
 # get learners by course
-def get_learners_by_course(course_id):
+def get_learners_by_course(class_id):
     learners_complete_list = LearnerCourseCompletion.query.filter_by(
-        course_id=course_id
+        class_id=class_id
     ).all()
 
     if len(learners_complete_list):
         return (
             jsonify(
                 {
-                    "data": [
-                        each_learner.serialise()
-                        for each_learner in learners_complete_list
-                    ],
+                    "success": True,
+                    "result": {
+                        "type": "Learner_Course_Completion",
+                        "records": [
+                            each_learner.to_dict()
+                            for each_learner in learners_complete_list
+                        ],
+                    },
                 }
             ),
             200,

@@ -38,10 +38,10 @@
           <select id="selectTrainer" v-model="user_id" class="form-select">
             <option
               v-for="trainer in trainers"
-              :key="trainer.id"
-              :value="trainer.id"
+              :key="trainer.user_id"
+              :value="trainer.user_id"
             >
-              {{ trainer.first_name }}
+              {{ trainer.name }}
             </option>
             <option v-if="trainers.length == 0" disabled>
               No trainers currently available for this course
@@ -124,53 +124,29 @@ export default {
     course_id: async function () {
       //get classes according to course selected
       await axios
-        .get(
-          'http://localhost:5000/api/classes/get_classes_by_course/' +
-            parseInt(this.course_id)
-        )
+        .get('http://localhost:5000/api/course/' + parseInt(this.course_id))
         .then((response) => {
-          this.classes = response.data.data;
-          //reset class_id whenever a new course is selected
+          //reset classes and trainers of previous query
+          this.classes = [];
           this.class_id = 0;
+          this.trainers = [];
+
+          // display enrolling classes which would not have a trainer assigned yet
+          var enrol_classes = response.data.result.records.class.enrolling;
+
+          for (var each_class of enrol_classes) {
+            this.classes = this.classes.concat(each_class);
+          }
+
+          var past_classes = response.data.result.records.class.past;
+
+          for (var each_past_class of past_classes) {
+            this.getTrainers(each_past_class);
+          }
         })
         .catch((error) => {
           console.log(error);
           this.classes = [];
-        });
-
-      //get user_id of learners who have completed the selected course
-      await axios
-        .get(
-          'http://localhost:5000/api/learnercompletion/get_learners_by_course/' +
-            parseInt(this.course_id)
-        )
-        .then((response) => {
-          //reset trainers
-          this.user_id = 0;
-          this.trainers = [];
-
-          this.learners_completion = response.data.data;
-          this.learners_completion = this.learners_completion.sort(
-            (a, b) => parseInt(a.user_id) - parseInt(b.user_id)
-          );
-
-          // for (var each_learner of this.learners_completion) {
-          //   this.getTrainers(each_learner);
-          // }
-
-          // this.learners_completion.forEach((each_learner) => {
-          //   this.getTrainers(each_learner);
-          // });
-
-          this.learners_completion.forEach(this.getTrainers);
-
-          this.trainers = this.trainers.sort(
-            (a, b) => parseInt(a.id) - parseInt(b.id)
-          );
-        })
-        .catch((error) => {
-          console.log(error);
-          this.trainers = [];
         });
 
       console.log(this.trainers);
@@ -185,30 +161,31 @@ export default {
   },
   mounted: async function () {
     await axios
-      .get('http://localhost:5000/api/course/get_courses')
+      .get('http://localhost:5000/api/course/all')
       .then((response) => {
-        this.courses = response.data.data;
+        this.courses = response.data.result.records;
       })
       .catch((error) => alert(error));
   },
   methods: {
-    getTrainers: async function (each_learner) {
+    getTrainers: async function (each_past_class) {
       await axios
         .get(
-          'http://localhost:5000/api/learners/get_trainers_by_id/' +
-            parseInt(each_learner.user_id)
+          'http://localhost:5000/api/class/' +
+            parseInt(each_past_class.class_id)
         )
         .then((response) => {
-          this.trainers = this.trainers.concat(response.data.data);
+          this.trainers = this.trainers.concat(
+            response.data.result.records.past_learners
+          );
         })
         .catch((error) => alert(error));
     },
 
     assignTrainer: async function () {
       await axios
-        .post('http://localhost:5000/api/trainer/assign_trainer', {
+        .post('http://localhost:5000/api/trainer/add', {
           user_id: this.user_id,
-          course_id: this.course_id,
           class_id: this.class_id,
         })
         .then((response) => {

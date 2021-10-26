@@ -101,6 +101,7 @@ def get_all_courses(is_retired: bool):
 def get_course_classes(course: Course):
     enrolling = []
     ongoing = []
+    past = []
 
     for a_class in course.get_class_enrolment():
         enrolling.append(a_class.serialise())
@@ -108,7 +109,10 @@ def get_course_classes(course: Course):
     for a_class in course.get_class_ongoing():
         ongoing.append(a_class.serialise())
 
-    return {"enrolling": enrolling, "ongoing": ongoing}
+    for a_class in course.get_class_past():
+        past.append(a_class.serialise())
+
+    return {"enrolling": enrolling, "ongoing": ongoing, "past": past}
 
 
 def get_prereq_courses(course_id: int):
