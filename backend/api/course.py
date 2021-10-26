@@ -120,7 +120,6 @@ def get_prereq_courses(course_id: int):
     prereq_courses: List[Course] = []
 
     for prereq in prereqs_list:
-        print(prereq)
         prereq_courses.append(prereq.get_prereq_course())
 
     return prereq_courses

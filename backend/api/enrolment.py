@@ -23,14 +23,19 @@ def is_learner_eligible_for_enrolment(learner_id: int, course_id: int):
     ] = LearnerCourseCompletion.query.filter_by(user_id=learner_id).all()
 
     # get list of course completed by learner
-    completed_course: List[Course] = []
+    completed_count = 0
     for complete in completed_class:
         class_details: CClass = CClass.query.filter_by(id=complete.class_id).first()
-        course: Course = Course.query.filter_by(id=class_details.course_id).first()
-        if course_id in prereq_courses:
-            completed_course.append(course)
+        course_completed: Course = Course.query.filter_by(
+            id=class_details.course_id
+        ).first()
 
-    return len(completed_class) == len(completed_course)
+        if course_completed.id in prereq_courses:
+            completed_count += 1
+
+    print(completed_count)
+
+    return len(prereq_courses) == completed_count
 
 
 def check_learner_course_valid(token: str, course_id: int):

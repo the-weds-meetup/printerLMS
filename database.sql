@@ -223,7 +223,7 @@ INSERT INTO course (name, description)
 
 -- COURSE PREREQUISITE
 INSERT INTO course_prerequisite (course_id, prerequisite_course_id)
-  VALUES (1, 4);
+  VALUES (4, 1);
 
 -- CLASS
 INSERT INTO class (course_id, class_id, max_capacity, class_start_date, class_end_date, enrolment_start_date, enrolment_end_date)
