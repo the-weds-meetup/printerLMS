@@ -2,9 +2,11 @@ from flask import jsonify
 from typing import List
 
 from main import db
+from model.Class import Class
 from model.Course import Course
 from model.CoursePreq import CoursePreq
 from model.Learner import Learner
+from model.LearnerCourseCompletion import LearnerCourseCompletion
 from model.LoginSession import LoginSession
 from api.error import throw_error
 
@@ -122,3 +124,53 @@ def get_prereq_courses(course_id: int):
         prereq_courses.append(prereq.get_prereq_course())
 
     return prereq_courses
+
+
+def check_learner_course_valid(token: str, course_id: int):
+    session: LoginSession = LoginSession.query.filter_by(token=token).first()
+    learner = session.get_learner()
+
+    if learner.isAdmin() == False:
+        return throw_error("Authorisation", "Not Authorised", 403)
+
+    # check preq courses
+    prereq_course = get_prereq_courses(course_id)
+
+    if len(prereq_course) == 0:
+        response = {
+            "success": True,
+            "results": {"type": "enrolment_status", "msg": "OK"},
+        }
+        return response, 200
+
+    # get learner completed courses
+    completed_class: List[
+        LearnerCourseCompletion
+    ] = LearnerCourseCompletion.query.filter_by(user_id=learner.id).all()
+
+    completed_course: List[Course] = []
+    for complete in completed_class:
+        class_details: Class = Class.query.filter_by(id=complete.class_id).first()
+        course: Course = Course.query.filter_by(id=class_details.course_id).first()
+        if course_id in prereq_course:
+            completed_course.append(course)
+
+    if len(completed_class) != len(completed_course):
+        response = {
+            "success": False,
+            "results": {
+                "type": "enrolment_status",
+                "msg": "Does not fulfil pre-requisites",
+            },
+        }
+        return response, 200
+
+    response = {
+        "success": True,
+        "results": {
+            "type": "enrolment_status",
+            "msg": "OK",
+        },
+    }
+
+    return response, 200
