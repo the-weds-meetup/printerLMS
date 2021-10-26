@@ -25,67 +25,6 @@ def index():
     return "Hello World!"
 
 
-# get all courses that aren't retired
-# @app.route("/api/course/get_courses")
-# def courses():
-#     is_retired = request.args.get("is_retired", default="False")
-#     return course.get_courses(is_retired)
-
-
-# get all classes
-@app.route("/api/classes/get_classes")
-def classes():
-    return classes.get_classes()
-
-
-# get classes by course
-@app.route("/api/classes/get_classes_by_course/<int:course_id>")
-def classes_by_course(course_id):
-    return classes.get_classes_by_course(course_id)
-
-
-# get all trainers (department id 2)
-# for now: assume you can put any learner in the trainer role
-@app.route("/api/learners/get_trainers/<int:department_id>")
-def learners(department_id):
-    return trainer.get_trainers(department_id)
-
-
-@app.route("/api/learner/<int:id>")
-def learners_by_user_id(id):
-    return learner.get_learner_by_id(id)
-
-
-@app.route("/api/learners/get_trainers_by_id/<int:user_id>")
-def assigned_trainers(user_id):
-    return trainer.get_assigned_trainer(user_id)
-
-
-@app.route("/api/trainer/assign_trainer", methods=["POST"])
-def assign_trainer():
-    data = request.get_json()
-
-    try:
-        user_id = data["user_id"]
-        course_id = data["course_id"]
-        class_id = data["class_id"]
-        return trainer.assign_trainer(user_id, course_id, class_id)
-    except Exception:
-        return (
-            jsonify(
-                {
-                    "success": False,
-                    "message": "Error occured, unable to commit to database",
-                }
-            )
-        ), 500
-
-
-@app.route("/api/learnercompletion/<int:class_id>")
-def learners_by_class(class_id):
-    return learnercompletion.get_learners_by_course(class_id)
-
-
 @app.route("/api/test/user/<int:user_id>")
 def get_user(user_id):
     return test.get_user_full_name(user_id)
