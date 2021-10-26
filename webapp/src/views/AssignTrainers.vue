@@ -130,6 +130,7 @@ export default {
           this.classes = [];
           this.class_id = 0;
           this.trainers = [];
+          this.user_id = [];
 
           // display enrolling classes which would not have a trainer assigned yet
           var enrol_classes = response.data.result.records.class.enrolling;
