@@ -4,6 +4,7 @@ import datetime
 
 class Enrolment(db.Model):
     __tablename__ = "enrolment"
+    __table_args__ = (db.UniqueConstraint("user_id", "class_id"),)
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True, nullable=True)
     user_id = db.Column(db.Integer, db.ForeignKey("learner.id"), nullable=False)
@@ -26,7 +27,7 @@ class Enrolment(db.Model):
         self.class_id = class_id
         self.is_approved = is_approved
         self.course_progress = course_progress
-        self.creation_date = dt.isoformat() + "Z"
+        self.enrolment_date = dt.isoformat() + "Z"
 
     def serialise(self):
         columns = self.__mapper__.column_attrs.keys()

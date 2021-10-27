@@ -30,10 +30,10 @@ def is_learner_eligible_for_enrolment(learner_id: int, course_id: int):
             id=class_details.course_id
         ).first()
 
-        if course_completed.id in prereq_courses:
-            completed_count += 1
-
-    print(completed_count)
+        for course in prereq_courses:
+            if course_completed.id == course.id:
+                completed_count += 1
+                break
 
     return len(prereq_courses) == completed_count
 
@@ -67,7 +67,7 @@ def check_learner_course_valid(token: str, course_id: int):
 
 def add_enrolment(token: str, class_id: int):
     session: LoginSession = LoginSession.query.filter_by(token=token).first()
-    the_class: CClass = CClass.query.filter_by(class_id=class_id)
+    the_class: CClass = CClass.query.filter_by(class_id=class_id).first()
     learner = session.get_learner()
 
     if learner is None or the_class is None:
@@ -88,4 +88,13 @@ def add_enrolment(token: str, class_id: int):
     # add enrolment object
     enroll: Enrolment = Enrolment(learner.id, class_id)
     db.session.add(enroll)
-    db.session.flush()
+    db.session.commit()
+
+    response = {
+        "success": True,
+        "results": {
+            "type": "enrolment_status",
+            "msg": enroll.serialise(),
+        },
+    }
+    return response, 200

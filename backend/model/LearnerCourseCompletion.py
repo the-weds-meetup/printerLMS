@@ -4,6 +4,7 @@ import datetime
 
 class LearnerCourseCompletion(db.Model):
     __tablename__ = "learner_course_completion"
+    __table_args__ = (db.UniqueConstraint("user_id", "class_id"),)
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True, nullable=True)
     user_id = db.Column(db.Integer, db.ForeignKey("learner.id"), nullable=False)

@@ -117,6 +117,22 @@ def get_learner():
         return auth.throw_error(type="Learner", message=str(e), status_code=400)
 
 
+@app.route("/api/enroll/<int:class_id>", methods=["POST"])
+def enroll_learner(class_id):
+    request_data = request.get_json()
+    try:
+        session = request_data["token"]
+        isValid = auth.validateToken(session)
+        if isValid["status"] == False:
+            return auth.throw_error("enroll_class", isValid["message"])
+        else:
+            return enrolment.add_enrolment(token=session, class_id=class_id)
+
+    except Exception as e:
+        print(e)
+        return auth.throw_error(type="enroll_class", message=str(e), status_code=400)
+
+
 if __name__ == "__main__":
     from api import *
 

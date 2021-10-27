@@ -256,6 +256,16 @@ INSERT INTO class (course_id, class_id, max_capacity, class_start_date, class_en
     '2021-10-04T00:00:00.000Z',
     '2021-10-21T04:00:00.000Z'
   );
+  INSERT INTO class (course_id, class_id, max_capacity, class_start_date, class_end_date, enrolment_start_date, enrolment_end_date)
+  VALUES (
+    4,
+    4,
+    20,
+    '2021-11-01T16:00:00.000Z',
+    '2021-11-05T16:00:00.000Z',
+    '2021-10-04T00:00:00.000Z',
+    '2021-10-31T04:00:00.000Z'
+  );
 
 -- TRAINER
 INSERT INTO trainer (user_id, class_id)
@@ -265,7 +275,7 @@ INSERT INTO trainer (user_id, class_id)
 
 -- Learner_Course_Completion
 INSERT INTO learner_course_completion (user_id, class_id, completion_date)
-  VALUES (2, 1, "2021-10-11T12:00:00.000Z")
+  VALUES (2, 1, '2021-10-11T12:00:00.000Z');
 INSERT INTO learner_course_completion (user_id, class_id, completion_date)
-  VALUES (3, 1, "2021-10-12T11:00:00.000Z")
+  VALUES (3, 1, '2021-10-12T11:00:00.000Z');
 
