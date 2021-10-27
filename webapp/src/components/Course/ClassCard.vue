@@ -3,7 +3,16 @@
     <div class="card-top">
       <h5>G{{ classId }}</h5>
       <button v-if="isAdmin" class="btn">Edit</button>
-      <button v-else class="btn">{{ checkStatus() }}</button>
+      <button v-else-if="!canEnroll" disabled class="btn">
+        {{ checkStatus() }}
+      </button>
+      <button
+        v-else
+        class="btn"
+        @click="enrollClass()"
+      >
+        {{ checkStatus() }}
+      </button>
     </div>
     <div class="class-body">
       <div class="row-side">
@@ -35,6 +44,7 @@
 </template>
 
 <script>
+import axios from 'axios';
 import moment from 'moment';
 
 export default {
@@ -74,14 +84,23 @@ export default {
       required: false,
       default: '',
     },
+    canEnroll: {
+      type: Boolean,
+      required: false,
+      default: false,
+    },
   },
   data() {
     return {
       isAdmin: false,
+      enrollState: 'no_enroll',
     };
   },
-  created() {
+  async created() {
     this.isAdmin = window.sessionStorage.getItem('learner_isAdmin') == 'true';
+  },
+  async mounted() {
+    await this.learnerEnrollStatus();
   },
   methods: {
     convertIS8601Date(dateString) {
@@ -89,7 +108,39 @@ export default {
       return momentDate.format('DD MMM YYYY');
     },
     checkStatus() {
-      return 'Enroll';
+      switch (this.enrollState) {
+        case 'approve':
+          return 'Approved';
+        case 'awaiting_approval':
+          return 'Waiting For Approval';
+        case 'no_enroll':
+        default:
+          return 'Enroll';
+      }
+    },
+    async learnerEnrollStatus() {
+      await axios
+        .post(`/api/class/${this.classId}/status`, {
+          token: window.localStorage.getItem('session_token'),
+        })
+        .then((response) => {
+          this.enrollState = response.data.results.status;
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    },
+    async enrollClass() {
+      await axios
+        .post('/api/enroll/' + this.classId, {
+          token: window.localStorage.getItem('session_token'),
+        })
+        .then(() => {
+          location.reload();
+        })
+        .catch((error) => {
+          console.error(error);
+        });
     },
   },
 };
