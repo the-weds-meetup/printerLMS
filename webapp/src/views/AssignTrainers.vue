@@ -65,8 +65,9 @@
               :key="each_class.class_id"
               :value="each_class.class_id"
             >
-              Class {{ each_class.class_id }}: starting date
-              {{ each_class.class_start_date.substring(0, 10) }}
+              G{{ each_class.class_id }}:
+              {{ convertIS8601Date(each_class.class_start_date) }} -
+              {{ convertIS8601Date(each_class.class_end_date) }}
             </option>
             <option v-if="classes.length == 0" disabled>
               No classes currently available for this course
@@ -94,6 +95,7 @@
 
 <script>
 import axios from 'axios';
+import moment from 'moment';
 
 // @ is an alias to /src
 import { checkSessionToken } from '@/assets/js/authentication.js';
@@ -168,6 +170,11 @@ export default {
       .catch((error) => alert(error));
   },
   methods: {
+    convertIS8601Date(dateString) {
+      const momentDate = moment.parseZone(dateString).local();
+      return momentDate.format('DD MMM YYYY');
+    },
+
     getTrainers: async function (each_past_class) {
       await axios
         .get(
