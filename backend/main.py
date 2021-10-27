@@ -97,6 +97,16 @@ def get_learner():
         return auth.throw_error(type="Learner", message=str(e), status_code=400)
 
 
+@app.route("/api/enrolment/<int:user_id>")
+def get_approved_courses(user_id):
+    try:
+        return enrolment.get_approved_enrolments(user_id=user_id)
+
+    except Exception as e:
+        print(e)
+        return auth.throw_error(type="Class", message=str(e), status_code=400)
+
+
 if __name__ == "__main__":
     from api import *
 

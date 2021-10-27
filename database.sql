@@ -265,7 +265,12 @@ INSERT INTO trainer (user_id, class_id)
 
 -- Learner_Course_Completion
 INSERT INTO learner_course_completion (user_id, class_id, completion_date)
-  VALUES (2, 1, "2021-10-11T12:00:00.000Z")
+  VALUES (2, 1, '2021-10-11T12:00:00.000Z');
 INSERT INTO learner_course_completion (user_id, class_id, completion_date)
-  VALUES (3, 1, "2021-10-12T11:00:00.000Z")
+  VALUES (3, 1, '2021-10-12T11:00:00.000Z');
 
+-- Enrolment
+INSERT INTO enrolment (user_id, class_id, enrolment_date, is_approved, is_withdrawn)
+  VALUES (4, 3, '2021-10-04T00:00:00.000Z', TRUE, FALSE);
+INSERT INTO enrolment (user_id, class_id, enrolment_date, is_approved, is_withdrawn)
+  VALUES (5, 2, '2021-10-04T00:00:00.000Z', TRUE, FALSE);
