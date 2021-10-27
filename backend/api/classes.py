@@ -1,4 +1,4 @@
-from flask import jsonify
+from flask import jsonify, request
 from typing import List
 from main import db
 from model.Class import Class
