@@ -58,7 +58,7 @@ def get_class(class_id: int):
 
     response = {
         "success": True,
-        "result": {"type": "Course", "records": serialise},
+        "result": {"type": "Class", "records": serialise},
     }
 
     return jsonify(response), 200
