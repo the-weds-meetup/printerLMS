@@ -46,14 +46,30 @@ def check_learner_course_valid(token: str, course_id: int):
         return throw_error("Authorisation", "Not Authorised", 403)
 
     if is_learner_eligible_for_enrolment(learner.id, course_id):
+        # check if learner has completed
+        is_completed = False
+        completed_course: List[
+            LearnerCourseCompletion
+        ] = LearnerCourseCompletion.query.filter_by(user_id=learner.id).all()
+
+        for completion in completed_course:
+            completed_class: CClass = CClass.query.filter_by(
+                id=completion.class_id
+            ).first()
+            if completed_class.course_id == course_id:
+                is_completed = True
+                break
+
+        # check if completed
         response = {
             "success": True,
             "results": {
                 "type": "enrolment_status",
                 "msg": "OK",
+                "completed": is_completed,
             },
         }
-        return response, 200
+        return jsonify(response), 200
 
     response = {
         "success": False,
@@ -100,34 +116,29 @@ def add_enrolment(token: str, class_id: int):
     return jsonify(response), 200
 
 
-def course_classes_enrolment_status(token: str, course_id: int):
+def class_enrolment_status(token: str, class_id: int):
     session: LoginSession = LoginSession.query.filter_by(token=token).first()
-    course: Course = Course.query.filter_by(id=course_id).first()
+    selected_class: CClass = CClass.query.filter_by(id=class_id).first()
     learner = session.get_learner()
-    if learner is None or course is None:
+
+    if learner is None or selected_class is None:
         return throw_error("Authorisation", "Not Authorised", 403)
 
-    enrolling_class = course.get_class_enrolment()
-    status_serialised = {}
-
-    for enrol in enrolling_class:
-        enrolment: Enrolment = Enrolment.query.filter_by(
-            user_id=learner.id, class_id=enrol.class_id
-        ).first()
-        status = "no_enroll"
-        if enrolment != None:
-            if enrolment.is_approved:
-                status = "approve"
-            else:
-                status = "awaiting_approval"
-
-        status_serialised[enrol.class_id] = status
+    status = "no_enroll"
+    enrolment: Enrolment = Enrolment.query.filter_by(
+        user_id=learner.id, class_id=class_id
+    ).first()
+    if enrolment != None:
+        if enrolment.is_approved:
+            status = "approve"
+        else:
+            status = "awaiting_approval"
 
     response = {
         "success": True,
         "results": {
-            "type": "enrolment_status",
-            "records": status_serialised,
+            "type": "class_enrolment_status",
+            "status": status,
         },
     }
     return jsonify(response), 200

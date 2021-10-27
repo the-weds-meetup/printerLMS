@@ -272,6 +272,8 @@ INSERT INTO trainer (user_id, class_id)
   VALUES (2 , 1);
 INSERT INTO trainer (user_id, class_id)
   VALUES (2 , 2);
+INSERT INTO trainer (user_id, class_id)
+  VALUES (1 , 2);
 
 -- Learner_Course_Completion
 INSERT INTO learner_course_completion (user_id, class_id, completion_date)

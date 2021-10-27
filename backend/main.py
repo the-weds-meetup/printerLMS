@@ -104,19 +104,17 @@ def get_course(course_id):
             )
 
 
-@app.route("/api/course/status/<int:course_id>", methods=["POST"])
-def get_course_enrolment_status(course_id):
+@app.route("/api/class/<int:class_id>/status", methods=["POST"])
+def get_course_enrolment_status(class_id):
     request_data = request.get_json()
     session = request_data["token"]
 
     try:
         isValid = auth.validateToken(session)
         if isValid["status"] == False:
-            return auth.throw_error("course_status", isValid["message"])
+            return auth.throw_error("class_enrolment_status", isValid["message"])
         else:
-            return enrolment.course_classes_enrolment_status(
-                token=session, course_id=course_id
-            )
+            return enrolment.class_enrolment_status(token=session, class_id=class_id)
 
     except Exception as e:
         print(e)
