@@ -62,7 +62,7 @@ def check_learner_course_valid(token: str, course_id: int):
             "msg": "Does not fulfil pre-requisites",
         },
     }
-    return response, 200
+    return jsonify(response), 200
 
 
 def add_enrolment(token: str, class_id: int):
@@ -83,7 +83,7 @@ def add_enrolment(token: str, class_id: int):
                 "msg": "Does not fulfil pre-requisites",
             },
         }
-        return response, 401
+        return jsonify(response), 401
 
     # add enrolment object
     enroll: Enrolment = Enrolment(learner.id, class_id)
@@ -94,7 +94,43 @@ def add_enrolment(token: str, class_id: int):
         "success": True,
         "results": {
             "type": "enrolment_status",
-            "msg": enroll.serialise(),
+            "records": enroll.serialise(),
         },
     }
-    return response, 200
+    return jsonify(response), 200
+
+
+def course_classes_enrolment_status(token: str, course_id: int):
+    session: LoginSession = LoginSession.query.filter_by(token=token).first()
+    course: Course = Course.query.filter_by(id=course_id).first()
+    learner = session.get_learner()
+    if learner is None or course is None:
+        return throw_error("Authorisation", "Not Authorised", 403)
+
+    enrolling_class = course.get_class_enrolment()
+    status_serialised = []
+
+    for enrol in enrolling_class:
+        enrolment: Enrolment = Enrolment.query.filter_by(
+            user_id=learner.id, class_id=enrol.class_id
+        ).first()
+        status = "no_enroll"
+        if enrolment != None:
+            if enrolment.is_approved:
+                status = "approve"
+            else:
+                status = "awaiting_approval"
+
+        seralised = {}
+        seralised["class_id"] = enrol.class_id
+        seralised["enrol_status"] = status
+        status_serialised.append(seralised)
+
+    response = {
+        "success": True,
+        "results": {
+            "type": "enrolment_status",
+            "records": status_serialised,
+        },
+    }
+    return jsonify(response), 200
