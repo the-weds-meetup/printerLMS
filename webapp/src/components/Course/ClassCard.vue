@@ -8,6 +8,7 @@
       </button>
       <button
         v-else
+        :disabled="!canEnroll || enrollState !== 'no_enroll'"
         class="btn"
         @click="enrollClass()"
       >
