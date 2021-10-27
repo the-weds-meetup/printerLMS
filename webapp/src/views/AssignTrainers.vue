@@ -32,7 +32,7 @@
               class="form-label"
               :style="{ display: 'block' }"
             >
-              Recommended Trainers
+              Select Trainer
             </label>
           </div>
           <select id="selectTrainer" v-model="user_id" class="form-select">
