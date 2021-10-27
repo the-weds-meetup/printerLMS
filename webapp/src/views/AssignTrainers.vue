@@ -114,7 +114,6 @@ export default {
       trainers: [],
       courses: [],
       classes: [],
-      learners_completion: [],
       user_id: 0,
       course_id: 0,
       class_id: 0,
