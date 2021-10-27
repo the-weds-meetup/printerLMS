@@ -108,7 +108,7 @@ def course_classes_enrolment_status(token: str, course_id: int):
         return throw_error("Authorisation", "Not Authorised", 403)
 
     enrolling_class = course.get_class_enrolment()
-    status_serialised = []
+    status_serialised = {}
 
     for enrol in enrolling_class:
         enrolment: Enrolment = Enrolment.query.filter_by(
@@ -121,10 +121,7 @@ def course_classes_enrolment_status(token: str, course_id: int):
             else:
                 status = "awaiting_approval"
 
-        seralised = {}
-        seralised["class_id"] = enrol.class_id
-        seralised["enrol_status"] = status
-        status_serialised.append(seralised)
+        status_serialised[enrol.class_id] = status
 
     response = {
         "success": True,
