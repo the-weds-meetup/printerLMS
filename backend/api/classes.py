@@ -48,7 +48,6 @@ def get_past_learners(class_id):
 
 
 def add_trainer(user_id, class_id):
-    # trainer: Trainer = trainer
     a_class: Class = Class.query.filter_by(class_id=class_id).first()
     response = a_class.add_trainer(user_id)
 
