@@ -127,6 +127,17 @@ def get_course_enrolment_status(class_id):
         return auth.throw_error(type="course_status", message=str(e), status_code=400)
 
 
+
+@app.route("/api/class/<int:class_id>/learners")
+def get_class_learners(class_id):
+    try:
+        return classes.get_class_learners(class_id)
+
+    except Exception as e:
+        print(e)
+        return auth.throw_error(type="course_status", message=str(e), status_code=400)
+
+
 @app.route("/api/class/<int:id>")
 def get_class(id):
     try:
