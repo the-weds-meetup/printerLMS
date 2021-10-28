@@ -33,15 +33,15 @@
         <div>
           <!-- Start of form -->
           <form class ="center" @submit.prevent ="submitform()"><br><br>
-              Course ID: <input type = "text" v-model ="courseid" placeholder ="Course ID" required> <br><br>
-              Class ID: <input type = "text" v-model ="classid" placeholder ="Class ID" required> <br><br>
-              Max Capacity: <input type = "number" v-model ="maxcapacity" placeholder = "Max Capacity"> <br><br>
-              Start Date: <input type = "datetime-local" v-model ="startdate" placeholder = "Start Date"> 
+              Course ID: <input type = "text" v-model ="course_id" placeholder ="Course ID" required> <br><br>
+              Class ID: <input type = "text" v-model ="class_id" placeholder ="Class ID" required> <br><br>
+              Max Capacity: <input type = "number" v-model ="max_capacity" placeholder = "Max Capacity"> <br><br>
+              Start Date: <input type = "datetime-local" v-model ="class_start_date" placeholder = "Start Date"> 
               <button type = "button" v-on:click = "getmin1()" name="Verify1"> Verify </button><br><br>
-              End Date: <input type= "datetime-local" id="setmin1" v-model ="enddate" placeholder = "End Date" min="2021-10-14T00:00"> <br><br>
-              Enrolment Start Date: <input type = "datetime-local" v-model ="enrolstartdate" placeholder = "Enrolment Start Date"> 
+              End Date: <input type= "datetime-local" id="setmin1" v-model ="class_end_date" placeholder = "End Date" min="2021-10-14T00:00"> <br><br>
+              Enrolment Start Date: <input type = "datetime-local" v-model ="enrolment_start_date" placeholder = "Enrolment Start Date"> 
               <button type = "button" v-on:click = "getmin2()" name="Verify2"> Verify </button><br><br>
-              Enrolment End Date: <input type = "datetime-local" id="setmin2" v-model ="enrolenddate" placeholder = "Enrolment End Date" min="2021-10-14T00:00"> <br><br>
+              Enrolment End Date: <input type = "datetime-local" id="setmin2" v-model ="enrolment_end_date" placeholder = "Enrolment End Date" min="2021-10-14T00:00"> <br><br>
               <button type = "submit" name="submit">Submit</button>
           </form>
           <!-- End of form -->  
@@ -60,26 +60,25 @@ export default{
     name: 'createclass',
     data(){
       return{
-        courseid: '',
-        classid: '',
-        maxcapacity: '',
-        currentcapacity: '',
-        startdate: '',
-        enddate: '',
-        enrolstartdate: '',
-        enrolenddate: '',
+        course_id: '',
+        class_id: '',
+        max_capacity: '',
+        class_start_date: '',
+        class_end_date: '',
+        enrolment_start_date: '',
+        enrolment_end_date: '',
       }
     },
     methods:{
       getmin1(){
         console.log("Start Date -> Running");
         console.log(this.startdate);
-        document.getElementById("setmin1").setAttribute("min",this.startdate);
+        document.getElementById("setmin1").setAttribute("min",this.class_start_date);
       },
       getmin2(){
         console.log("Enrolment Start Date -> Running");
         console.log(this.enrolstartdate);
-        document.getElementById("setmin2").setAttribute("min",this.enrolstartdate);
+        document.getElementById("setmin2").setAttribute("min",this.enrolment_start_date);
       },
       submitform(){
         /* console.log("Class created and updated to database!") */
@@ -88,9 +87,8 @@ export default{
           course_id: this.course_id,
           class_id: this.class_id,
           max_capacity: this.max_capacity,
-          current_capacity: this.current_capacity,
-          start_date: this.start_date,
-          end_date: this.end_date,
+          class_start_date: this.class_start_date,
+          class_end_date: this.class_end_date,
           enrolment_start_date: this.enrolment_start_date,
           enrolment_end_date: this.enrolment_end_date
         })

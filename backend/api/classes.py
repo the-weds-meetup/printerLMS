@@ -27,11 +27,11 @@ def add_class(request_data: dict[str, any]):
 
 
 def get_all_class():
-    classes: classes = Class.query.all()
+    class_list = classes.query.all()
     classes_serialised = []
 
-    for classes in class_list:
-        serialise = classes.to_dict()
+    for classs in class_list:
+        serialise = classs.to_dict()
         classes_serialised.append(serialise)
 
     response = {
@@ -40,4 +40,3 @@ def get_all_class():
     }
 
     return jsonify(response), 200
-

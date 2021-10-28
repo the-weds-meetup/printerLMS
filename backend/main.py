@@ -151,10 +151,10 @@ def enroll_learner(class_id):
         return auth.throw_error(type="enroll_class", message=str(e), status_code=400)
 
 @cross_origin(origins= "http://localhost:8080")
-@app.route("/api/class/all")
+@app.route("/api/class" , methods=['GET'])
 def get_all_class():
     try:
-        return class_list.get_all_class()
+        return classes.get_all_class()
     except Exception as e:
         print(e)
         return auth.throw_error(type="Class", message=str(e), status_code=400)
