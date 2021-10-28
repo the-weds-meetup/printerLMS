@@ -2,9 +2,8 @@
   <div class="card">
     <div class="card-top">
       <h5>G{{ classId }}</h5>
-      <button v-if="isAdmin" class="btn">Edit</button>
-      <button v-else-if="!canEnroll" disabled class="btn">
-        {{ checkStatus() }}
+      <button v-if="isAdmin" class="btn" @click="navtigateToEditClas()">
+        Edit
       </button>
       <button
         v-else
@@ -133,7 +132,7 @@ export default {
     },
     async enrollClass() {
       await axios
-        .post('/api/enroll/' + this.classId, {
+        .post(`/api/enroll/self/${this.classId}`, {
           token: window.localStorage.getItem('session_token'),
         })
         .then(() => {
@@ -142,6 +141,11 @@ export default {
         .catch((error) => {
           console.error(error);
         });
+    },
+    navtigateToEditClas() {
+      if (this.isAdmin) {
+        window.location.href = `/class/${this.classId}/edit`;
+      }
     },
   },
 };
