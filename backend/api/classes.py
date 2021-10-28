@@ -1,11 +1,23 @@
 from flask import jsonify, request
-from typing import List
+from typing import Any, List
 from main import db
 from model.Class import Class
+from model.Enrolment import Enrolment
 from model.Learner import Learner
 from model.Trainer import Trainer
 from model.LearnerCourseCompletion import LearnerCourseCompletion
 from api.error import throw_error
+
+
+def get_class_learners(class_id: int):
+    enrolments: List[Enrolment] = Enrolment.query.filter_by(class_id=class_id).all()
+    learners: List[dict[str, Any]] = []
+
+    for enrolment in enrolments:
+        learner: Learner = Learner.query.filter_by(id=enrolment.user_id).first()
+        learners.append(learner.serialise())
+
+    response = {"sucess": True, "results": {"type": "Class", "records": learners}}
 
 
 def add_class(request_data: dict[str, any]):

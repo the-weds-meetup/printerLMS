@@ -161,16 +161,49 @@ def get_learner():
         return auth.throw_error(type="Learner", message=str(e), status_code=400)
 
 
-@app.route("/api/enroll/<int:class_id>", methods=["POST"])
-def enroll_learner(class_id):
+@app.route("/api/enroll/self/<int:class_id>", methods=["POST"])
+def self_enroll_learner(class_id):
     request_data = request.get_json()
     try:
         session = request_data["token"]
         isValid = auth.validateToken(session)
-        if isValid["status"] == False:
-            return auth.throw_error("enroll_class", isValid["message"])
+
+        if isValid["status"] == True:
+            loginSession = auth.return_login_session(session)
+            return enrolment.add_enrolment(
+                learner_id=loginSession.get_learner().id, class_id=class_id
+            )
+
+        return auth.throw_error("enroll_class", isValid["message"])
+
+    except Exception as e:
+        print(e)
+        return auth.throw_error(type="enroll_class", message=str(e), status_code=400)
+
+
+@app.route("/api/enroll/manual/<int:class_id>", methods=["POST"])
+def manual_enroll_learner(class_id):
+    request_data = request.get_json()
+
+    try:
+        session = request_data["token"]
+        learner_id = request_data["learner"]
+        isValid = auth.validateToken(session)
+
+        if isValid["status"] == True:
+            loginSession = auth.return_login_session(session)
+
+            if loginSession.get_learner().isAdmin() == False:
+                return auth.throw_error(
+                    type="Authorisation", message="Not Authorised", status_code=403
+                )
+
+            return enrolment.add_enrolment(
+                class_id=class_id, learner_id=learner_id, is_approved=True
+            )
+
         else:
-            return enrolment.add_enrolment(token=session, class_id=class_id)
+            return auth.throw_error("enroll_class", isValid["message"])
 
     except Exception as e:
         print(e)

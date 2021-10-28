@@ -81,15 +81,13 @@ def check_learner_course_valid(token: str, course_id: int):
     return jsonify(response), 200
 
 
-def add_enrolment(token: str, class_id: int):
-    session: LoginSession = LoginSession.query.filter_by(token=token).first()
+def add_enrolment(learner_id: int, class_id: int, is_approved: bool = False):
     the_class: CClass = CClass.query.filter_by(class_id=class_id).first()
-    learner = session.get_learner()
 
-    if learner is None or the_class is None:
+    if the_class is None:
         return throw_error("Authorisation", "Not Authorised", 403)
 
-    is_eligible = is_learner_eligible_for_enrolment(learner.id, the_class.course_id)
+    is_eligible = is_learner_eligible_for_enrolment(learner_id, the_class.course_id)
 
     if is_eligible == False:
         response = {
@@ -102,7 +100,7 @@ def add_enrolment(token: str, class_id: int):
         return jsonify(response), 401
 
     # add enrolment object
-    enroll: Enrolment = Enrolment(learner.id, class_id)
+    enroll: Enrolment = Enrolment(learner_id, class_id, is_approved=is_approved)
     db.session.add(enroll)
     db.session.commit()
 
