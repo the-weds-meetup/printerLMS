@@ -49,9 +49,10 @@
           <div v-if="course.class.enrolling.length > 0" class="classes">
             <ClassCard
               v-for="enroll in course.class.enrolling"
-              :key="enroll.class_id"
-              :class-id="enroll.class_id"
-              :course-id="enroll.course_id"
+              :key="enroll.class_name"
+              :class-name="enroll.class_name"
+              :class-id="enroll.id"
+              :course-id="enroll.coures_id"
               :max-capacity="enroll.max_capacity"
               :class-start-date="enroll.class_start_date"
               :class-end-date="enroll.class_end_date"

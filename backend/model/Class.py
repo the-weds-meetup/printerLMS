@@ -65,7 +65,7 @@ class Class(db.Model):
         return {
             "id": self.id,
             "course_id": self.course_id,
-            "class_id": self.class_id,
+            "class_name": self.class_id,
             "max_capacity": self.max_capacity,
             "class_start_date": self.class_start_date,
             "class_end_date": self.class_end_date,
