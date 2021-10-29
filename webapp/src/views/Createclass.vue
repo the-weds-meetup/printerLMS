@@ -5,9 +5,7 @@
     <!-- Start of navbar -->
        <SideNav :email="email" :full-name="fullName" :is-admin="isAdmin" />
     <!-- End of navbar -->
-
-
-        
+   
     <div class="content-container">
       <div class="container-fluid">
         <h1 class ="center">Create Class</h1>
