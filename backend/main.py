@@ -44,6 +44,19 @@ def login():
         return error.throw_error(type="Login", message=str(e), status_code=400)
 
 
+@app.route("/api/auth/logout", methods=["POST"])
+def logout():
+    request_data = request.get_json()
+
+    try:
+        session = request_data["token"]
+        return auth.logout(session)
+
+    except Exception as e:
+        print(e)
+        return auth.throw_error(type="Logout", message=str(e), status_code=400)
+
+
 @app.route("/api/course/add", methods=["POST"])
 def add_course():
     request_data = request.get_json()
@@ -67,14 +80,50 @@ def get_course_all():
         return auth.throw_error(type="Course", message=str(e), status_code=400)
 
 
-@app.route("/api/course/<int:course_id>")
+@app.route("/api/course/<int:course_id>", methods=["GET", "POST"])
 def get_course(course_id):
+    if request.method == "GET":
+        try:
+            return course.get_course(course_id=course_id)
+
+        except Exception as e:
+            print(e)
+            return auth.throw_error(type="Course", message=str(e), status_code=400)
+
+    if request.method == "POST":
+        request_data = request.get_json()
+        try:
+            session = request_data["token"]
+            isValid = auth.validateToken(session)
+            if isValid["status"] == False:
+                return auth.throw_error("course_enrolement_valid", isValid["message"])
+            else:
+                return enrolment.check_learner_course_valid(
+                    token=session, course_id=course_id
+                )
+
+        except Exception as e:
+            print(e)
+            return auth.throw_error(
+                type="course_enrolement_valid", message=str(e), status_code=400
+            )
+
+
+@app.route("/api/class/<int:class_id>/status", methods=["POST"])
+def get_course_enrolment_status(class_id):
+    request_data = request.get_json()
+    session = request_data["token"]
+
     try:
-        return course.get_course(course_id=course_id)
+        isValid = auth.validateToken(session)
+        if isValid["status"] == False:
+            return auth.throw_error("class_enrolment_status", isValid["message"])
+        else:
+            return enrolment.class_enrolment_status(token=session, class_id=class_id)
 
     except Exception as e:
         print(e)
-        return auth.throw_error(type="Course", message=str(e), status_code=400)
+        return auth.throw_error(type="course_status", message=str(e), status_code=400)
 
 
 @app.route("/api/class/<int:class_id>")
@@ -99,19 +148,6 @@ def add_trainer():
         return auth.throw_error(type="Trainer", message=str(e), status_code=400)
 
 
-@app.route("/api/auth/logout", methods=["POST"])
-def logout():
-    request_data = request.get_json()
-
-    try:
-        session = request_data["token"]
-        return auth.logout(session)
-
-    except Exception as e:
-        print(e)
-        return auth.throw_error(type="Logout", message=str(e), status_code=400)
-
-
 @app.route("/api/learner", methods=["POST"])
 def get_learner():
     request_data = request.get_json()
@@ -122,6 +158,22 @@ def get_learner():
     except Exception as e:
         print(e)
         return auth.throw_error(type="Learner", message=str(e), status_code=400)
+
+
+@app.route("/api/enroll/<int:class_id>", methods=["POST"])
+def enroll_learner(class_id):
+    request_data = request.get_json()
+    try:
+        session = request_data["token"]
+        isValid = auth.validateToken(session)
+        if isValid["status"] == False:
+            return auth.throw_error("enroll_class", isValid["message"])
+        else:
+            return enrolment.add_enrolment(token=session, class_id=class_id)
+
+    except Exception as e:
+        print(e)
+        return auth.throw_error(type="enroll_class", message=str(e), status_code=400)
 
 
 if __name__ == "__main__":

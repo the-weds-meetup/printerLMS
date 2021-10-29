@@ -223,7 +223,7 @@ INSERT INTO course (name, description)
 
 -- COURSE PREREQUISITE
 INSERT INTO course_prerequisite (course_id, prerequisite_course_id)
-  VALUES (1, 4);
+  VALUES (4, 1);
 
 -- CLASS
 INSERT INTO class (course_id, class_id, max_capacity, class_start_date, class_end_date, enrolment_start_date, enrolment_end_date)
@@ -256,12 +256,24 @@ INSERT INTO class (course_id, class_id, max_capacity, class_start_date, class_en
     '2021-10-04T00:00:00.000Z',
     '2021-10-21T04:00:00.000Z'
   );
+  INSERT INTO class (course_id, class_id, max_capacity, class_start_date, class_end_date, enrolment_start_date, enrolment_end_date)
+  VALUES (
+    4,
+    4,
+    20,
+    '2021-11-01T16:00:00.000Z',
+    '2021-11-05T16:00:00.000Z',
+    '2021-10-04T00:00:00.000Z',
+    '2021-10-31T04:00:00.000Z'
+  );
 
 -- TRAINER
 INSERT INTO trainer (user_id, class_id)
   VALUES (2 , 1);
 INSERT INTO trainer (user_id, class_id)
   VALUES (2 , 2);
+INSERT INTO trainer (user_id, class_id)
+  VALUES (1 , 2);
 
 -- Learner_Course_Completion
 INSERT INTO learner_course_completion (user_id, class_id, completion_date)

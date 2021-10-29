@@ -2,9 +2,11 @@ from flask import jsonify
 from typing import List
 
 from main import db
+from model.Class import Class
 from model.Course import Course
 from model.CoursePreq import CoursePreq
 from model.Learner import Learner
+from model.LearnerCourseCompletion import LearnerCourseCompletion
 from model.LoginSession import LoginSession
 from api.error import throw_error
 
@@ -122,7 +124,6 @@ def get_prereq_courses(course_id: int):
     prereq_courses: List[Course] = []
 
     for prereq in prereqs_list:
-        print(prereq)
         prereq_courses.append(prereq.get_prereq_course())
 
     return prereq_courses
