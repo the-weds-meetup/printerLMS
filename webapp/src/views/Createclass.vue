@@ -1,31 +1,12 @@
 <template>
 
  <div>
+   
     <!-- Start of navbar -->
-    <div class="sidebar-container">
-      <div class="sidebar-logo">
-        LMS - Trainer
-      </div>
-      <ul class="sidebar-navigation">
-        <li class="header">Navigation</li>
-        <li>
-          <a href="#">Homepage</a>
-        </li>
-        <li>
-          <a href="#">Dashboard</a>
-        </li>
-        <li class="header">Another Menu</li>
-        <li>
-          <router-link to="/viewclass">Class list</router-link>
-        </li>
-        <li>
-          <router-link to="/createclass">Create Class</router-link>
-        </li>
-      </ul>
-    </div>
-
-
+       <SideNav :email="email" :full-name="fullName" :is-admin="isAdmin" />
     <!-- End of navbar -->
+
+
         
     <div class="content-container">
       <div class="container-fluid">
@@ -55,9 +36,16 @@
 
 <script>
 import axios from "axios"
+import { checkSessionToken } from '@/assets/js/authentication.js';
+import SideNav from '@/components/Navigation/SideNav.vue';
+import TopNav from '@/components/Navigation/TopNav.vue';
 
 export default{
     name: 'createclass',
+    components: {
+        SideNav,
+       TopNav,
+     },
     data(){
       return{
         course_id: '',
@@ -99,8 +87,15 @@ export default{
             })
         .catch(error => { this.error = error.response.data.message });
         }
-      }
-    }
+      },
+       async created() {
+       await checkSessionToken().then(() => {
+         this.email = window.sessionStorage.getItem('learner_email');
+         this.fullName = window.sessionStorage.getItem('learner_fullname');
+         this.isAdmin = window.sessionStorage.getItem('learner_isAdmin') == 'true';
+       });
+    },
+}
 
 </script>
 

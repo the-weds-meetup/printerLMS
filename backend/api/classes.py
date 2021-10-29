@@ -27,16 +27,16 @@ def add_class(request_data: dict[str, any]):
 
 
 def get_all_class():
-    class_list = classes.query.all()
-    classes_serialised = []
+    class_list = Class.query.all()
+    response = Class(class_list)
+    class_serialised = []
 
-    for classs in class_list:
-        serialise = classs.to_dict()
-        classes_serialised.append(serialise)
+    for classes in class_list:
+        serialise = classes.to_dict()
+        class_serialised.append(serialise)
 
     response = {
         "success": True,
-        "result": {"type": "Class", "records": classes_serialised},
+        "result": {"type": "Course", "records": class_serialised},
     }
-
     return jsonify(response), 200
