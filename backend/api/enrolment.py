@@ -8,8 +8,80 @@ from main import db
 from model.Class import Class as CClass
 from model.Course import Course
 from model.Enrolment import Enrolment
+from model.Learner import Learner
 from model.LearnerCourseCompletion import LearnerCourseCompletion
 from model.LoginSession import LoginSession
+
+
+def response_self_enrolment(class_id: int, learner_id: int):
+    the_class: CClass = CClass.query.filter_by(id=class_id).first()
+    if the_class is None:
+        return throw_error("Authorisation", "Not Authorised", 403)
+
+    try:
+        results = add_enrolment(learner_id=learner_id, class_id=class_id)
+        if results == "not_eligible":
+            response = {
+                "success": False,
+                "results": {
+                    "type": "enrolment_status",
+                    "msg": "Does not fulfil pre-requisites",
+                },
+            }
+            return jsonify(response), 401
+
+        response = {
+            "success": True,
+            "results": {
+                "type": "enrolment_status",
+                "msg": "OK",
+            },
+        }
+        return jsonify(response), 200
+
+    except Exception as e:
+        print(e, flush=True)
+        return throw_error(type="enroll_class", message=str(e), status_code=400)
+
+
+def response_manual_enrolment(class_id: int, learner_id_list: List[int]):
+    the_class: CClass = CClass.query.filter_by(id=class_id).first()
+    non_enrolled_names: List[str] = []
+
+    if the_class is None:
+        return throw_error("Authorisation", "Not Authorised", 403)
+
+    try:
+        for learner_id in learner_id_list:
+            results = add_enrolment(
+                learner_id=learner_id, class_id=class_id, is_approved=True
+            )
+            if results == "not_eligible":
+                learner: Learner = Learner.query.filter_by(id=learner_id).first()
+                non_enrolled_names.append(learner.fullName())
+
+        if len(non_enrolled_names) > 0:
+            response = {
+                "success": True,
+                "results": {
+                    "type": "class_enrolment_status",
+                    "status": "Partially Failed",
+                    "records": non_enrolled_names,
+                },
+            }
+        else:
+            response = {
+                "success": True,
+                "results": {
+                    "type": "class_enrolment_status",
+                    "status": "OK",
+                },
+            }
+        return jsonify(response), 200
+
+    except Exception as e:
+        print(e, flush=True)
+        return throw_error(type="enroll_class", message=str(e), status_code=400)
 
 
 def is_learner_eligible_for_enrolment(learner_id: int, course_id: int):
@@ -82,36 +154,17 @@ def check_learner_course_valid(token: str, course_id: int):
 
 
 def add_enrolment(learner_id: int, class_id: int, is_approved: bool = False):
-    the_class: CClass = CClass.query.filter_by(class_id=class_id).first()
-
-    if the_class is None:
-        return throw_error("Authorisation", "Not Authorised", 403)
-
+    the_class: CClass = CClass.query.filter_by(id=class_id).first()
     is_eligible = is_learner_eligible_for_enrolment(learner_id, the_class.course_id)
 
     if is_eligible == False:
-        response = {
-            "success": False,
-            "results": {
-                "type": "enrolment_status",
-                "msg": "Does not fulfil pre-requisites",
-            },
-        }
-        return jsonify(response), 401
+        return "not_eligible"
 
     # add enrolment object
     enroll: Enrolment = Enrolment(learner_id, class_id, is_approved=is_approved)
     db.session.add(enroll)
     db.session.commit()
-
-    response = {
-        "success": True,
-        "results": {
-            "type": "enrolment_status",
-            "records": enroll.serialise(),
-        },
-    }
-    return jsonify(response), 200
+    return "OK"
 
 
 def class_enrolment_status(token: str, class_id: int):

@@ -41,7 +41,7 @@ def login():
         return auth.login(email, password)
 
     except Exception as e:
-        print(e)
+        print(e, flush=True)
         return error.throw_error(type="Login", message=str(e), status_code=400)
 
 
@@ -54,7 +54,7 @@ def logout():
         return auth.logout(session)
 
     except Exception as e:
-        print(e)
+        print(e, flush=True)
         return auth.throw_error(type="Logout", message=str(e), status_code=400)
 
 
@@ -77,7 +77,7 @@ def get_course_all():
     try:
         return course.get_all_courses(is_retired)
     except Exception as e:
-        print(e)
+        print(e, flush=True)
         return auth.throw_error(type="Course", message=str(e), status_code=400)
 
 
@@ -88,7 +88,7 @@ def get_course(course_id):
             return course.get_course(course_id=course_id)
 
         except Exception as e:
-            print(e)
+            print(e, flush=True)
             return auth.throw_error(type="Course", message=str(e), status_code=400)
 
     if request.method == "POST":
@@ -104,7 +104,7 @@ def get_course(course_id):
                 )
 
         except Exception as e:
-            print(e)
+            print(e, flush=True)
             return auth.throw_error(
                 type="course_enrolement_valid", message=str(e), status_code=400
             )
@@ -123,7 +123,17 @@ def get_course_enrolment_status(class_id):
             return enrolment.class_enrolment_status(token=session, class_id=class_id)
 
     except Exception as e:
-        print(e)
+        print(e, flush=True)
+        return auth.throw_error(type="course_status", message=str(e), status_code=400)
+
+
+@app.route("/api/class/<int:class_id>/nonlearners")
+def get_class_nonlearners(class_id):
+    try:
+        return classes.response_get_non_enrolled_learners(class_id)
+
+    except Exception as e:
+        print(e, flush=True)
         return auth.throw_error(type="course_status", message=str(e), status_code=400)
 
 
@@ -131,10 +141,10 @@ def get_course_enrolment_status(class_id):
 @app.route("/api/class/<int:class_id>/learners")
 def get_class_learners(class_id):
     try:
-        return classes.get_class_learners(class_id)
+        return classes.response_get_class_learners(class_id)
 
     except Exception as e:
-        print(e)
+        print(e, flush=True)
         return auth.throw_error(type="course_status", message=str(e), status_code=400)
 
 
@@ -168,7 +178,7 @@ def get_learner():
         return learner.get_learner(token=session)
 
     except Exception as e:
-        print(e)
+        print(e, flush=True)
         return auth.throw_error(type="Learner", message=str(e), status_code=400)
 
 
@@ -181,14 +191,14 @@ def self_enroll_learner(class_id):
 
         if isValid["status"] == True:
             loginSession = auth.return_login_session(session)
-            return enrolment.add_enrolment(
+            return enrolment.response_self_enrolment(
                 learner_id=loginSession.get_learner().id, class_id=class_id
             )
 
         return auth.throw_error("enroll_class", isValid["message"])
 
     except Exception as e:
-        print(e)
+        print(e, flush=True)
         return auth.throw_error(type="enroll_class", message=str(e), status_code=400)
 
 
@@ -198,7 +208,7 @@ def manual_enroll_learner(class_id):
 
     try:
         session = request_data["token"]
-        learner_id = request_data["learner"]
+        learner_id = request_data["learners"]
         isValid = auth.validateToken(session)
 
         if isValid["status"] == True:
@@ -209,15 +219,19 @@ def manual_enroll_learner(class_id):
                     type="Authorisation", message="Not Authorised", status_code=403
                 )
 
-            return enrolment.add_enrolment(
-                class_id=class_id, learner_id=learner_id, is_approved=True
+            if learner_id == None:
+                return auth.throw_error(
+                    type="enroll_class", message="Missing Variables", status_code=403
+                )
+
+            return enrolment.response_manual_enrolment(
+                class_id=class_id, learner_id_list=learner_id
             )
 
-        else:
-            return auth.throw_error("enroll_class", isValid["message"])
+        return auth.throw_error("enroll_class", isValid["message"])
 
     except Exception as e:
-        print(e)
+        print(e, flush=True)
         return auth.throw_error(type="enroll_class", message=str(e), status_code=400)
 
 

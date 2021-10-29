@@ -1,23 +1,55 @@
 from flask import jsonify, request
 from typing import Any, List
-from main import db
+
+from api.course import get_course_incompleted_learners
+from api.enrolment import is_learner_eligible_for_enrolment
+from api.error import throw_error
+
+from model.Course import Course
+from model.LearnerCourseCompletion import LearnerCourseCompletion
 from model.Class import Class
 from model.Enrolment import Enrolment
 from model.Learner import Learner
 from model.Trainer import Trainer
-from model.LearnerCourseCompletion import LearnerCourseCompletion
-from api.error import throw_error
+
+
+def response_get_class_learners(class_id: int):
+    learners = get_class_learners(class_id)
+    learners_serialised = []
+
+    for learner in learners:
+        learners_serialised.append(learner.serialise())
+
+    response = {
+        "sucess": True,
+        "results": {"type": "Class", "records": learners_serialised},
+    }
+    return jsonify(response), 200
+
+
+def response_get_non_enrolled_learners(class_id):
+    learners = get_class_non_enrolled_learners(class_id)
+    learners_serialised = []
+
+    for learner in learners:
+        learners_serialised.append(learner.serialise())
+
+    response = {
+        "success": True,
+        "results": {"type": "class_enrolment", "records": learners_serialised},
+    }
+    return jsonify(response), 200
 
 
 def get_class_learners(class_id: int):
     enrolments: List[Enrolment] = Enrolment.query.filter_by(class_id=class_id).all()
-    learners: List[dict[str, Any]] = []
+    learners: List[Learner] = []
 
     for enrolment in enrolments:
         learner: Learner = Learner.query.filter_by(id=enrolment.user_id).first()
-        learners.append(learner.serialise())
+        learners.append(learner)
+    return learners
 
-    response = {"sucess": True, "results": {"type": "Class", "records": learners}}
 
 
 def add_class(request_data: dict[str, any]):
@@ -115,3 +147,27 @@ def add_trainer(user_id, id):
     response = a_class.add_trainer(user_id)
 
     return jsonify(response), 200
+
+
+def get_class_non_enrolled_learners(class_id: int):
+    current_class: Class = Class.query.filter_by(id=class_id).first()
+    incompleted_learners = get_course_incompleted_learners(
+        current_class.get_course().id
+    )
+    course_id = current_class.get_course().id
+    ongoing_learners = get_class_learners(class_id)
+    nonstarted_learners: List[Learner] = []
+
+    for learner in incompleted_learners:
+        is_match = False
+        for ongoing_learner in ongoing_learners:
+            if ongoing_learner.id == learner.id:
+                is_match = True
+                break
+
+        if is_match == False and is_learner_eligible_for_enrolment(
+            learner.id, course_id
+        ):
+            nonstarted_learners.append(learner)
+
+    return nonstarted_learners

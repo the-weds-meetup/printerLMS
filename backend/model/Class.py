@@ -3,6 +3,7 @@ Class.py
 """
 
 from main import db
+from model.Course import Course
 from model.Trainer import Trainer
 from model.Learner import Learner
 
@@ -89,20 +90,20 @@ class Class(db.Model):
     def add_trainer(self, user_id):
         trainer: Trainer = Trainer.query.filter_by(class_id=self.id).first()
 
-        if trainer == None:
-            # record dont exist, we shall add it
-            trainer = Trainer(user_id, self.id)
-        else:
-            # else overwrite
-            trainer.user_id = user_id
+        try:
+            if trainer == None:
+                # record dont exist, we shall add it
+                trainer = Trainer(user_id)
+            else:
+                # else overwrite
+                trainer.user_id = user_id
 
-        db.session.add(trainer)
-        db.session.commit()
+            db.session.add(trainer)
+            db.session.commit()
 
-        response = {
-            "success": True,
-            "message": "Trainer record is successfully created",
-            "result": {"type": "Trainer", "records": [trainer.serialise()]},
-        }
+        except Exception as e:
+            print(e, flush=True)
 
-        return response
+    def get_course(self):
+        course: Course = Course.query.filter_by(id=self.course_id).first()
+        return course

@@ -1,5 +1,7 @@
 from main import db
 import datetime
+from model.Class import Class
+from model.Course import Course
 
 
 class LearnerCourseCompletion(db.Model):
@@ -27,3 +29,7 @@ class LearnerCourseCompletion(db.Model):
         for column in columns:
             result[column] = getattr(self, column)
         return result
+
+    def get_course(self):
+        current_class: Class = Class.query.filter_by(id=self.class_id).first()
+        return current_class.get_course()
