@@ -39,8 +39,8 @@
         <div v-if="selected === 'course'" class="content-body">
           <ul>
             <li>
-              <a href="/course/management" class="link-primary"
-                >Manage Courses and Classes
+              <a href="/class/approve-enrolment" class="link-primary"
+                >Approve Self-Enrolled Learners
               </a>
             </li>
             <li>

@@ -52,7 +52,6 @@
               :key="enroll.class_name"
               :class-name="enroll.class_name"
               :class-id="enroll.id"
-              :course-id="enroll.coures_id"
               :max-capacity="enroll.max_capacity"
               :class-start-date="enroll.class_start_date"
               :class-end-date="enroll.class_end_date"

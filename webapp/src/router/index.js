@@ -27,6 +27,16 @@ const routes = [
     component: () => import('../views/Class/ClassAdd.vue'),
   },
   {
+    path: '/class/:id/learners',
+    name: 'View Class Learners',
+    component: () => import('../views/Class/ClassLearners.vue'),
+  },
+  {
+    path: '/class/:id/learners/add',
+    name: 'Add Learners to Class',
+    component: () => import('../views/Class/ClassLearnersAdd.vue'),
+  },
+  {
     path: '/admin',
     name: 'Admin',
     component: () => import('../views/Admin/Admin.vue'),
