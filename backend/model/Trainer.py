@@ -3,7 +3,7 @@ from main import db
 
 class Trainer(db.Model):
     __tablename__ = "trainer"
-    
+
     id = db.Column(db.Integer, primary_key=True, autoincrement=True, nullable=True)
     user_id = db.Column(db.Integer, db.ForeignKey("learner.id"), nullable=False)
     class_id = db.Column(db.Integer, db.ForeignKey("class.id"), nullable=False)
