@@ -14,7 +14,15 @@ def add_class(request_data: dict[str, any]):
     enrolment_start_date = request_data["enrolment_start_date"]
     enrolment_end_date = request_data["enrolment_end_date"]
 
-    classes: Class = Class(course_id,class_id,max_capacity,class_start_date,class_end_date,enrolment_start_date,enrolment_end_date)
+    classes: Class = Class(
+        course_id,
+        class_id,
+        max_capacity,
+        class_start_date,
+        class_end_date,
+        enrolment_start_date,
+        enrolment_end_date,
+    )
     db.session.add(classes)
     db.session.flush()
     db.session.commit()

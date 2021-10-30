@@ -9,10 +9,7 @@ from model.Learner import Learner
 
 class Class(db.Model):
     __tablename__ = "class"
-    __table_args__ = (db.UniqueConstraint("course_id", "class_id"))
-    __mapper_args__ = {
-        'polymorphic_identity': 'class'
-    }
+    __table_args__ = (db.UniqueConstraint("course_id", "class_id"),)
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True, nullable=True)
     course_id = db.Column(db.Integer, db.ForeignKey("course.id"), nullable=False)
@@ -95,5 +92,3 @@ class Class(db.Model):
 
         except Exception as e:
             print(e)
-
-
