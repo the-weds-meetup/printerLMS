@@ -8,8 +8,8 @@ from api.error import throw_error
 
 
 # get class of the course along with the learners that has passed the class
-def get_class(class_id: int):
-    a_class: Class = Class.query.filter_by(class_id=class_id).first()
+def get_class(id: int):
+    a_class: Class = Class.query.filter_by(id=id).first()
 
     if a_class is None:
         error_type = "Class"
@@ -19,7 +19,7 @@ def get_class(class_id: int):
     serialise = a_class.to_dict()
 
     past_learners = []
-    for each_past_learner in get_past_learners(class_id):
+    for each_past_learner in get_past_learners(id):
         learner: Learner = Learner.query.filter_by(id=each_past_learner.user_id).first()
         learner_name = learner.fullName()
         past_learners.append(

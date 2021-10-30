@@ -177,10 +177,7 @@ export default {
 
     getTrainers: async function (each_past_class) {
       await axios
-        .get(
-          'http://localhost:5000/api/class/' +
-            parseInt(each_past_class.class_id)
-        )
+        .get('http://localhost:5000/api/class/' + parseInt(each_past_class.id))
         .then((response) => {
           this.trainers = this.trainers.concat(
             response.data.result.records.past_learners

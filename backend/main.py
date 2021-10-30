@@ -126,14 +126,14 @@ def get_course_enrolment_status(class_id):
         return auth.throw_error(type="course_status", message=str(e), status_code=400)
 
 
-@app.route("/api/class/<int:class_id>")
-def get_class(class_id):
+@app.route("/api/class/<int:id>")
+def get_class(id):
     try:
-        return classes.get_class(class_id=class_id)
+        return classes.get_class(id=id)
 
     except Exception as e:
         print(e)
-        return auth.throw_error(type="Course", message=str(e), status_code=400)
+        return auth.throw_error(type="Class", message=str(e), status_code=400)
 
 
 @app.route("/api/trainer/add", methods=["POST"])
