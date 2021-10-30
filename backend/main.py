@@ -150,8 +150,9 @@ def enroll_learner(class_id):
         print(e)
         return auth.throw_error(type="enroll_class", message=str(e), status_code=400)
 
-@cross_origin(origins= "http://localhost:8080")
-@app.route("/api/class" , methods=['GET'])
+
+@cross_origin(origins="http://localhost:8080")
+@app.route("/api/class", methods=["GET"])
 def get_all_class():
     try:
         return classes.get_all_class()
@@ -159,12 +160,12 @@ def get_all_class():
         print(e)
         return auth.throw_error(type="Class", message=str(e), status_code=400)
 
-@cross_origin(origins= "http://localhost:8080")
-@app.route("/api/class", methods=['POST'])
+
+@cross_origin(origins="http://localhost:8080")
+@app.route("/api/class", methods=["POST"])
 def add_class():
     request_data = request.get_json()
     return classes.add_class(request_data)
-
 
 
 if __name__ == "__main__":
