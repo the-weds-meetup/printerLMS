@@ -62,8 +62,8 @@
           <select id="selectClass" v-model="class_id" class="form-select">
             <option
               v-for="each_class in classes"
-              :key="each_class.class_id"
-              :value="each_class.class_id"
+              :key="each_class.id"
+              :value="each_class.id"
             >
               G{{ each_class.class_id }}:
               {{ convertIS8601Date(each_class.class_start_date) }} -

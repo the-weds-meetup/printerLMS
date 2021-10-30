@@ -48,6 +48,7 @@ class Class(db.Model):
             trainer_name = learner.fullName()
 
         return {
+            "id": self.id,
             "course_id": self.course_id,
             "class_id": self.class_id,
             "max_capacity": self.max_capacity,

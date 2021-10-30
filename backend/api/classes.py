@@ -47,8 +47,9 @@ def get_past_learners(class_id):
     return past_learners
 
 
-def add_trainer(user_id, class_id):
-    a_class: Class = Class.query.filter_by(class_id=class_id).first()
+def add_trainer(user_id, id):
+    # queries a class according to what has been selected in AssignTrainers form
+    a_class: Class = Class.query.filter_by(id=id).first()
     response = a_class.add_trainer(user_id)
 
     return jsonify(response), 200
