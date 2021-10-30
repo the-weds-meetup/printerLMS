@@ -22,6 +22,16 @@ const routes = [
     component: () => import('../views/Course/Course.vue'),
   },
   {
+    path: '/class/approve-enrolment',
+    name: 'Approve Learner Self-Enrolment',
+    component: () => import('../views/Class/ClassApproval.vue'),
+  },
+  {
+    path: '/class/:id/edit',
+    name: 'Edit Class',
+    component: () => import('../views/Class/ClassEdit.vue'),
+  },
+  {
     path: '/course/:id/add-class',
     name: 'Add Class',
     component: () => import('../views/Class/ClassAdd.vue'),
