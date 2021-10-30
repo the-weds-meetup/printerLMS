@@ -7,27 +7,10 @@
       <TopNav title="Add Class" />
       <div id="content" class="content-container">
         <div class="container-fluid">
-          <h1 class="center">Create Class</h1>
           <div>
             <!-- Start of form -->
+
             <form class="center" @submit.prevent="submitform()">
-              <br /><br />
-              Course ID:
-              <input
-                v-model="course_id"
-                type="text"
-                placeholder="Course ID"
-                required
-              />
-              <br /><br />
-              Class ID:
-              <input
-                v-model="class_id"
-                type="text"
-                placeholder="Class ID"
-                required
-              />
-              <br /><br />
               Max Capacity:
               <input
                 v-model="max_capacity"
@@ -40,6 +23,7 @@
                 v-model="class_start_date"
                 type="datetime-local"
                 placeholder="Start Date"
+                step="3600"
               />
               <button type="button" name="Verify1" @click="getmin1()">
                 Verify</button
@@ -51,6 +35,7 @@
                 type="datetime-local"
                 placeholder="End Date"
                 min="2021-10-14T00:00"
+                step="3600"
               />
               <br /><br />
               Enrolment Start Date:
@@ -58,6 +43,7 @@
                 v-model="enrolment_start_date"
                 type="datetime-local"
                 placeholder="Enrolment Start Date"
+                step="3600"
               />
               <button type="button" name="Verify2" @click="getmin2()">
                 Verify</button
@@ -69,10 +55,12 @@
                 type="datetime-local"
                 placeholder="Enrolment End Date"
                 min="2021-10-14T00:00"
+                step="3600"
               />
               <br /><br />
               <button type="submit" name="submit">Submit</button>
             </form>
+
             <!-- End of form -->
           </div>
         </div>
@@ -83,6 +71,7 @@
 
 <script>
 import axios from 'axios';
+import moment from 'moment';
 
 import { checkSessionToken } from '@/assets/js/authentication.js';
 import SideNav from '@/components/Navigation/SideNav.vue';
@@ -99,8 +88,6 @@ export default {
       email: '',
       fullName: '',
       isAdmin: false,
-      course_id: '',
-      class_id: '',
       max_capacity: '',
       class_start_date: '',
       class_end_date: '',
@@ -130,21 +117,23 @@ export default {
         .getElementById('setmin2')
         .setAttribute('min', this.enrolment_start_date);
     },
+    getISOString(dateString) {
+      var date = moment(dateString);
+      return date.toISOString();
+    },
     submitform() {
       /* console.log("Class created and updated to database!") */
       axios
-        .post('http://localhost:5000/api/model/class', {
-          course_id: this.course_id,
-          class_id: this.class_id,
+        .post('http://localhost:5000/api/class', {
+          course_id: this.$route.params.id,
           max_capacity: this.max_capacity,
-          class_start_date: this.class_start_date,
-          class_end_date: this.class_end_date,
-          enrolment_start_date: this.enrolment_start_date,
-          enrolment_end_date: this.enrolment_end_date,
+          class_start_date: this.getISOString(this.class_start_date),
+          class_end_date: this.getISOString(this.class_end_date),
+          enrolment_start_date: this.getISOString(this.enrolment_start_date),
+          enrolment_end_date: this.getISOString(this.enrolment_end_date),
         })
         .then(() => {
-          /* window.location.replace("./Createclass.vue"); */
-          this.$router.push('createclass');
+          this.$router.push('/course/' + this.$route.id);
           return false;
         })
         .catch((error) => {
