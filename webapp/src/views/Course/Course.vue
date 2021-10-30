@@ -37,7 +37,9 @@
         <div class="ongoing-class">
           <div class="header">
             <h4>{{ course.class.enrolling.length }} classes available</h4>
-            <button v-if="isAdmin" class="btn">+ Add Class</button>
+            <button v-if="isAdmin" class="btn" @click="navigateToAddClass()">
+              + Add Class
+            </button>
           </div>
 
           <p v-if="!isPrereqFulfilled" class="text-danger">
@@ -140,6 +142,9 @@ export default {
   methods: {
     togglePrereqButton() {
       this.isPrereqShown = !this.isPrereqShown;
+    },
+    navigateToAddClass() {
+      this.$router.push(`/course/${this.$route.params.id}/add-class`);
     },
   },
 };

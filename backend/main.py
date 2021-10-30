@@ -1,9 +1,11 @@
 from flask import Flask
-from flask import request
+from flask import request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from os import environ
+from flask_cors import CORS, cross_origin
 
 app = Flask(__name__)
+CORS(app)
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql+psycopg2://{}:{}@{}/{}".format(
     environ["DB_USER"],
@@ -147,6 +149,23 @@ def enroll_learner(class_id):
     except Exception as e:
         print(e)
         return auth.throw_error(type="enroll_class", message=str(e), status_code=400)
+
+
+@cross_origin(origins="http://localhost:8080")
+@app.route("/api/class", methods=["GET"])
+def get_all_class():
+    try:
+        return classes.get_all_class()
+    except Exception as e:
+        print(e)
+        return auth.throw_error(type="Class", message=str(e), status_code=400)
+
+
+@cross_origin(origins="http://localhost:8080")
+@app.route("/api/class", methods=["POST"])
+def add_class():
+    request_data = request.get_json()
+    return classes.add_class(request_data)
 
 
 if __name__ == "__main__":
