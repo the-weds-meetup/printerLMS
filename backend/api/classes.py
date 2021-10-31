@@ -59,6 +59,7 @@ def add_class(request_data: dict[str, any]):
     class_end_date = request_data["class_end_date"]
     enrolment_start_date = request_data["enrolment_start_date"]
     enrolment_end_date = request_data["enrolment_end_date"]
+    trainer_id = request_data["trainer_id"]
 
     # get latest class id
     all_classes: list[Class] = Class.query.filter_by(course_id=course_id).all()
@@ -75,11 +76,49 @@ def add_class(request_data: dict[str, any]):
     )
     db.session.add(classes)
     db.session.flush()
-    db.session.commit()
+
+    # add trainer id
+    if trainer_id != None:
+        classes.add_trainer(trainer_id)
+    else:
+        db.session.commit()
 
     response = {
         "success": True,
         "result": {"type": "class_add", "msg": "Added a new class"},
+    }
+
+    return jsonify(response), 200
+
+
+def edit_class(request_data: dict[str, any]):
+    class_id = request_data["class_id"]
+    max_capacity = request_data["max_capacity"]
+    class_start_date = request_data["class_start_date"]
+    class_end_date = request_data["class_end_date"]
+    enrolment_start_date = request_data["enrolment_start_date"]
+    enrolment_end_date = request_data["enrolment_end_date"]
+    trainer_id = request_data["trainer_id"]
+
+    a_class: Class = Class.query.filter_by(id=class_id).first()
+
+    if trainer_id is None:
+        raise ("Missing Trainer ID")
+
+    if a_class is None:
+        raise ("Missing Class ID")
+
+    a_class.max_capacity = max_capacity
+    a_class.class_start_date = class_start_date
+    a_class.class_end_date = class_end_date
+    a_class.enrolment_start_date = enrolment_start_date
+    a_class.enrolment_end_date = enrolment_end_date
+    a_class.add_trainer(trainer_id)
+    db.session.commit()
+
+    response = {
+        "success": True,
+        "result": {"type": "class_edit", "msg": "Edited Class"},
     }
 
     return jsonify(response), 200
@@ -112,18 +151,18 @@ def get_class(id: int):
 
     serialise = a_class.to_dict()
 
-    past_learners = []
-    for each_past_learner in get_past_learners(id):
-        learner: Learner = Learner.query.filter_by(id=each_past_learner.user_id).first()
+    learners = []
+    for learner in get_learners(id):
+        learner: Learner = Learner.query.filter_by(id=learner.user_id).first()
         learner_name = learner.fullName()
-        past_learners.append(
+        learners.append(
             {
-                "user_id": each_past_learner.user_id,
+                "user_id": learner.user_id,
                 "name": learner_name,
             }
         )
 
-    serialise["past_learners"] = past_learners
+    serialise["learners"] = learners
 
     response = {
         "success": True,
@@ -133,7 +172,7 @@ def get_class(id: int):
     return jsonify(response), 200
 
 
-def get_past_learners(class_id):
+def get_learners(class_id):
     past_learners: List[
         LearnerCourseCompletion
     ] = LearnerCourseCompletion.query.filter_by(class_id=class_id).all()
@@ -141,9 +180,9 @@ def get_past_learners(class_id):
     return past_learners
 
 
-def add_trainer(user_id, id):
+def add_trainer(user_id, class_id):
     # queries a class according to what has been selected in AssignTrainers form
-    a_class: Class = Class.query.filter_by(id=id).first()
+    a_class: Class = Class.query.filter_by(id=class_id).first()
     response = a_class.add_trainer(user_id)
 
     return jsonify(response), 200

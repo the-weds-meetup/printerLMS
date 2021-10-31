@@ -157,6 +157,16 @@ def get_class(id):
         return auth.throw_error(type="Class", message=str(e), status_code=400)
 
 
+@app.route("/api/course/<int:course_id>/learners/completed")
+def get_course_completed_learners(course_id):
+    try:
+        return course.response_get_completed_learners(course_id)
+
+    except Exception as e:
+        print(e)
+        return auth.throw_error(type="course_learners", message=str(e), status_code=400)
+
+
 @app.route("/api/trainer/add", methods=["POST"])
 def add_trainer():
     data = request.get_json()
@@ -240,15 +250,44 @@ def get_all_class():
     try:
         return classes.get_all_class()
     except Exception as e:
-        print(e)
+        print(e, flush=True)
         return auth.throw_error(type="Class", message=str(e), status_code=400)
 
 
 @cross_origin(origins="http://localhost:8080")
-@app.route("/api/class", methods=["POST"])
+@app.route("/api/class/add", methods=["POST"])
 def add_class():
     request_data = request.get_json()
-    return classes.add_class(request_data)
+    try:
+        token = request_data["token"]
+        tokenValid = auth.validateToken(token)
+
+        if tokenValid["status"]:
+            return classes.add_class(request_data)
+        else:
+            return auth.throw_error("create_class", tokenValid["message"])
+
+    except Exception as e:
+        print(e, flush=True)
+        return auth.throw_error(type="create_class", message=str(e), status_code=400)
+
+
+@cross_origin(origins="http://localhost:8080")
+@app.route("/api/class/edit", methods=["POST"])
+def edit_class():
+    request_data = request.get_json()
+    try:
+        token = request_data["token"]
+        tokenValid = auth.validateToken(token)
+
+        if tokenValid["status"]:
+            return classes.edit_class(request_data)
+        else:
+            return auth.throw_error("create_class", tokenValid["message"])
+
+    except Exception as e:
+        print(e, flush=True)
+        return auth.throw_error(type="create_class", message=str(e), status_code=400)
 
 
 if __name__ == "__main__":

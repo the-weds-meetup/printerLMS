@@ -3,43 +3,123 @@
     <SideNav :email="email" :full-name="fullName" :is-admin="isAdmin" />
     <main>
       <TopNav title="Edit Class" />
-      <div id="content">
-        <!-- <div
-          class="btn-group"
-          role="group"
-          aria-label="Basic radio toggle button group"
-        >
-          <input
-            id="adminselect1"
-            v-model="selected"
-            type="radio"
-            class="btn-check"
-            name="btnradio"
-            autocomplete="off"
-            value="course"
-            checked
-          />
-          <label class="btn btn-outline-primary" for="adminselect1"
-            >Courses</label
-          >
+      <div id="content" class="content-container">
+        <div class="container-fluid">
+          <div>
+            <!-- Start of form -->
 
-          <input
-            id="adminselect2"
-            v-model="selected"
-            type="radio"
-            class="btn-check"
-            name="btnradio"
-            autocomplete="off"
-            value="learner"
-          />
-          <label class="btn btn-outline-primary" for="adminselect2"
-            >Learners</label
-          >
-        </div> -->
-        <h1>Class Details</h1>
-        <!-- Add learner here -->
-        <div class="learner-container">
-          <h1>Learners Management</h1>
+            <form class="center" @submit.prevent="submitform()">
+              <div class="form-group">
+                <label for="maxCapacityInput" class="form-label"
+                  >Max Capacity</label
+                >
+                <input
+                  id="maxCapacityInput"
+                  v-model="max_capacity"
+                  type="number"
+                  placeholder="Max Capacity"
+                  class="form-control"
+                  min="0"
+                  required
+                />
+              </div>
+
+              <!-- Class Dates -->
+              <div class="form-group">
+                <label for="startDateInput" class="form-label"
+                  >Start Date</label
+                >
+                <input
+                  id="startDateInput"
+                  v-model="class_start_date"
+                  type="datetime-local"
+                  placeholder="Start Date"
+                  :onchange="onSelectStartDate()"
+                  class="form-control"
+                  step="3600"
+                  required
+                />
+              </div>
+
+              <div class="form-group">
+                <label for="endDateInput" class="form-label">End Date</label>
+                <input
+                  id="endDateInput"
+                  v-model="class_end_date"
+                  type="datetime-local"
+                  placeholder="Start Date"
+                  class="form-control"
+                  :onchange="onSelectEndDate()"
+                  :min="getMinDate1"
+                  step="3600"
+                  required
+                />
+              </div>
+
+              <!-- Enrolment Dates -->
+              <div class="form-group">
+                <label for="enrolmentStartDateInput" class="form-label"
+                  >Enrolment Start Date</label
+                >
+                <input
+                  id="enrolmentStartDateInput"
+                  v-model="enrolment_start_date"
+                  type="datetime-local"
+                  placeholder="Start Date"
+                  class="form-control"
+                  :onchange="onSelectEnrolmentStartDate()"
+                  step="3600"
+                  required
+                />
+              </div>
+
+              <div class="form-group">
+                <label for="enrolmentEndDateInput" class="form-label"
+                  >End Date</label
+                >
+                <input
+                  id="enrolmentEndDateInput"
+                  v-model="enrolment_end_date"
+                  type="datetime-local"
+                  placeholder="Start Date"
+                  class="form-control"
+                  :onchange="onSelectEnrolmentEndDate()"
+                  :min="getMinDate2"
+                  step="3600"
+                  required
+                />
+              </div>
+
+              <div class="form-group">
+                <label for="selectTrainer" class="form-label"
+                  >Select Trainer</label
+                >
+                <select
+                  id="selectTrainer"
+                  v-model="user_id"
+                  class="form-select"
+                  required
+                >
+                  <option
+                    v-for="trainer in trainers"
+                    :key="trainer.id"
+                    :value="trainer.id"
+                  >
+                    {{ trainer.full_name }}
+                  </option>
+                  <option v-if="trainers.length == 0" disabled>
+                    No trainers currently available for this course
+                  </option>
+                </select>
+              </div>
+
+              <button class="mt-3 btn btn-primary" type="submit" name="submit">
+                Submit
+              </button>
+            </form>
+
+            <!-- End of form -->
+          </div>
         </div>
       </div>
     </main>
@@ -49,6 +129,7 @@
 <script>
 // @ is an alias to /src
 import axios from 'axios';
+import moment from 'moment-timezone';
 
 import { checkSessionToken } from '@/assets/js/authentication.js';
 import SideNav from '@/components/Navigation/SideNav.vue';
@@ -65,8 +146,32 @@ export default {
       email: '',
       fullName: '',
       isAdmin: false,
-      isDataFetched: false,
+      max_capacity: '',
+      class_start_date: '',
+      class_end_date: '',
+      enrolment_start_date: '',
+      enrolment_end_date: '',
+      trainers: [],
+      user_id: [],
+      course_id: undefined,
     };
+  },
+  computed: {
+    // trimStartDate()
+    getMinDate1() {
+      const date = this.class_start_date
+        ? moment(this.class_start_date)
+        : moment();
+      date.hour(0).minute(0).second(0).millisecond(0);
+      return date.format('YYYY-MM-DDTHH:mm:ss');
+    },
+    getMinDate2() {
+      const date = this.enrolment_start_date
+        ? moment(this.enrolment_start_date)
+        : moment();
+      date.hour(0).minute(0).second(0).millisecond(0);
+      return date.format('YYYY-MM-DDTHH:mm:ss');
+    },
   },
   async created() {
     await checkSessionToken().then(() => {
@@ -76,21 +181,80 @@ export default {
     });
   },
   async mounted() {
-    await axios
-      .get('/api/course/' + this.$route.params.id)
+    const course_id = await axios
+      .get(`/api/class/${this.$route.params.id}`)
       .then((response) => {
-        const data = response.data.result.records;
-        this.course = data;
-        this.isDataFetched = true;
+        return response.data.result.records.course_id;
       })
+      .catch((error) => alert(error));
+
+    if (!course_id) {
+      return;
+    }
+    this.course_id = course_id;
+    this.trainers = await axios
+      .get(`/api/course/${course_id}/learners/completed`)
+      .then((response) => response.data.result.records)
       .catch((error) => {
-        console.error(error);
-        return undefined;
+        alert(error);
+        return [];
       });
   },
   methods: {
-    togglePrereqButton() {
-      this.isPrereqShown = !this.isPrereqShown;
+    getISOString(dateString) {
+      var date = moment(dateString);
+      return date.toISOString();
+    },
+    onSelectStartDate() {
+      const date = moment(this.class_start_date)
+        .minute(0)
+        .second(0)
+        .millisecond(0);
+      this.class_start_date = date.format('YYYY-MM-DDTHH:mm:ss');
+    },
+    onSelectEndDate() {
+      const date = moment(this.class_end_date)
+        .minute(0)
+        .second(0)
+        .millisecond(0);
+      this.class_end_date = date.format('YYYY-MM-DDTHH:mm:ss');
+    },
+    onSelectEnrolmentStartDate() {
+      const date = moment(this.enrolment_start_date)
+        .minute(0)
+        .second(0)
+        .millisecond(0);
+      this.enrolment_start_date = date.format('YYYY-MM-DDTHH:mm:ss');
+    },
+    onSelectEnrolmentEndDate() {
+      const date = moment(this.enrolment_end_date)
+        .minute(0)
+        .second(0)
+        .millisecond(0);
+      this.enrolment_end_date = date.format('YYYY-MM-DDTHH:mm:ss');
+    },
+    submitform() {
+      /* console.log("Class created and updated to database!") */
+      const variables = {
+        token: window.localStorage.getItem('session_token'),
+        class_id: this.$route.params.id,
+        max_capacity: this.max_capacity,
+        class_start_date: this.getISOString(this.class_start_date),
+        class_end_date: this.getISOString(this.class_end_date),
+        enrolment_start_date: this.getISOString(this.enrolment_start_date),
+        enrolment_end_date: this.getISOString(this.enrolment_end_date),
+        trainer_id: this.user_id,
+      };
+
+      axios
+        .post('/api/class/edit', variables)
+        .then(() => {
+          this.$router.push('/course/' + this.course_id);
+        })
+        .catch((error) => {
+          alert(error.response.data.message);
+          this.error = error.response.data.message;
+        });
     },
   },
 };
@@ -101,56 +265,7 @@ export default {
 @import '~bootstrap/scss/bootstrap';
 @import '~bootstrap/scss/_variables.scss';
 
-#content {
-  h1 {
-    font-size: 1.6em;
-    font-weight: 600;
-    margin-bottom: 24px;
-  }
-
-  p {
-    color: $gray-800;
-    font-size: 1.1em;
-  }
-}
-
-.description {
-  padding-bottom: 12px;
-}
-
-.prereq {
-  padding-bottom: 16px;
-
-  button {
-    font-size: 1.1em;
-    font-weight: 600;
-    margin-bottom: 24px;
-  }
-}
-
-.ongoing-class {
-  .header {
-    display: flex;
-    flex-direction: row;
-
-    justify-content: space-between;
-    align-items: center;
-
-    h4 {
-      font-size: 1.3em;
-      font-weight: 600;
-      margin: 0;
-    }
-
-    .btn {
-      font-size: 1.1em;
-      font-weight: 600;
-      color: $primary;
-    }
-
-    .btn:hover {
-      text-decoration: underline;
-    }
-  }
+.form-group {
+  padding: 8px 0;
 }
 </style>

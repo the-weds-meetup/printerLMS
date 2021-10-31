@@ -52,11 +52,11 @@ const routes = [
     component: () => import('../views/Admin/Admin.vue'),
   },
   {
-    path: '/assigntrainers',
+    path: '/admin/assigntrainers',
     name: 'AssignTrainers',
     component: () =>
       import(
-        /* webpackChunkName: "assigntrainers" */ '../views/AssignTrainers.vue'
+        /* webpackChunkName: "assigntrainers" */ '../views/Admin/AssignTrainers.vue'
       ),
   },
   {

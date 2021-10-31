@@ -123,16 +123,18 @@ export default {
       }
     },
     async learnerEnrollStatus() {
-      await axios
-        .post(`/api/class/${this.classId}/status`, {
-          token: window.localStorage.getItem('session_token'),
-        })
-        .then((response) => {
-          this.enrollState = response.data.results.status;
-        })
-        .catch((error) => {
-          console.error(error);
-        });
+      if (!this.isAdmin) {
+        await axios
+          .post(`/api/class/${this.classId}/status`, {
+            token: window.localStorage.getItem('session_token'),
+          })
+          .then((response) => {
+            this.enrollState = response.data.results.status;
+          })
+          .catch((error) => {
+            console.error(error);
+          });
+      }
     },
     async enrollClass() {
       await axios

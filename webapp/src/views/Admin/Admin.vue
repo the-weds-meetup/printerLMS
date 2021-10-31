@@ -46,6 +46,11 @@
             <li>
               <a href="/course/add" class="link-primary">Add a New Course</a>
             </li>
+            <li>
+              <a href="/admin/assigntrainers" class="link-primary"
+                >Assign Trainers to Class</a
+              >
+            </li>
           </ul>
         </div>
       </div>
