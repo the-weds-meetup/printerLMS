@@ -8,11 +8,8 @@
         @click="navigateToAdd"
       />
       <div id="content">
-        <div v-if="!isDataFetched" class="d-flex justify-content-center">
-          <div class="spinner-border text-primary m-5" role="status">
-            <span class="visually-hidden">Loading...</span>
-          </div>
-        </div>
+        <Spinner v-if="!isDataFetched" />
+
         <div v-else>
           <ol>
             <li v-for="learner in learners" :key="learner.id">
@@ -32,12 +29,14 @@ import axios from 'axios';
 import { checkSessionToken } from '@/assets/js/authentication.js';
 import SideNav from '@/components/Navigation/SideNav.vue';
 import TopNav from '@/components/Navigation/TopNav.vue';
+import Spinner from '@/components/Tools/Spinner.vue';
 
 export default {
   name: 'EditCourse',
   components: {
     SideNav,
     TopNav,
+    Spinner,
   },
   data() {
     return {

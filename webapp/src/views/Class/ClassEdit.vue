@@ -196,7 +196,8 @@ export default {
       .get(`/api/course/${course_id}/learners/completed`)
       .then((response) => response.data.result.records)
       .catch((error) => {
-        alert(error);
+        console.log(error.response.data);
+        alert(error.response.data);
         return [];
       });
   },
