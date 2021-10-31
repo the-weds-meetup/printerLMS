@@ -1,5 +1,6 @@
 from main import db
 from model.Administrator import Administrator
+from model.Department import Department
 
 
 class Learner(db.Model):
@@ -42,7 +43,7 @@ class Learner(db.Model):
             "middle_name": self.middle_name,
             "last_name": self.last_name,
             "full_name": self.fullName(),
-            "department_id": self.department_id,
+            "department": self.getDepartment(),
             "is_admin": self.isAdmin(),
         }
 
@@ -50,7 +51,6 @@ class Learner(db.Model):
         if self.middle_name != None:
             return "{} {} {}".format(self.first_name, self.middle_name, self.last_name)
         return "{} {}".format(self.first_name, self.last_name)
-
 
     def to_dict(self):
         """
@@ -68,3 +68,9 @@ class Learner(db.Model):
         if admin == None:
             return False
         return True
+
+    def getDepartment(self):
+        department: Department = Department.query.filter_by(
+            id=self.department_id
+        ).first()
+        return department.name

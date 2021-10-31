@@ -2,7 +2,10 @@ from flask import jsonify, request
 from typing import Any, List
 
 from api.course import get_course_incompleted_learners, get_enrolling_classes_course
-from api.enrolment import is_learner_eligible_for_enrolment
+from api.enrolment import (
+    is_learner_eligible_for_enrolment,
+    get_learners_awaiting_approval,
+)
 from api.error import throw_error
 
 from main import db
@@ -37,7 +40,7 @@ def response_get_non_enrolled_learners(class_id):
 
     response = {
         "success": True,
-        "results": {"type": "class_enrolment", "records": learners_serialised},
+        "results": {"type": "class_non_enrolment", "records": learners_serialised},
     }
     return jsonify(response), 200
 
@@ -68,6 +71,23 @@ def response_get_all_enrollable_classes():
         },
     }
 
+    return jsonify(response), 200
+
+
+def response_get_all_waiting_learners(class_id: int):
+    serialise_learners = []
+    learners = get_learners_awaiting_approval(class_id)
+
+    for learner in learners:
+        serialise_learners.append(learner.serialise())
+
+    response = {
+        "success": True,
+        "results": {
+            "type": "class_waiting_list",
+            "records": serialise_learners,
+        },
+    }
     return jsonify(response), 200
 
 
@@ -183,14 +203,10 @@ def get_class(class_id: int):
 
     learners = []
     for learner in get_class_learners(class_id):
-        learners.append(
-            {
-                "user_id": learner.id,
-                "name": learner.fullName(),
-            }
-        )
+        learners.append(learner.serialise())
 
     serialise["learners"] = learners
+    serialise["course_name"] = a_class.get_course().name
 
     response = {
         "success": True,

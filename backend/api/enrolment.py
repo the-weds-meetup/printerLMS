@@ -172,14 +172,21 @@ def check_learner_course_valid(token: str, course_id: int):
 
 def add_enrolment(learner_id: int, class_id: int, is_approved: bool = False):
     the_class: Class = Class.query.filter_by(id=class_id).first()
+    enrolment: Enrolment = Enrolment.query.filter_by(
+        user_id=learner_id, class_id=class_id
+    ).first()
     is_eligible = is_learner_eligible_for_enrolment(learner_id, the_class.course_id)
 
     if is_eligible == False:
         return "not_eligible"
 
-    # add enrolment object
-    enroll: Enrolment = Enrolment(learner_id, class_id, is_approved=is_approved)
-    db.session.add(enroll)
+    if enrolment != None:
+        enrolment.is_approved = True
+    else:
+        # add enrolment object
+        enroll: Enrolment = Enrolment(learner_id, class_id, is_approved=is_approved)
+        db.session.add(enroll)
+
     db.session.commit()
     return "OK"
 
@@ -213,7 +220,7 @@ def class_enrolment_status(token: str, class_id: int):
 
 
 def get_learners_awaiting_approval(class_id: int):
-    learners = []
+    learners: List[Learner] = []
     awaiting_enrolment: List[Enrolment] = Enrolment.query.filter_by(
         class_id=class_id, is_approved=False
     ).all()
