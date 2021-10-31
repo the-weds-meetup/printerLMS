@@ -272,6 +272,24 @@ def add_class():
         return auth.throw_error(type="create_class", message=str(e), status_code=400)
 
 
+@cross_origin(origins="http://localhost:8080")
+@app.route("/api/class/edit", methods=["POST"])
+def edit_class():
+    request_data = request.get_json()
+    try:
+        token = request_data["token"]
+        tokenValid = auth.validateToken(token)
+
+        if tokenValid["status"]:
+            return classes.edit_class(request_data)
+        else:
+            return auth.throw_error("create_class", tokenValid["message"])
+
+    except Exception as e:
+        print(e, flush=True)
+        return auth.throw_error(type="create_class", message=str(e), status_code=400)
+
+
 if __name__ == "__main__":
     from api import *
 

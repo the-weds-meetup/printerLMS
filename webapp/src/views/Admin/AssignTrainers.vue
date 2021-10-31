@@ -180,7 +180,7 @@ export default {
         .get('/api/class/' + parseInt(each_past_class.id))
         .then((response) => {
           this.trainers = this.trainers.concat(
-            response.data.result.records.past_learners
+            response.data.result.records.learners
           );
         })
         .catch((error) => alert(error));
