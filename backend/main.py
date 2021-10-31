@@ -137,7 +137,6 @@ def get_class_nonlearners(class_id):
         return auth.throw_error(type="course_status", message=str(e), status_code=400)
 
 
-
 @app.route("/api/class/<int:class_id>/learners")
 def get_class_learners(class_id):
     try:
