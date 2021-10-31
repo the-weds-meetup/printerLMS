@@ -93,7 +93,7 @@ class Class(db.Model):
         try:
             if trainer == None:
                 # record dont exist, we shall add it
-                trainer = Trainer(user_id)
+                trainer = Trainer(user_id, self.id)
             else:
                 # else overwrite
                 trainer.user_id = user_id

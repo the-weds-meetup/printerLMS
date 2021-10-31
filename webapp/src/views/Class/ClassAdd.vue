@@ -22,6 +22,7 @@
                   placeholder="Max Capacity"
                   class="form-control"
                   min="0"
+                  required
                 />
               </div>
 
@@ -38,6 +39,7 @@
                   :onchange="onSelectStartDate()"
                   class="form-control"
                   step="3600"
+                  required
                 />
               </div>
 
@@ -52,6 +54,7 @@
                   :onchange="onSelectEndDate()"
                   :min="getMinDate1"
                   step="3600"
+                  required
                 />
               </div>
 
@@ -68,6 +71,7 @@
                   class="form-control"
                   :onchange="onSelectEnrolmentStartDate()"
                   step="3600"
+                  required
                 />
               </div>
 
@@ -84,7 +88,30 @@
                   :onchange="onSelectEnrolmentEndDate()"
                   :min="getMinDate2"
                   step="3600"
+                  required
                 />
+              </div>
+
+              <div class="form-group">
+                <label for="selectTrainer" class="form-label"
+                  >Select Trainer</label
+                >
+                <select
+                  id="selectTrainer"
+                  v-model="user_id"
+                  class="form-select"
+                >
+                  <option
+                    v-for="trainer in trainers"
+                    :key="trainer.id"
+                    :value="trainer.id"
+                  >
+                    {{ trainer.full_name }}
+                  </option>
+                  <option v-if="trainers.length == 0" disabled>
+                    No trainers currently available for this course
+                  </option>
+                </select>
               </div>
 
               <button class="mt-3 btn btn-primary" type="submit" name="submit">
@@ -124,24 +151,24 @@ export default {
       class_end_date: '',
       enrolment_start_date: '',
       enrolment_end_date: '',
+      trainers: [],
+      user_id: [],
     };
   },
   computed: {
     // trimStartDate()
     getMinDate1() {
-      const date = moment(this.class_start_date)
-        .hour(0)
-        .minute(0)
-        .second(0)
-        .millisecond(0);
+      const date = this.class_start_date
+        ? moment(this.class_start_date)
+        : moment();
+      date.hour(0).minute(0).second(0).millisecond(0);
       return date.format('YYYY-MM-DDTHH:mm:ss');
     },
     getMinDate2() {
-      const date = moment(this.enrolment_start_date)
-        .hour(0)
-        .minute(0)
-        .second(0)
-        .millisecond(0);
+      const date = this.enrolment_start_date
+        ? moment(this.enrolment_start_date)
+        : moment();
+      date.hour(0).minute(0).second(0).millisecond(0);
       return date.format('YYYY-MM-DDTHH:mm:ss');
     },
   },
@@ -151,6 +178,14 @@ export default {
       this.fullName = window.sessionStorage.getItem('learner_fullname');
       this.isAdmin = window.sessionStorage.getItem('learner_isAdmin') == 'true';
     });
+
+    this.trainers = await axios
+      .get(`/api/course/${this.$route.params.id}/learners/completed`)
+      .then((response) => response.data.result.records)
+      .catch((error) => {
+        alert(error);
+        return [];
+      });
   },
   methods: {
     getISOString(dateString) {
@@ -187,20 +222,35 @@ export default {
     },
     submitform() {
       /* console.log("Class created and updated to database!") */
+
+      const variables = this.user_id
+        ? {
+            token: window.localStorage.getItem('session_token'),
+            course_id: this.$route.params.id,
+            max_capacity: this.max_capacity,
+            class_start_date: this.getISOString(this.class_start_date),
+            class_end_date: this.getISOString(this.class_end_date),
+            enrolment_start_date: this.getISOString(this.enrolment_start_date),
+            enrolment_end_date: this.getISOString(this.enrolment_end_date),
+            trainer_id: this.user_id,
+          }
+        : {
+            token: window.localStorage.getItem('session_token'),
+            course_id: this.$route.params.id,
+            max_capacity: this.max_capacity,
+            class_start_date: this.getISOString(this.class_start_date),
+            class_end_date: this.getISOString(this.class_end_date),
+            enrolment_start_date: this.getISOString(this.enrolment_start_date),
+            enrolment_end_date: this.getISOString(this.enrolment_end_date),
+          };
+
       axios
-        .post('http://localhost:5000/api/class', {
-          course_id: this.$route.params.id,
-          max_capacity: this.max_capacity,
-          class_start_date: this.getISOString(this.class_start_date),
-          class_end_date: this.getISOString(this.class_end_date),
-          enrolment_start_date: this.getISOString(this.enrolment_start_date),
-          enrolment_end_date: this.getISOString(this.enrolment_end_date),
-        })
+        .post('/api/class/add', variables)
         .then(() => {
-          this.$router.push('/course/' + this.$route.id);
-          return false;
+          this.$router.push('/course/' + this.$route.params.id);
         })
         .catch((error) => {
+          alert(error.response.data.message);
           this.error = error.response.data.message;
         });
     },

@@ -42,7 +42,7 @@
             </button>
           </div>
 
-          <p v-if="!isPrereqFulfilled" class="text-danger">
+          <p v-if="!isPrereqFulfilled && !isAdmin" class="text-danger">
             You are not allowed to enroll until you finish the prerequisites
             courses required
           </p>
@@ -116,27 +116,30 @@ export default {
       });
 
     // to check if allowed to enrol in course
-    await axios
-      .post('/api/course/' + this.$route.params.id, {
-        token: window.localStorage.getItem('session_token'),
-      })
-      .then((response) => {
-        const data = response.data;
-        // prereqs not met, show error message for prereqs
-        if (!data.success) {
-          this.isPrereqFulfilled = false;
-          return;
-        } else {
-          this.isPrereqFulfilled = true;
-          if (data.results.completed) {
-            this.isCourseCompleted = true;
+    if (!this.isAdmin) {
+      await axios
+        .post('/api/course/' + this.$route.params.id, {
+          token: window.localStorage.getItem('session_token'),
+        })
+        .then((response) => {
+          const data = response.data;
+          // prereqs not met, show error message for prereqs
+          if (!data.success) {
+            this.isPrereqFulfilled = false;
+            return;
+          } else {
+            this.isPrereqFulfilled = true;
+            if (data.results.completed) {
+              this.isCourseCompleted = true;
+            }
           }
-        }
-        this.isEnrolCheckFinished = true;
-      })
-      .catch((error) => {
-        console.error(error);
-      });
+          this.isEnrolCheckFinished = true;
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    }
+
     this.isDataFetched = true;
   },
   methods: {

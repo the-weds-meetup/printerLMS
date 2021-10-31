@@ -163,7 +163,7 @@ export default {
   },
   mounted: async function () {
     await axios
-      .get('http://localhost:5000/api/course/all')
+      .get('/api/course/all')
       .then((response) => {
         this.courses = response.data.result.records;
       })
@@ -177,7 +177,7 @@ export default {
 
     getTrainers: async function (each_past_class) {
       await axios
-        .get('http://localhost:5000/api/class/' + parseInt(each_past_class.id))
+        .get('/api/class/' + parseInt(each_past_class.id))
         .then((response) => {
           this.trainers = this.trainers.concat(
             response.data.result.records.past_learners
@@ -188,7 +188,7 @@ export default {
 
     assignTrainer: async function () {
       await axios
-        .post('http://localhost:5000/api/trainer/add', {
+        .post('/api/trainer/add', {
           user_id: this.user_id,
           class_id: this.class_id,
         })

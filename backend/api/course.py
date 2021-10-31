@@ -15,6 +15,20 @@ from model.LoginSession import LoginSession
 from api.error import throw_error
 
 
+def response_get_completed_learners(course_id: int):
+    learners = get_course_completed_learners(course_id)
+    learners_serialised = []
+
+    for learner in learners:
+        learners_serialised.append(learner.serialise())
+
+    response = {
+        "success": True,
+        "result": {"type": "Course", "records": learners_serialised},
+    }
+    return jsonify(response), 200
+
+
 def get_course(course_id: int):
     """
     Get course and ongoing and upcoming classes

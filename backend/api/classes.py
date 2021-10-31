@@ -59,6 +59,7 @@ def add_class(request_data: dict[str, any]):
     class_end_date = request_data["class_end_date"]
     enrolment_start_date = request_data["enrolment_start_date"]
     enrolment_end_date = request_data["enrolment_end_date"]
+    trainer_id = request_data["trainer_id"]
 
     # get latest class id
     all_classes: list[Class] = Class.query.filter_by(course_id=course_id).all()
@@ -75,7 +76,12 @@ def add_class(request_data: dict[str, any]):
     )
     db.session.add(classes)
     db.session.flush()
-    db.session.commit()
+
+    # add trainer id
+    if trainer_id != None:
+        classes.add_trainer(trainer_id)
+    else:
+        db.session.commit()
 
     response = {
         "success": True,
@@ -141,9 +147,9 @@ def get_past_learners(class_id):
     return past_learners
 
 
-def add_trainer(user_id, id):
+def add_trainer(user_id, class_id):
     # queries a class according to what has been selected in AssignTrainers form
-    a_class: Class = Class.query.filter_by(id=id).first()
+    a_class: Class = Class.query.filter_by(id=class_id).first()
     response = a_class.add_trainer(user_id)
 
     return jsonify(response), 200
