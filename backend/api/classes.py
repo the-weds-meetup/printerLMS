@@ -56,6 +56,7 @@ def get_all_class():
     }
     return jsonify(response), 200
 
+
 # get class of the course along with the learners that has passed the class
 def get_class(id: int):
     a_class: Class = Class.query.filter_by(id=id).first()
@@ -83,8 +84,6 @@ def get_class(id: int):
     response = {
         "success": True,
         "result": {"type": "Class", "records": serialise},
-
-
     }
 
     return jsonify(response), 200
