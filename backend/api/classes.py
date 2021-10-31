@@ -5,6 +5,7 @@ from api.course import get_course_incompleted_learners
 from api.enrolment import is_learner_eligible_for_enrolment
 from api.error import throw_error
 
+from main import db
 from model.Course import Course
 from model.LearnerCourseCompletion import LearnerCourseCompletion
 from model.Class import Class
@@ -49,7 +50,6 @@ def get_class_learners(class_id: int):
         learner: Learner = Learner.query.filter_by(id=enrolment.user_id).first()
         learners.append(learner)
     return learners
-
 
 
 def add_class(request_data: dict[str, any]):

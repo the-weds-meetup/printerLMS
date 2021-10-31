@@ -3,7 +3,6 @@ from typing import List
 import dateutil.parser
 import datetime
 import pytz
-import sys
 
 from main import db
 from model.Class import Class
@@ -116,10 +115,27 @@ def get_course_classes(course_id: int):
     for a_class in get_ongoing_classes_course(course_id=course_id):
         ongoing.append(a_class.serialise())
 
-    for a_class in course.get_class_past():
+    for a_class in get_past_classes_courses(course_id=course_id):
         past.append(a_class.serialise())
 
     return {"enrolling": enrolling, "ongoing": ongoing, "past": past}
+
+
+def get_past_classes_courses(course_id: int):
+    classes: List[Class] = Class.query.filter_by(course_id=course_id).all()
+    past_class: List[Class] = []
+    time_now = datetime.datetime.now(pytz.utc)
+
+    if len(classes) == 0:
+        return classes
+
+    for a_class in classes:
+        end_date = dateutil.parser.parse(a_class.class_end_date)
+
+        if time_now >= end_date:
+            past_class.append(a_class)
+
+    return past_class
 
 
 def get_completed_classes_courses(course_id: int):
