@@ -1,6 +1,7 @@
 from flask import Flask
 from flask import request, jsonify
 from flask_sqlalchemy import SQLAlchemy
+from flask import jsonify
 from os import environ
 from flask_cors import CORS, cross_origin
 
@@ -13,7 +14,10 @@ app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql+psycopg2://{}:{}@{}/{}".form
     environ["DB_HOST"],
     environ["DB_NAME"],
 )
+app.config["SQLALCHEMY_ENGINE_OPTIONS"] = {"pool_size": 100, "pool_recycle": 280}
+
 db = SQLAlchemy(app)
+CORS(app)
 
 
 @app.route("/")
@@ -121,6 +125,28 @@ def get_course_enrolment_status(class_id):
     except Exception as e:
         print(e)
         return auth.throw_error(type="course_status", message=str(e), status_code=400)
+
+
+@app.route("/api/class/<int:id>")
+def get_class(id):
+    try:
+        return classes.get_class(id=id)
+
+    except Exception as e:
+        print(e)
+        return auth.throw_error(type="Class", message=str(e), status_code=400)
+
+
+@app.route("/api/trainer/add", methods=["POST"])
+def add_trainer():
+    data = request.get_json()
+
+    try:
+        user_id = data["user_id"]
+        class_id = data["class_id"]
+        return classes.add_trainer(user_id, class_id)
+    except Exception as e:
+        return auth.throw_error(type="Trainer", message=str(e), status_code=400)
 
 
 @app.route("/api/learner", methods=["POST"])

@@ -32,6 +32,14 @@ const routes = [
     component: () => import('../views/Admin.vue'),
   },
   {
+    path: '/assigntrainers',
+    name: 'AssignTrainers',
+    component: () =>
+      import(
+        /* webpackChunkName: "assigntrainers" */ '../views/AssignTrainers.vue'
+      ),
+  },
+  {
     path: '/messages',
     name: 'Messages',
     component: () => import('../views/Messages.vue'),
