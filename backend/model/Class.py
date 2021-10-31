@@ -1,3 +1,7 @@
+"""
+Class.py
+"""
+
 from main import db
 from model.Trainer import Trainer
 from model.Learner import Learner
@@ -38,6 +42,17 @@ class Class(db.Model):
         return "<id: {}, course_id: {}, class_id: {}, max_capacity: {}>".format(
             self.id, self.course_id, self.class_id, self.max_capacity
         )
+
+    def to_dict(self):
+        """
+        'to_dict' converts the object into a dictionary,
+        in which the keys correspond to database columns
+        """
+        columns = self.__mapper__.column_attrs.keys()
+        result = {}
+        for column in columns:
+            result[column] = getattr(self, column)
+        return result
 
     def serialise(self):
         trainer = self.get_trainer()
