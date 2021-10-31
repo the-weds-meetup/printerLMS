@@ -1,6 +1,8 @@
 from main import db
 import datetime
 
+from model.Class import Class
+
 
 class Enrolment(db.Model):
     __tablename__ = "enrolment"
@@ -35,3 +37,7 @@ class Enrolment(db.Model):
         for column in columns:
             result[column] = getattr(self, column)
         return result
+
+    def get_class(self):
+        currentClass: Class = Class.query.filter_by(id=self.class_id).first()
+        return currentClass.get_course()

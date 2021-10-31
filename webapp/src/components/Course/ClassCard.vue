@@ -1,11 +1,14 @@
 <template>
   <div class="card">
     <div class="card-top">
-      <h5>G{{ classId }}</h5>
-      <button v-if="isAdmin" class="btn">Edit</button>
-      <button v-else-if="!canEnroll" disabled class="btn">
-        {{ checkStatus() }}
-      </button>
+      <h5>G{{ className }}</h5>
+      <div v-if="isAdmin">
+        <button class="btn" @click="navigateToLearnerClass()">Learners</button>
+        |
+        <button v-if="isAdmin" class="btn" @click="navigateToEditClass()">
+          Edit
+        </button>
+      </div>
       <button
         v-else
         :disabled="!canEnroll || enrollState !== 'no_enroll'"
@@ -55,7 +58,7 @@ export default {
       type: Number,
       required: true,
     },
-    courseId: {
+    className: {
       type: Number,
       required: true,
     },
@@ -133,7 +136,7 @@ export default {
     },
     async enrollClass() {
       await axios
-        .post('/api/enroll/' + this.classId, {
+        .post(`/api/enroll/self/${this.classId}`, {
           token: window.localStorage.getItem('session_token'),
         })
         .then(() => {
@@ -142,6 +145,16 @@ export default {
         .catch((error) => {
           console.error(error);
         });
+    },
+    navigateToEditClass() {
+      if (this.isAdmin) {
+        window.location.href = `/class/${this.classId}/edit`;
+      }
+    },
+    navigateToLearnerClass() {
+      if (this.isAdmin) {
+        window.location.href = `/class/${this.classId}/learners`;
+      }
     },
   },
 };

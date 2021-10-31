@@ -22,14 +22,34 @@ const routes = [
     component: () => import('../views/Course/Course.vue'),
   },
   {
+    path: '/class/approve-enrolment',
+    name: 'Approve Learner Self-Enrolment',
+    component: () => import('../views/Class/ClassApproval.vue'),
+  },
+  {
+    path: '/class/:id/edit',
+    name: 'Edit Class',
+    component: () => import('../views/Class/ClassEdit.vue'),
+  },
+  {
     path: '/course/:id/add-class',
     name: 'Add Class',
     component: () => import('../views/Class/ClassAdd.vue'),
   },
   {
+    path: '/class/:id/learners',
+    name: 'View Class Learners',
+    component: () => import('../views/Class/ClassLearners.vue'),
+  },
+  {
+    path: '/class/:id/learners/add',
+    name: 'Add Learners to Class',
+    component: () => import('../views/Class/ClassLearnersAdd.vue'),
+  },
+  {
     path: '/admin',
     name: 'Admin',
-    component: () => import('../views/Admin.vue'),
+    component: () => import('../views/Admin/Admin.vue'),
   },
   {
     path: '/assigntrainers',
