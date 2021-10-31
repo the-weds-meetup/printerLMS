@@ -52,12 +52,19 @@ const routes = [
     component: () => import('../views/Admin/Admin.vue'),
   },
   {
-    path: '/admin/assigntrainers',
+    path: '/admin/assign/trainers',
     name: 'AssignTrainers',
-    component: () =>
-      import(
-        /* webpackChunkName: "assigntrainers" */ '../views/Admin/AssignTrainers.vue'
-      ),
+    component: () => import('../views/Admin/AssignTrainers.vue'),
+  },
+  {
+    path: '/admin/assign/learners',
+    name: 'ViewAvailableClasses',
+    component: () => import('../views/Admin/ViewClasses.vue'),
+  },
+  {
+    path: '/admin/assign/learners/:id',
+    name: 'AssignLearners',
+    component: () => import('../views/Admin/AssignLearners.vue'),
   },
   {
     path: '/messages',
@@ -83,11 +90,6 @@ const routes = [
     path: '/logout',
     name: 'Logout',
     component: () => import('../views/Auth/Logout.vue'),
-  },
-  {
-    path: '/learners',
-    name: 'assignLearners',
-    component: () => import('../views/assignLearners.vue'),
   },
 ];
 

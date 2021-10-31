@@ -38,10 +38,10 @@
           <select id="selectTrainer" v-model="user_id" class="form-select">
             <option
               v-for="trainer in trainers"
-              :key="trainer.user_id"
-              :value="trainer.user_id"
+              :key="trainer.id"
+              :value="trainer.id"
             >
-              {{ trainer.name }}
+              {{ trainer.full_name }}
             </option>
             <option v-if="trainers.length == 0" disabled>
               No trainers currently available for this course
@@ -150,8 +150,6 @@ export default {
           console.log(error);
           this.classes = [];
         });
-
-      console.log(this.trainers);
     },
   },
   async created() {
