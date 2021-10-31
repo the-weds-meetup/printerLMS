@@ -38,7 +38,7 @@ def logout(token: str):
     Returns:
       @success: success if expiry_date is updated
       @error: status_code 500 if failure"""
-    session: LoginSession = LoginSession.query.filter_by(token=token).first()
+    session = return_login_session(token)
 
     if session is None:
         error_type = "Logout"
@@ -62,7 +62,7 @@ def validateToken(token: str):
     Returns:
       @success: TRUE if token is valid (aka, not expired)
       @error: FALSE if token does not exist or is expired"""
-    session: LoginSession = LoginSession.query.filter_by(token=token).first()
+    session = return_login_session(token)
 
     if session is None:
         return {"status": False, "message": "Token does not exist"}
@@ -71,3 +71,11 @@ def validateToken(token: str):
         return {"status": False, "message": "Token is Expired"}
 
     return {"status": True, "message": "OK"}
+
+
+def return_login_session(token: str):
+    """
+    Returns a Login Session
+    """
+    loginSession: LoginSession = LoginSession.query.filter_by(token=token).first()
+    return loginSession

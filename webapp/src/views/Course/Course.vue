@@ -37,20 +37,28 @@
         <div class="ongoing-class">
           <div class="header">
             <h4>{{ course.class.enrolling.length }} classes available</h4>
-            <button v-if="isAdmin" class="btn">+ Add Class</button>
+            <button v-if="isAdmin" class="btn" @click="navigateToAddClass()">
+              + Add Class
+            </button>
           </div>
+
+          <p v-if="!isPrereqFulfilled && !isAdmin" class="text-danger">
+            You are not allowed to enroll until you finish the prerequisites
+            courses required
+          </p>
           <div v-if="course.class.enrolling.length > 0" class="classes">
             <ClassCard
               v-for="enroll in course.class.enrolling"
-              :key="enroll.class_id"
-              :class-id="enroll.class_id"
-              :course-id="enroll.course_id"
+              :key="enroll.class_name"
+              :class-name="enroll.class_name"
+              :class-id="enroll.id"
               :max-capacity="enroll.max_capacity"
               :class-start-date="enroll.class_start_date"
               :class-end-date="enroll.class_end_date"
               :enrolment-start-date="enroll.enrolment_start_date"
               :enrolment-end-date="enroll.enrolment_end_date"
               :trainer="enroll.trainer"
+              :can-enroll="isPrereqFulfilled && !isCourseCompleted"
             />
           </div>
         </div>
@@ -80,9 +88,12 @@ export default {
       email: '',
       fullName: '',
       isAdmin: false,
+      course: undefined,
+      classEnrolStatus: undefined,
       isDataFetched: false,
       isPrereqShown: false,
-      course: undefined,
+      isPrereqFulfilled: false,
+      isCourseCompleted: false,
     };
   },
   async created() {
@@ -98,16 +109,45 @@ export default {
       .then((response) => {
         const data = response.data.result.records;
         this.course = data;
-        this.isDataFetched = true;
       })
       .catch((error) => {
         console.error(error);
         return undefined;
       });
+
+    // to check if allowed to enrol in course
+    if (!this.isAdmin) {
+      await axios
+        .post('/api/course/' + this.$route.params.id, {
+          token: window.localStorage.getItem('session_token'),
+        })
+        .then((response) => {
+          const data = response.data;
+          // prereqs not met, show error message for prereqs
+          if (!data.success) {
+            this.isPrereqFulfilled = false;
+            return;
+          } else {
+            this.isPrereqFulfilled = true;
+            if (data.results.completed) {
+              this.isCourseCompleted = true;
+            }
+          }
+          this.isEnrolCheckFinished = true;
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    }
+
+    this.isDataFetched = true;
   },
   methods: {
     togglePrereqButton() {
       this.isPrereqShown = !this.isPrereqShown;
+    },
+    navigateToAddClass() {
+      this.$router.push(`/course/${this.$route.params.id}/add-class`);
     },
   },
 };
@@ -152,6 +192,7 @@ export default {
 
     justify-content: space-between;
     align-items: center;
+    margin-bottom: 8px;
 
     h4 {
       font-size: 1.3em;

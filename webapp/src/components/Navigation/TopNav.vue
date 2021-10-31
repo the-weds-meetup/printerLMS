@@ -1,7 +1,12 @@
 <template>
   <nav class="top-nav">
     <h1>{{ title }}</h1>
-    <button v-if="buttonTitle" class="btn" @click="buttonAction">
+    <button
+      v-if="buttonTitle"
+      class="btn"
+      :disabled="isDisabled"
+      @click="buttonAction"
+    >
       {{ buttonTitle }}
     </button>
   </nav>
@@ -20,6 +25,11 @@ export default {
     buttonTitle: {
       type: String,
       default: undefined,
+      required: false,
+    },
+    isDisabled: {
+      type: Boolean,
+      default: false,
       required: false,
     },
     buttonAction: {

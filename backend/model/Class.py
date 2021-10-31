@@ -1,4 +1,9 @@
+"""
+Class.py
+"""
+
 from main import db
+from model.Course import Course
 from model.Trainer import Trainer
 from model.Learner import Learner
 
@@ -39,6 +44,17 @@ class Class(db.Model):
             self.id, self.course_id, self.class_id, self.max_capacity
         )
 
+    def to_dict(self):
+        """
+        'to_dict' converts the object into a dictionary,
+        in which the keys correspond to database columns
+        """
+        columns = self.__mapper__.column_attrs.keys()
+        result = {}
+        for column in columns:
+            result[column] = getattr(self, column)
+        return result
+
     def serialise(self):
         trainer = self.get_trainer()
         if trainer == None:
@@ -48,8 +64,9 @@ class Class(db.Model):
             trainer_name = learner.fullName()
 
         return {
+            "id": self.id,
             "course_id": self.course_id,
-            "class_id": self.class_id,
+            "class_name": self.class_id,
             "max_capacity": self.max_capacity,
             "class_start_date": self.class_start_date,
             "class_end_date": self.class_end_date,
@@ -57,6 +74,13 @@ class Class(db.Model):
             "enrolment_end_date": self.enrolment_end_date,
             "trainer": trainer_name,
         }
+
+    def to_dict(self):
+        columns = self.__mapper__.column_attrs.keys()
+        result = {}
+        for column in columns:
+            result[column] = getattr(self, column)
+        return result
 
     def get_trainer(self):
         trainer: Trainer = Trainer.query.filter_by(class_id=self.id).first()
@@ -69,11 +93,17 @@ class Class(db.Model):
         try:
             if trainer == None:
                 # record dont exist, we shall add it
-                trainer = Trainer(user_id)
+                trainer = Trainer(user_id, self.id)
             else:
                 # else overwrite
                 trainer.user_id = user_id
+
+            db.session.add(trainer)
             db.session.commit()
 
         except Exception as e:
-            print(e)
+            print(e, flush=True)
+
+    def get_course(self):
+        course: Course = Course.query.filter_by(id=self.course_id).first()
+        return course
