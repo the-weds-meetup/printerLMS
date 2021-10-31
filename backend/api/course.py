@@ -143,6 +143,8 @@ def get_past_classes_courses(course_id: int):
     if len(classes) == 0:
         return classes
 
+    # determine which classes are completed
+    # current time > class_end_date
     for a_class in classes:
         end_date = dateutil.parser.parse(a_class.class_end_date)
 
@@ -150,25 +152,6 @@ def get_past_classes_courses(course_id: int):
             past_class.append(a_class)
 
     return past_class
-
-
-def get_completed_classes_courses(course_id: int):
-    classes: List[Class] = Class.query.filter_by(course_id=course_id).all()
-    completed_class: List[Class] = []
-    time_now = datetime.datetime.now(pytz.utc)
-
-    if len(classes) == 0:
-        return completed_class
-
-    # determine which classes are completed
-    # current time > class_end_date
-    for a_class in classes:
-        enrolment_end = dateutil.parser.parse(a_class.class_end_date)
-
-        if time_now > enrolment_end:
-            completed_class.append(a_class)
-
-    return completed_class
 
 
 def get_enrolling_classes_course(course_id: int):
@@ -225,7 +208,7 @@ def get_prereq_courses(course_id: int):
 
 def get_course_completed_learners(course_id: int):
     learner_completed: List[Learner] = []
-    completed_classes = get_completed_classes_courses(course_id=course_id)
+    completed_classes = get_past_classes_courses(course_id=course_id)
 
     all_learner_completed: List[
         LearnerCourseCompletion

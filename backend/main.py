@@ -81,6 +81,17 @@ def get_course_all():
         return auth.throw_error(type="Course", message=str(e), status_code=400)
 
 
+@app.route("/api/course/enrol")
+def get_course_enrolling():
+    try:
+        return classes.response_get_all_enrollable_classes()
+    except Exception as e:
+        print(e, flush=True)
+        return auth.throw_error(
+            type="course_enrolling", message=str(e), status_code=400
+        )
+
+
 @app.route("/api/course/<int:course_id>", methods=["GET", "POST"])
 def get_course(course_id):
     if request.method == "GET":
@@ -147,13 +158,13 @@ def get_class_learners(class_id):
         return auth.throw_error(type="course_status", message=str(e), status_code=400)
 
 
-@app.route("/api/class/<int:id>")
-def get_class(id):
+@app.route("/api/class/<int:class_id>")
+def get_class(class_id):
     try:
-        return classes.get_class(id=id)
+        return classes.get_class(class_id=class_id)
 
     except Exception as e:
-        print(e)
+        print(e, flush=True)
         return auth.throw_error(type="Class", message=str(e), status_code=400)
 
 
@@ -243,21 +254,18 @@ def manual_enroll_learner(class_id):
         print(e, flush=True)
         return auth.throw_error(type="enroll_class", message=str(e), status_code=400)
 
+
 @app.route("/api/learners")
 def learners():
-    search_first_name = request.args.get('first_name')
+    search_first_name = request.args.get("first_name")
     if search_first_name:
-        learner_list = Learner.Learner.query.filter(Learner.Learner.name.contains(search_first_name))
+        learner_list = Learner.Learner.query.filter(
+            Learner.Learner.name.contains(search_first_name)
+        )
     else:
         learner_list = Learner.Learner.query.all()
-    
-    
-    return jsonify(
-        {
-            "data": [learner.to_dict() for learner in learner_list]
-        }
-    ), 200
 
+    return jsonify({"data": [learner.to_dict() for learner in learner_list]}), 200
 
 
 @cross_origin(origins="http://localhost:8080")
