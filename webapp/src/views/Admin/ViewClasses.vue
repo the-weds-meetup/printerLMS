@@ -8,7 +8,7 @@
           v-for="enrol in classes"
           :key="enrol.id"
           :class-id="enrol.id"
-          :class-name="enrol.class_name"
+          :class-name="enrol.class_id"
           :course-name="enrol.course_name"
           :current-capacity="enrol.current_capacity"
           :max-capacity="enrol.max_capacity"
