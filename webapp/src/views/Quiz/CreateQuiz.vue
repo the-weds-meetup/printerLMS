@@ -10,10 +10,23 @@
       <h2>Question - MCQ</h2>
 
       <div>{{question}}</div>
-      <label for="option1"><input name="answers" type="radio" :value="option1"> {{option1}}</label><br>
-      <label for="option2"><input name="answers" type="radio" :value="option2"> {{option2}}</label><br>
-      <label for="option3"><input name="answers" type="radio" :value="option3"> {{option3}}</label><br>
-      <label for="option4"><input name="answers" type="radio" :value="option4"> {{option4}}</label><br>
+
+      <span v-if="option1.length > 0">
+        <label for="option1"><input name="answers" type="radio" :value="option1"> {{option1}}</label><br>
+      </span>
+      
+      <span v-if="option2.length > 0">
+        <label for="option2"><input name="answers" type="radio" :value="option2"> {{option2}}</label><br>
+      </span>
+
+      <span v-if="option3.length > 0">
+        <label for="option3"><input name="answers" type="radio" :value="option3"> {{option3}}</label><br>
+      </span>
+
+      <span v-if="option4.length > 0">
+        <label for="option4"><input name="answers" type="radio" :value="option4"> {{option4}}</label><br>
+      </span>
+      
     </div>
 
     <div v-if ="!mcq">
@@ -21,8 +34,15 @@
       <h2>Question - True/False</h2>
 
       <div>{{question}}</div>
-      <label for="option1"><input name="answers" type="radio" :value="option1"> {{option1}}</label><br>
-      <label for="option2"><input name="answers" type="radio" :value="option2"> {{option2}}</label><br>
+
+      <span v-if="option1.length > 0">
+        <label for="option1"><input name="answers" type="radio" :value="option1"> {{option1}}</label><br>
+      </span>
+      
+      <span v-if="option2.length > 0">
+        <label for="option2"><input name="answers" type="radio" :value="option2"> {{option2}}</label><br>
+      </span>
+
     </div>
     <!-- End -> Preview of quiz format -->
     <hr>
@@ -45,23 +65,23 @@
           <textarea cols="30" rows="3" v-model="question" id="question"></textarea>
         </label><br><br>
 
-        <label for="option1">Option 1
+        <label for="option1">Option 1:
           <input type="text" v-model="option1">
         </label><br><br>
 
-        <label for="option2">Option 2
+        <label for="option2">Option 2:
           <input type="text" v-model="option2">
         </label><br><br>
 
-        <label for="option2">Option 3
+        <label for="option2">Option 3:
           <input type="text" v-model="option3">
         </label><br><br>
 
-        <label for="option2">Option 4
+        <label for="option2">Option 4:
           <input type="text" v-model="option4">
         </label><br><br>
 
-         <label for="answer">Answer
+         <label for="answer">Answer:
           <input type="text" v-model="answer">
         </label><br><br>
 
@@ -81,15 +101,15 @@
           <textarea cols="30" rows="3" v-model="question" id="question"></textarea>
         </label><br><br>
 
-        <label for="option1">Option 1
+        <label for="option1">Option 1:
           <input type="text" v-model="option1">
         </label><br><br>
 
-        <label for="option2">Option 2
+        <label for="option2">Option 2:
           <input type="text" v-model="option2">
         </label><br><br>
 
-        <label for="answer">Answer
+        <label for="answer">Answer:
           <input type="text" v-model="answer">
         </label><br><br>
 
