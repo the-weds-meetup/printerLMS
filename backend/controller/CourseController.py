@@ -5,6 +5,7 @@ import datetime
 import pytz
 
 from model.Course import Course
+from model.CoursePreq import CoursePreq
 from model.Class import Class
 from model.Enrolment import Enrolment
 from model.Learner import Learner
@@ -13,7 +14,18 @@ from model.LearnerCourseCompletion import LearnerCourseCompletion
 from controller.ClassController import ClassController
 
 
-class CourseContoller:
+class CourseController:
+    def get_prereq_courses(self, course_id: int):
+        prereqs_list: List[CoursePreq] = CoursePreq.query.filter_by(
+            course_id=course_id, is_active=True
+        ).all()
+        prereq_courses: List[Course] = []
+
+        for prereq in prereqs_list:
+            prereq_courses.append(prereq.get_prereq_course())
+
+        return prereq_courses
+
     def get_past_classes_courses(self, course_id: int):
         classes: List[Class] = Class.query.filter_by(course_id=course_id).all()
         past_class: List[Class] = []
