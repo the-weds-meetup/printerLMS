@@ -42,7 +42,7 @@ def get_course(course_id: int):
     serialise["class"] = get_course_classes(course_id)
 
     prereqs = []
-    for prereq_course in CourseController.get_prereq_courses(course_id):
+    for prereq_course in CourseController().get_prereq_courses(course_id):
         prereqs.append(
             {
                 "id": prereq_course.id,
@@ -121,13 +121,13 @@ def get_course_classes(course_id: int):
     ongoing = []
     past = []
 
-    for a_class in CourseController.get_enrolling_classes_course(course_id=course_id):
+    for a_class in CourseController().get_enrolling_classes_course(course_id=course_id):
         enrolling.append(a_class.serialise())
 
-    for a_class in CourseController.get_ongoing_classes_course(course_id=course_id):
+    for a_class in CourseController().get_ongoing_classes_course(course_id=course_id):
         ongoing.append(a_class.serialise())
 
-    for a_class in CourseController.get_past_classes_courses(course_id=course_id):
+    for a_class in CourseController().get_past_classes_courses(course_id=course_id):
         past.append(a_class.serialise())
 
     return {"enrolling": enrolling, "ongoing": ongoing, "past": past}

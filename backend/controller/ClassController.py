@@ -15,7 +15,7 @@ class ClassController:
         enrolling_class = []
 
         for course in course_list:
-            enrolling: List[Class] = CourseController.get_enrolling_classes_course(
+            enrolling: List[Class] = CourseController().get_enrolling_classes_course(
                 course.id
             )
 
@@ -61,7 +61,7 @@ class ClassController:
         but have yet to be enrolled or is not current taking any of the class right now
         """
         current_class: Class = Class.query.filter_by(id=class_id).first()
-        incompleted_learners = CourseController.get_course_incompleted_learners(
+        incompleted_learners = CourseController().get_course_incompleted_learners(
             current_class.get_course().id
         )
         course_id = current_class.get_course().id
@@ -77,7 +77,7 @@ class ClassController:
 
             if (
                 is_match == False
-                and LearnerController.is_learner_eligible_for_enrolment(
+                and LearnerController().is_learner_eligible_for_enrolment(
                     learner.id, course_id
                 )
             ):

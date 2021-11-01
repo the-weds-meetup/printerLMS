@@ -1,6 +1,4 @@
-from typing import Any, List
-
-from api import learner
+from typing import List
 
 from model.Course import Course
 from model.Class import Class
@@ -14,11 +12,11 @@ from controller.CourseController import CourseController
 
 class LearnerController:
     def get_learner(self, token: str) -> Learner:
-        isValid = AuthController.validate_token(token)
+        isValid = AuthController().validate_token(token)
         if isValid == None:
             raise Exception("Invalid Token")
 
-        session: LoginSession = AuthController.return_login_session(token)
+        session: LoginSession = AuthController().return_login_session(token)
         learner: Learner = session.get_learner()
 
         if learner == None:
@@ -29,7 +27,7 @@ class LearnerController:
     def is_learner_eligible_for_enrolment(
         self, learner_id: int, course_id: int
     ) -> bool:
-        prereq_courses = CourseController.get_prereq_courses(course_id)
+        prereq_courses = CourseController().get_prereq_courses(course_id)
         completed_class: List[
             LearnerCourseCompletion
         ] = LearnerCourseCompletion.query.filter_by(user_id=learner_id).all()

@@ -1,11 +1,8 @@
 from flask import Flask
 from flask import request, jsonify
 from flask_sqlalchemy import SQLAlchemy
-from flask import jsonify
 from os import environ
 from flask_cors import CORS, cross_origin
-
-from model.LoginSession import LoginSession
 
 app = Flask(__name__)
 CORS(app)
@@ -57,7 +54,7 @@ def logout():
 
     except Exception as e:
         print(e, flush=True)
-        return auth.throw_error(type="Logout", message=str(e), status_code=500)
+        return error.throw_error(type="Logout", message=str(e), status_code=500)
 
 
 @app.route("/api/course/add", methods=["POST"])
@@ -71,7 +68,7 @@ def add_course():
 
     except Exception as e:
         print(e, flush=True)
-        return auth.throw_error(type="course_add", message=str(e), status_code=500)
+        return error.throw_error(type="course_add", message=str(e), status_code=500)
 
 
 @app.route("/api/course/all")
@@ -82,7 +79,7 @@ def get_course_all():
         return course.get_all_courses(is_retired)
     except Exception as e:
         print(e, flush=True)
-        return auth.throw_error(type="Course", message=str(e), status_code=400)
+        return error.throw_error(type="Course", message=str(e), status_code=400)
 
 
 @app.route("/api/course/enrol")
@@ -91,7 +88,7 @@ def get_course_enrolling():
         return classes.response_get_all_enrollable_classes()
     except Exception as e:
         print(e, flush=True)
-        return auth.throw_error(
+        return error.throw_error(
             type="course_enrolling", message=str(e), status_code=400
         )
 
@@ -104,7 +101,7 @@ def get_course(course_id):
 
         except Exception as e:
             print(e, flush=True)
-            return auth.throw_error(type="Course", message=str(e), status_code=400)
+            return error.throw_error(type="Course", message=str(e), status_code=400)
 
     if request.method == "POST":
         request_data = request.get_json()
@@ -112,16 +109,14 @@ def get_course(course_id):
 
         try:
             AuthController.AuthController().validate_token(session)
-            loginSession: LoginSession = (
-                AuthController.AuthController().return_login_session(session)
-            )
+            loginSession = AuthController.AuthController().return_login_session(session)
             return enrolment.check_learners_class_enrolment_status(
                 loginSession.get_learner().id, course_id
             )
 
         except Exception as e:
             print(e, flush=True)
-            return auth.throw_error(
+            return error.throw_error(
                 type="course_enrolement_valid", message=str(e), status_code=400
             )
 
@@ -133,16 +128,14 @@ def get_course_enrolment_status(class_id):
 
     try:
         AuthController.AuthController().validate_token(session)
-        loginSession: LoginSession = (
-            AuthController.AuthController().return_login_session(session)
-        )
+        loginSession = AuthController.AuthController().return_login_session(session)
         return enrolment.class_enrolment_status(
             learner_id=loginSession.get_learner(), class_id=class_id
         )
 
     except Exception as e:
         print(e, flush=True)
-        return auth.throw_error(type="course_status", message=str(e), status_code=400)
+        return error.throw_error(type="course_status", message=str(e), status_code=400)
 
 
 @app.route("/api/class/<int:class_id>/nonlearners")
@@ -152,7 +145,7 @@ def get_class_nonlearners(class_id):
 
     except Exception as e:
         print(e, flush=True)
-        return auth.throw_error(
+        return error.throw_error(
             type="class_non_enroled", message=str(e), status_code=400
         )
 
@@ -164,7 +157,7 @@ def get_class_learners(class_id):
 
     except Exception as e:
         print(e, flush=True)
-        return auth.throw_error(type="class_learners", message=str(e), status_code=400)
+        return error.throw_error(type="class_learners", message=str(e), status_code=400)
 
 
 @app.route("/api/class/<int:class_id>/waiting-list")
@@ -174,7 +167,7 @@ def get_class_awaiting_learners(class_id):
 
     except Exception as e:
         print(e, flush=True)
-        return auth.throw_error(
+        return error.throw_error(
             type="class_waiting_list", message=str(e), status_code=400
         )
 
@@ -186,7 +179,7 @@ def get_class(class_id):
 
     except Exception as e:
         print(e, flush=True)
-        return auth.throw_error(type="Class", message=str(e), status_code=400)
+        return error.throw_error(type="Class", message=str(e), status_code=400)
 
 
 @app.route("/api/course/<int:course_id>/learners/completed")
@@ -196,7 +189,9 @@ def get_course_completed_learners(course_id):
 
     except Exception as e:
         print(e)
-        return auth.throw_error(type="course_learners", message=str(e), status_code=400)
+        return error.throw_error(
+            type="course_learners", message=str(e), status_code=400
+        )
 
 
 @app.route("/api/trainer/add", methods=["POST"])
@@ -208,7 +203,7 @@ def add_trainer():
         class_id = data["class_id"]
         return classes.add_trainer(user_id, class_id)
     except Exception as e:
-        return auth.throw_error(type="Trainer", message=str(e), status_code=400)
+        return error.throw_error(type="Trainer", message=str(e), status_code=400)
 
 
 @app.route("/api/learner", methods=["POST"])
@@ -220,7 +215,7 @@ def get_learner():
 
     except Exception as e:
         print(e, flush=True)
-        return auth.throw_error(type="Learner", message=str(e), status_code=400)
+        return error.throw_error(type="Learner", message=str(e), status_code=400)
 
 
 @app.route("/api/enroll/self/<int:class_id>", methods=["POST"])
@@ -230,9 +225,7 @@ def self_enroll_learner(class_id):
 
     try:
         AuthController.AuthController().validate_token(session)
-        loginSession: LoginSession = (
-            AuthController.AuthController().return_login_session(session)
-        )
+        loginSession = AuthController.AuthController().return_login_session(session)
 
         return enrolment.response_self_enrolment(
             learner_id=loginSession.get_learner().id, class_id=class_id
@@ -240,7 +233,7 @@ def self_enroll_learner(class_id):
 
     except Exception as e:
         print(e, flush=True)
-        return auth.throw_error(type="enroll_class", message=str(e), status_code=400)
+        return error.throw_error(type="enroll_class", message=str(e), status_code=400)
 
 
 @app.route("/api/enroll/manual/<int:class_id>", methods=["POST"])
@@ -250,12 +243,10 @@ def manual_enroll_learner(class_id):
         session = request_data["token"]
         learner_id_list = request_data["learners"]
         AuthController.AuthController().validate_token(session)
-        loginSession: LoginSession = (
-            AuthController.AuthController().return_login_session(session)
-        )
+        loginSession = AuthController.AuthController().return_login_session(session)
 
         if loginSession.get_learner().isAdmin() == False:
-            return auth.throw_error(
+            return error.throw_error(
                 type="Authorisation", message="Not Authorised", status_code=403
             )
 
@@ -266,7 +257,7 @@ def manual_enroll_learner(class_id):
 
     except Exception as e:
         print(e, flush=True)
-        return auth.throw_error(type="enroll_class", message=str(e), status_code=400)
+        return error.throw_error(type="enroll_class", message=str(e), status_code=400)
 
 
 @cross_origin(origins="http://localhost:8080")
@@ -276,19 +267,17 @@ def add_class():
     try:
         session = request_data["token"]
         AuthController.AuthController().validate_token(session)
-        loginSession: LoginSession = (
-            AuthController.AuthController().return_login_session(session)
-        )
+        loginSession = AuthController.AuthController().return_login_session(session)
 
         if loginSession.get_learner().isAdmin() == False:
-            return auth.throw_error(
+            return error.throw_error(
                 type="Authorisation", message="Not Authorised", status_code=403
             )
         return classes.add_class(request_data)
 
     except Exception as e:
         print(e, flush=True)
-        return auth.throw_error(type="create_class", message=str(e), status_code=400)
+        return error.throw_error(type="create_class", message=str(e), status_code=400)
 
 
 @cross_origin(origins="http://localhost:8080")
@@ -303,7 +292,7 @@ def edit_class():
 
     except Exception as e:
         print(e, flush=True)
-        return auth.throw_error(type="create_class", message=str(e), status_code=400)
+        return error.throw_error(type="create_class", message=str(e), status_code=400)
 
 
 if __name__ == "__main__":

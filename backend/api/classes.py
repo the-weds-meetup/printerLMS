@@ -9,6 +9,7 @@ from controller.EnrolmentController import EnrolmentController
 
 def response_get_class_learners(class_id: int):
     learners = ClassController().get_class_learners(class_id)
+    print(learners, flush=True)
     learners_serialised = []
 
     for learner in learners:

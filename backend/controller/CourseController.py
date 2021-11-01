@@ -6,11 +6,8 @@ import pytz
 from model.Course import Course
 from model.CoursePreq import CoursePreq
 from model.Class import Class
-from model.Enrolment import Enrolment
 from model.Learner import Learner
 from model.LearnerCourseCompletion import LearnerCourseCompletion
-
-from controller.ClassController import ClassController
 
 
 class CourseController:

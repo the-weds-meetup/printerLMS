@@ -8,7 +8,7 @@ def get_learner(token: str):
     """
     Get a learner based on session token
     """
-    learner: Learner = LearnerController.get_learner(token)
+    learner: Learner = LearnerController().get_learner(token)
 
     response = {
         "success": True,
