@@ -422,7 +422,7 @@ VALUES
     '2021-11-01T16:00:00.000Z',
     '2021-11-12T16:00:00.000Z',
     '2021-10-04T00:00:00.000Z',
-    '2021-11-01T04:00:00.000Z'
+    '2021-11-08T04:00:00.000Z'
   );
 INSERT INTO class
   (course_id, class_id, max_capacity, class_start_date, class_end_date, enrolment_start_date, enrolment_end_date)
@@ -434,7 +434,7 @@ VALUES
     '2021-10-22T16:00:00.000Z',
     '2021-11-05T16:00:00.000Z',
     '2021-10-04T00:00:00.000Z',
-    '2021-11-01T04:00:00.000Z'
+    '2021-11-08T04:00:00.000Z'
   );
 INSERT INTO class
   (course_id, class_id, max_capacity, class_start_date, class_end_date, enrolment_start_date, enrolment_end_date)
@@ -446,7 +446,7 @@ VALUES
     '2021-10-22T16:00:00.000Z',
     '2021-11-05T16:00:00.000Z',
     '2021-10-04T00:00:00.000Z',
-    '2021-11-14T04:00:00.000Z'
+    '2021-11-15T04:00:00.000Z'
   );
 
 -- classes for course_id 2
@@ -460,7 +460,7 @@ VALUES
     '2021-11-01T16:00:00.000Z',
     '2021-11-12T16:00:00.000Z',
     '2021-10-04T00:00:00.000Z',
-    '2021-11-01T04:00:00.000Z'
+    '2021-11-08T04:00:00.000Z'
   );
 INSERT INTO class
   (course_id, class_id, max_capacity, class_start_date, class_end_date, enrolment_start_date, enrolment_end_date)
@@ -472,7 +472,7 @@ VALUES
     '2021-10-22T16:00:00.000Z',
     '2021-11-05T16:00:00.000Z',
     '2021-10-04T00:00:00.000Z',
-    '2021-11-01T04:00:00.000Z'
+    '2021-11-08T04:00:00.000Z'
   );
 INSERT INTO class
   (course_id, class_id, max_capacity, class_start_date, class_end_date, enrolment_start_date, enrolment_end_date)
@@ -484,7 +484,7 @@ VALUES
     '2021-10-22T16:00:00.000Z',
     '2021-11-05T16:00:00.000Z',
     '2021-10-04T00:00:00.000Z',
-    '2021-11-14T04:00:00.000Z'
+    '2021-11-15T04:00:00.000Z'
   );
 
 -- classes for course_id 4
@@ -498,7 +498,7 @@ VALUES
     '2021-11-01T16:00:00.000Z',
     '2021-11-12T16:00:00.000Z',
     '2021-10-04T00:00:00.000Z',
-    '2021-11-01T04:00:00.000Z'
+    '2021-11-01T08:00:00.000Z'
   );
 INSERT INTO class
   (course_id, class_id, max_capacity, class_start_date, class_end_date, enrolment_start_date, enrolment_end_date)
@@ -510,7 +510,7 @@ VALUES
     '2021-10-22T16:00:00.000Z',
     '2021-11-05T16:00:00.000Z',
     '2021-10-04T00:00:00.000Z',
-    '2021-11-01T04:00:00.000Z'
+    '2021-11-01T08:00:00.000Z'
   );
 INSERT INTO class
   (course_id, class_id, max_capacity, class_start_date, class_end_date, enrolment_start_date, enrolment_end_date)
@@ -522,7 +522,7 @@ VALUES
     '2021-10-22T16:00:00.000Z',
     '2021-11-05T16:00:00.000Z',
     '2021-10-04T00:00:00.000Z',
-    '2021-11-14T04:00:00.000Z'
+    '2021-11-14T08:00:00.000Z'
   );
 
 -- classes for course_id 3
@@ -536,7 +536,7 @@ VALUES
     '2021-11-01T16:00:00.000Z',
     '2021-11-12T16:00:00.000Z',
     '2021-10-04T00:00:00.000Z',
-    '2021-11-01T04:00:00.000Z'
+    '2021-11-01T08:00:00.000Z'
   );
 INSERT INTO class
   (course_id, class_id, max_capacity, class_start_date, class_end_date, enrolment_start_date, enrolment_end_date)
@@ -548,7 +548,7 @@ VALUES
     '2021-10-22T16:00:00.000Z',
     '2021-11-05T16:00:00.000Z',
     '2021-10-04T00:00:00.000Z',
-    '2021-11-01T04:00:00.000Z'
+    '2021-11-01T08:00:00.000Z'
   );
 INSERT INTO class
   (course_id, class_id, max_capacity, class_start_date, class_end_date, enrolment_start_date, enrolment_end_date)
@@ -560,7 +560,7 @@ VALUES
     '2021-10-22T16:00:00.000Z',
     '2021-11-05T16:00:00.000Z',
     '2021-10-04T00:00:00.000Z',
-    '2021-11-14T04:00:00.000Z'
+    '2021-11-14T08:00:00.000Z'
   );
 
 -- TRAINER
@@ -651,6 +651,14 @@ INSERT INTO enrolment
   (user_id, class_id, enrolment_date, is_approved, is_withdrawn, course_progress)
 VALUES
   (7, 7, '2021-10-04T01:00:00.000Z', false, false, 0);
+INSERT INTO enrolment
+  (user_id, class_id, enrolment_date, is_approved, is_withdrawn, course_progress)
+VALUES
+  (8, 7, '2021-10-04T01:00:00.000Z', true, false, 0);
+INSERT INTO enrolment
+  (user_id, class_id, enrolment_date, is_approved, is_withdrawn, course_progress)
+VALUES
+  (9, 7, '2021-10-04T01:00:00.000Z', false, false, 0);
 INSERT INTO enrolment
   (user_id, class_id, enrolment_date, is_approved, is_withdrawn, course_progress)
 VALUES
