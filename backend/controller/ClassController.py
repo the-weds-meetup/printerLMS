@@ -24,9 +24,6 @@ class ClassController:
                 # check that class is not full
                 current_learners = self.get_class_learners(enrol_class.id)
                 if len(current_learners) < enrol_class.max_capacity:
-                    serialise = enrol_class.serialise()
-                    serialise["current_capacity"] = len(current_learners)
-                    serialise["course_name"] = course.name
                     enrolling_class.append(self.get_class(enrol_class.id))
 
         return enrolling_class
@@ -36,7 +33,7 @@ class ClassController:
         learners = []
 
         if a_class is None:
-            raise Exception("Class", "Invalid ClassID")
+            raise Exception("Invalid ClassID")
 
         serialise = a_class.to_dict()
         for learner in self.get_class_learners(class_id):

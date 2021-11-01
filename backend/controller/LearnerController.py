@@ -68,7 +68,7 @@ class LearnerController:
                     is_completed = True
                     break
 
-            return (True, is_completed)
+            return is_completed
 
         # success, msg
-        return (False, "Does not fulfil pre-requisites")
+        return "Does not fulfil pre-requisites"

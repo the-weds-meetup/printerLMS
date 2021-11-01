@@ -8,7 +8,6 @@ from model.Course import Course
 from model.Class import Class
 from model.Enrolment import Enrolment
 from model.Learner import Learner
-from model.LearnerCourseCompletion import LearnerCourseCompletion
 
 
 class EnrolmentController:
