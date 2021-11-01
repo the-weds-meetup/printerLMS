@@ -1,8 +1,11 @@
 from flask import jsonify, request
 from typing import Any, List
 
-from api.course import get_course_incompleted_learners
-from api.enrolment import is_learner_eligible_for_enrolment
+from api.course import get_course_incompleted_learners, get_enrolling_classes_course
+from api.enrolment import (
+    is_learner_eligible_for_enrolment,
+    get_learners_awaiting_approval,
+)
 from api.error import throw_error
 
 from main import db
@@ -37,13 +40,61 @@ def response_get_non_enrolled_learners(class_id):
 
     response = {
         "success": True,
-        "results": {"type": "class_enrolment", "records": learners_serialised},
+        "results": {"type": "class_non_enrolment", "records": learners_serialised},
+    }
+    return jsonify(response), 200
+
+
+def response_get_all_enrollable_classes():
+    # get active classes
+    # currently enrolling
+    course_list: List[Course] = Course.query.all()
+    enrolling_class = []
+
+    for course in course_list:
+        enrolling = get_enrolling_classes_course(course.id)
+        # check if class is full
+        for enrol_class in enrolling:
+            # check that class is not full
+            current_learners = get_class_learners(enrol_class.id)
+            if len(current_learners) < enrol_class.max_capacity:
+                serialise = enrol_class.serialise()
+                serialise["current_capacity"] = len(current_learners)
+                serialise["course_name"] = course.name
+                enrolling_class.append(serialise)
+
+    response = {
+        "success": True,
+        "results": {
+            "type": "get_enrollable_class",
+            "records": enrolling_class,
+        },
+    }
+
+    return jsonify(response), 200
+
+
+def response_get_all_waiting_learners(class_id: int):
+    serialise_learners = []
+    learners = get_learners_awaiting_approval(class_id)
+
+    for learner in learners:
+        serialise_learners.append(learner.serialise())
+
+    response = {
+        "success": True,
+        "results": {
+            "type": "class_waiting_list",
+            "records": serialise_learners,
+        },
     }
     return jsonify(response), 200
 
 
 def get_class_learners(class_id: int):
-    enrolments: List[Enrolment] = Enrolment.query.filter_by(class_id=class_id).all()
+    enrolments: List[Enrolment] = Enrolment.query.filter_by(
+        class_id=class_id, is_approved=True, is_withdrawn=False
+    ).all()
     learners: List[Learner] = []
 
     for enrolment in enrolments:
@@ -140,9 +191,8 @@ def get_all_class():
     return jsonify(response), 200
 
 
-# get class of the course along with the learners that has passed the class
-def get_class(id: int):
-    a_class: Class = Class.query.filter_by(id=id).first()
+def get_class(class_id: int):
+    a_class: Class = Class.query.filter_by(id=class_id).first()
 
     if a_class is None:
         error_type = "Class"
@@ -152,17 +202,11 @@ def get_class(id: int):
     serialise = a_class.to_dict()
 
     learners = []
-    for learner in get_learners(id):
-        learner: Learner = Learner.query.filter_by(id=learner.user_id).first()
-        learner_name = learner.fullName()
-        learners.append(
-            {
-                "user_id": learner.user_id,
-                "name": learner_name,
-            }
-        )
+    for learner in get_class_learners(class_id):
+        learners.append(learner.serialise())
 
     serialise["learners"] = learners
+    serialise["course_name"] = a_class.get_course().name
 
     response = {
         "success": True,
@@ -170,14 +214,6 @@ def get_class(id: int):
     }
 
     return jsonify(response), 200
-
-
-def get_learners(class_id):
-    past_learners: List[
-        LearnerCourseCompletion
-    ] = LearnerCourseCompletion.query.filter_by(class_id=class_id).all()
-
-    return past_learners
 
 
 def add_trainer(user_id, class_id):

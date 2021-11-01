@@ -642,11 +642,11 @@ VALUES
 INSERT INTO enrolment
   (user_id, class_id, enrolment_date, is_approved, is_withdrawn, course_progress)
 VALUES
-  (5, 7, '2021-10-04T01:00:00.000Z', false, false, 0);
+  (5, 7, '2021-10-04T01:00:00.000Z', true, false, 0);
 INSERT INTO enrolment
   (user_id, class_id, enrolment_date, is_approved, is_withdrawn, course_progress)
 VALUES
-  (6, 7, '2021-10-04T01:00:00.000Z', false, false, 0);
+  (6, 7, '2021-10-04T01:00:00.000Z', true, false, 0);
 INSERT INTO enrolment
   (user_id, class_id, enrolment_date, is_approved, is_withdrawn, course_progress)
 VALUES
@@ -654,11 +654,11 @@ VALUES
 INSERT INTO enrolment
   (user_id, class_id, enrolment_date, is_approved, is_withdrawn, course_progress)
 VALUES
-  (5, 11, '2021-10-04T01:00:00.000Z', false, false, 0);
+  (5, 11, '2021-10-04T01:00:00.000Z', true, false, 0);
 INSERT INTO enrolment
   (user_id, class_id, enrolment_date, is_approved, is_withdrawn, course_progress)
 VALUES
-  (6, 11, '2021-10-04T01:00:00.000Z', false, false, 0);
+  (6, 11, '2021-10-04T01:00:00.000Z', true, false, 0);
 INSERT INTO enrolment
   (user_id, class_id, enrolment_date, is_approved, is_withdrawn, course_progress)
 VALUES
@@ -666,11 +666,11 @@ VALUES
 INSERT INTO enrolment
   (user_id, class_id, enrolment_date, is_approved, is_withdrawn, course_progress)
 VALUES
-  (5, 14, '2021-10-04T01:00:00.000Z', false, false, 0);
+  (5, 14, '2021-10-04T01:00:00.000Z', true, false, 0);
 INSERT INTO enrolment
   (user_id, class_id, enrolment_date, is_approved, is_withdrawn, course_progress)
 VALUES
-  (6, 14, '2021-10-04T01:00:00.000Z', false, false, 0);
+  (6, 14, '2021-10-04T01:00:00.000Z', true, false, 0);
 INSERT INTO enrolment
   (user_id, class_id, enrolment_date, is_approved, is_withdrawn, course_progress)
 VALUES

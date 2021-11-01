@@ -1,5 +1,6 @@
 from main import db
 from model.Administrator import Administrator
+from model.Department import Department
 
 
 class Learner(db.Model):
@@ -42,7 +43,7 @@ class Learner(db.Model):
             "middle_name": self.middle_name,
             "last_name": self.last_name,
             "full_name": self.fullName(),
-            "department_id": self.department_id,
+            "department": self.getDepartment(),
             "is_admin": self.isAdmin(),
         }
 
@@ -51,8 +52,25 @@ class Learner(db.Model):
             return "{} {} {}".format(self.first_name, self.middle_name, self.last_name)
         return "{} {}".format(self.first_name, self.last_name)
 
+    def to_dict(self):
+        """
+        'to_dict' converts the object into a dictionary,
+        in which the keys correspond to database columns
+        """
+        columns = self.__mapper__.column_attrs.keys()
+        result = {}
+        for column in columns:
+            result[column] = getattr(self, column)
+        return result
+
     def isAdmin(self):
         admin = Administrator.query.filter_by(user_id=self.id).first()
         if admin == None:
             return False
         return True
+
+    def getDepartment(self):
+        department: Department = Department.query.filter_by(
+            id=self.department_id
+        ).first()
+        return department.name

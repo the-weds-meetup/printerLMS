@@ -81,6 +81,17 @@ def get_course_all():
         return auth.throw_error(type="Course", message=str(e), status_code=400)
 
 
+@app.route("/api/course/enrol")
+def get_course_enrolling():
+    try:
+        return classes.response_get_all_enrollable_classes()
+    except Exception as e:
+        print(e, flush=True)
+        return auth.throw_error(
+            type="course_enrolling", message=str(e), status_code=400
+        )
+
+
 @app.route("/api/course/<int:course_id>", methods=["GET", "POST"])
 def get_course(course_id):
     if request.method == "GET":
@@ -134,7 +145,9 @@ def get_class_nonlearners(class_id):
 
     except Exception as e:
         print(e, flush=True)
-        return auth.throw_error(type="course_status", message=str(e), status_code=400)
+        return auth.throw_error(
+            type="class_non_enroled", message=str(e), status_code=400
+        )
 
 
 @app.route("/api/class/<int:class_id>/learners")
@@ -144,16 +157,28 @@ def get_class_learners(class_id):
 
     except Exception as e:
         print(e, flush=True)
-        return auth.throw_error(type="course_status", message=str(e), status_code=400)
+        return auth.throw_error(type="class_learners", message=str(e), status_code=400)
 
 
-@app.route("/api/class/<int:id>")
-def get_class(id):
+@app.route("/api/class/<int:class_id>/waiting-list")
+def get_class_awaiting_learners(class_id):
     try:
-        return classes.get_class(id=id)
+        return classes.response_get_all_waiting_learners(class_id)
 
     except Exception as e:
-        print(e)
+        print(e, flush=True)
+        return auth.throw_error(
+            type="class_waiting_list", message=str(e), status_code=400
+        )
+
+
+@app.route("/api/class/<int:class_id>")
+def get_class(class_id):
+    try:
+        return classes.get_class(class_id=class_id)
+
+    except Exception as e:
+        print(e, flush=True)
         return auth.throw_error(type="Class", message=str(e), status_code=400)
 
 
