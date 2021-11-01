@@ -145,7 +145,7 @@ def edit_class(request_data: dict[str, any]):
     return jsonify(response), 200
 
 
-def add_trainer(user_id, class_id):
+def add_trainer_response(user_id: int, class_id: int):
     # queries a class according to what has been selected in AssignTrainers form
     a_class: Class = Class.query.filter_by(id=class_id).first()
     response = a_class.add_trainer(user_id)

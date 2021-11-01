@@ -7,7 +7,6 @@ from controller.EnrolmentController import EnrolmentController
 
 from main import db
 from model.Class import Class
-from model.Enrolment import Enrolment
 from model.Learner import Learner
 
 
@@ -17,7 +16,9 @@ def response_self_enrolment(class_id: int, learner_id: int):
         return throw_error("Authorisation", "Not Authorised", 403)
 
     try:
-        results = add_enrolment(learner_id=learner_id, class_id=class_id)
+        results = EnrolmentController().add_enrolment(
+            learner_id=learner_id, class_id=class_id
+        )
         if results == "not_eligible":
             response = {
                 "success": False,
@@ -51,7 +52,7 @@ def response_manual_enrolment(class_id: int, learner_id_list: List[int]):
 
     try:
         for learner_id in learner_id_list:
-            results = add_enrolment(
+            results = EnrolmentController().add_enrolment(
                 learner_id=learner_id, class_id=class_id, is_approved=True
             )
             if results == "not_eligible":
@@ -93,29 +94,6 @@ def check_learners_class_enrolment_status(learner_id: int, course_id: int):
         },
     }
     return jsonify(response), 200
-
-
-def add_enrolment(learner_id: int, class_id: int, is_approved: bool = False):
-    the_class: Class = Class.query.filter_by(id=class_id).first()
-    enrolment: Enrolment = Enrolment.query.filter_by(
-        user_id=learner_id, class_id=class_id
-    ).first()
-    is_eligible = LearnerController().is_learner_eligible_for_enrolment(
-        learner_id, the_class.course_id
-    )
-
-    if is_eligible == False:
-        return "not_eligible"
-
-    if enrolment != None:
-        enrolment.is_approved = True
-    else:
-        # add enrolment object
-        enroll: Enrolment = Enrolment(learner_id, class_id, is_approved=is_approved)
-        db.session.add(enroll)
-
-    db.session.commit()
-    return "OK"
 
 
 def learner_class_enrolment_status(learner_id: int, class_id: int):

@@ -201,7 +201,7 @@ def add_trainer():
     try:
         user_id = data["user_id"]
         class_id = data["class_id"]
-        return classes.add_trainer(user_id, class_id)
+        return classes.add_trainer_response(user_id, class_id)
     except Exception as e:
         return error.throw_error(type="Trainer", message=str(e), status_code=400)
 
