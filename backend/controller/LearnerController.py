@@ -1,8 +1,8 @@
-"""To get courses, and details of its respective classs"""
 from typing import Any, List
 import dateutil.parser
 import datetime
 import pytz
+from backend.api import learner
 
 from model.Course import Course
 from model.Class import Class
@@ -11,11 +11,24 @@ from model.Learner import Learner
 from model.LoginSession import LoginSession
 from model.LearnerCourseCompletion import LearnerCourseCompletion
 
-
+from controller.AuthController import AuthController
 from controller.CourseController import CourseController
 
 
 class LearnerController:
+    def get_learner(self, token: str) -> Learner:
+        isValid = AuthController.validate_token(token)
+        if isValid == None:
+            raise Exception("Invalid Token")
+
+        session: LoginSession = AuthController.return_login_session(token)
+        learner: Learner = session.get_learner()
+
+        if learner == None:
+            raise Exception("Invalid LearnerID")
+
+        return learner
+
     def is_learner_eligible_for_enrolment(
         self, learner_id: int, course_id: int
     ) -> bool:
