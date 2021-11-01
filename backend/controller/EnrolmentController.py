@@ -1,8 +1,4 @@
-"""To get courses, and details of its respective classs"""
 from typing import Any, List
-import dateutil.parser
-import datetime
-import pytz
 
 from model.Course import Course
 from model.Class import Class

@@ -1,5 +1,4 @@
-"""To get courses, and details of its respective classs"""
-from typing import Any, List
+from typing import List
 import dateutil.parser
 import datetime
 import pytz

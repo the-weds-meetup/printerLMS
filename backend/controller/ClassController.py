@@ -1,4 +1,4 @@
-from typing import Any, List
+from typing import List
 
 from model.Course import Course
 from model.Class import Class

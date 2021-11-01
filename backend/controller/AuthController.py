@@ -1,5 +1,3 @@
-from typing import Any, List
-
 from main import db
 from model.Learner import Learner
 from model.LoginSession import LoginSession

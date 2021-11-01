@@ -1,12 +1,9 @@
 from typing import Any, List
-import dateutil.parser
-import datetime
-import pytz
-from backend.api import learner
+
+from api import learner
 
 from model.Course import Course
 from model.Class import Class
-from model.Enrolment import Enrolment
 from model.Learner import Learner
 from model.LoginSession import LoginSession
 from model.LearnerCourseCompletion import LearnerCourseCompletion

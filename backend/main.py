@@ -5,7 +5,7 @@ from flask import jsonify
 from os import environ
 from flask_cors import CORS, cross_origin
 
-from backend.model.LoginSession import LoginSession
+from model.LoginSession import LoginSession
 
 app = Flask(__name__)
 CORS(app)
