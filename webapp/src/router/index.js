@@ -18,8 +18,8 @@ const routes = [
   },
   {
     path: '/course/:id',
-    name: 'Course',
-    component: () => import('../views/Course/Course.vue'),
+    name: 'EnrolCourse',
+    component: () => import('../views/Course/EnrolCourse.vue'),
   },
   {
     path: '/class/approve-enrolment',

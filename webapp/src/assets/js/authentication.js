@@ -52,9 +52,9 @@ export async function cleanupSession() {
       // remove everything
       window.localStorage.clear();
       window.sessionStorage.clear();
-      // navigate to login after 5 secs
+      // navigate to login after 3 secs
       setTimeout(function () {
         window.location.replace('/login');
-      }, 5000);
+      }, 3000);
     });
 }
