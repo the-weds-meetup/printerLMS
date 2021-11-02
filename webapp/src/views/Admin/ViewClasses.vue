@@ -2,49 +2,44 @@
   <div class="body">
     <SideNav :email="email" :full-name="fullName" :is-admin="isAdmin" />
     <main>
-      <TopNav
-        title="Learners"
-        button-title="+ Add Learner"
-        @click="navigateToAdd"
-      />
+      <TopNav title="Assign Learners to Class" />
       <div id="content">
-        <Spinner v-if="!isDataFetched" />
-
-        <div v-else>
-          <ol>
-            <li v-for="learner in learners" :key="learner.id">
-              {{ learner.full_name }}
-            </li>
-          </ol>
-        </div>
+        <ClassEnrol
+          v-for="enrol in classes"
+          :key="enrol.id"
+          :class-id="enrol.id"
+          :class-name="enrol.class_id"
+          :course-name="enrol.course_name"
+          :current-capacity="enrol.current_capacity"
+          :max-capacity="enrol.max_capacity"
+        />
       </div>
     </main>
   </div>
 </template>
 
 <script>
-// @ is an alias to /src
 import axios from 'axios';
 
 import { checkSessionToken } from '@/assets/js/authentication.js';
+import ClassEnrol from '@/components/Course/ClassEnrol.vue';
 import SideNav from '@/components/Navigation/SideNav.vue';
 import TopNav from '@/components/Navigation/TopNav.vue';
-import Spinner from '@/components/Tools/Spinner.vue';
 
 export default {
-  name: 'EditCourse',
+  name: 'AllClassEnrolling',
   components: {
     SideNav,
     TopNav,
-    Spinner,
+    ClassEnrol,
   },
   data() {
     return {
       email: '',
       fullName: '',
       isAdmin: false,
+      classes: [],
       isDataFetched: false,
-      learners: [],
     };
   },
   async created() {
@@ -55,26 +50,18 @@ export default {
     });
   },
   async mounted() {
-    this.learners = await axios
-      .get(`/api/class/${this.$route.params.id}/learners`)
+    await axios
+      .get('/api/course/enrol')
       .then((response) => {
+        const data = response.data.results.records;
+        this.classes = data;
         this.isDataFetched = true;
-        return response.data.results.records;
       })
       .catch((error) => {
-        console.error(error);
+        console.error(error.response.data);
       });
   },
-  methods: {
-    togglePrereqButton() {
-      this.isPrereqShown = !this.isPrereqShown;
-    },
-    navigateToAdd() {
-      if (this.isAdmin) {
-        window.location.href = `/class/${this.$route.params.id}/learners/add`;
-      }
-    },
-  },
+  methods: {},
 };
 </script>
 
@@ -82,21 +69,4 @@ export default {
 @use '@/assets/styles/shared';
 @import '~bootstrap/scss/bootstrap';
 @import '~bootstrap/scss/_variables.scss';
-
-#content {
-  h1 {
-    font-size: 1.6em;
-    font-weight: 600;
-    margin-bottom: 24px;
-  }
-
-  p {
-    color: $gray-800;
-    font-size: 1.1em;
-  }
-}
-
-li {
-  padding: 8px 0;
-}
 </style>

@@ -36,20 +36,27 @@
             >Learners</label
           >
         </div>
-        <div v-if="selected === 'course'" class="content-body">
-          <ul>
-            <li>
-              <a href="/class/approve-enrolment" class="link-primary"
-                >Approve Self-Enrolled Learners
-              </a>
-            </li>
+        <div class="content-body">
+          <ul v-if="selected === 'course'">
             <li>
               <a href="/course/add" class="link-primary">Add a New Course</a>
             </li>
             <li>
-              <a href="/admin/assigntrainers" class="link-primary"
+              <a href="/admin/assign/learners" class="link-primary"
+                >Assign Learners to Class
+              </a>
+            </li>
+            <li>
+              <a href="/admin/assign/trainers" class="link-primary"
                 >Assign Trainers to Class</a
               >
+            </li>
+          </ul>
+          <ul v-else-if="selected === 'learner'">
+            <li>
+              <a href="/admin/assign/learners" class="link-primary"
+                >Manage Learners
+              </a>
             </li>
           </ul>
         </div>

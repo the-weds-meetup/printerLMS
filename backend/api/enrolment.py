@@ -1,16 +1,13 @@
 from flask import jsonify
 from typing import List
 
-from api.course import get_prereq_courses
 from api.error import throw_error
+from controller.LearnerController import LearnerController
+from controller.EnrolmentController import EnrolmentController
 
 from main import db
-from model.Class import Class as CClass
-from model.Course import Course
-from model.Enrolment import Enrolment
+from model.Class import Class
 from model.Learner import Learner
-from model.LearnerCourseCompletion import LearnerCourseCompletion
-from model.LoginSession import LoginSession
 
 import dateutil.parser
 import datetime
@@ -75,12 +72,14 @@ def get_approved_enrolments(user_id):
 
 
 def response_self_enrolment(class_id: int, learner_id: int):
-    the_class: CClass = CClass.query.filter_by(id=class_id).first()
+    the_class: Class = Class.query.filter_by(id=class_id).first()
     if the_class is None:
         return throw_error("Authorisation", "Not Authorised", 403)
 
     try:
-        results = add_enrolment(learner_id=learner_id, class_id=class_id)
+        results = EnrolmentController().add_enrolment(
+            learner_id=learner_id, class_id=class_id
+        )
         if results == "not_eligible":
             response = {
                 "success": False,
@@ -106,7 +105,7 @@ def response_self_enrolment(class_id: int, learner_id: int):
 
 
 def response_manual_enrolment(class_id: int, learner_id_list: List[int]):
-    the_class: CClass = CClass.query.filter_by(id=class_id).first()
+    the_class: Class = Class.query.filter_by(id=class_id).first()
     non_enrolled_names: List[str] = []
 
     if the_class is None:
@@ -114,7 +113,7 @@ def response_manual_enrolment(class_id: int, learner_id_list: List[int]):
 
     try:
         for learner_id in learner_id_list:
-            results = add_enrolment(
+            results = EnrolmentController().add_enrolment(
                 learner_id=learner_id, class_id=class_id, is_approved=True
             )
             if results == "not_eligible":
@@ -145,106 +144,28 @@ def response_manual_enrolment(class_id: int, learner_id_list: List[int]):
         return throw_error(type="enroll_class", message=str(e), status_code=400)
 
 
-def is_learner_eligible_for_enrolment(learner_id: int, course_id: int):
-    prereq_courses = get_prereq_courses(course_id)
-
-    if len(prereq_courses) == 0:
-        return True
-
-    completed_class: List[
-        LearnerCourseCompletion
-    ] = LearnerCourseCompletion.query.filter_by(user_id=learner_id).all()
-
-    # get list of course completed by learner
-    completed_count = 0
-    for complete in completed_class:
-        class_details: CClass = CClass.query.filter_by(id=complete.class_id).first()
-        course_completed: Course = Course.query.filter_by(
-            id=class_details.course_id
-        ).first()
-
-        for course in prereq_courses:
-            if course_completed.id == course.id:
-                completed_count += 1
-                break
-
-    return len(prereq_courses) == completed_count
-
-
-def check_learner_course_valid(token: str, course_id: int):
-    session: LoginSession = LoginSession.query.filter_by(token=token).first()
-    learner = session.get_learner()
-
-    if learner is None:
-        return throw_error("Authorisation", "Not Authorised", 403)
-
-    if is_learner_eligible_for_enrolment(learner.id, course_id):
-        # check if learner has completed
-        is_completed = False
-        completed_course: List[
-            LearnerCourseCompletion
-        ] = LearnerCourseCompletion.query.filter_by(user_id=learner.id).all()
-
-        for completion in completed_course:
-            completed_class: CClass = CClass.query.filter_by(
-                id=completion.class_id
-            ).first()
-            if completed_class.course_id == course_id:
-                is_completed = True
-                break
-
-        # check if completed
-        response = {
-            "success": True,
-            "results": {
-                "type": "enrolment_status",
-                "msg": "OK",
-                "completed": is_completed,
-            },
-        }
-        return jsonify(response), 200
-
+def check_learners_class_enrolment_status(learner_id: int, course_id: int):
+    status = LearnerController().check_learner_finish_course(learner_id, course_id)
+    success = type(status) == bool
     response = {
-        "success": False,
+        "success": success,
         "results": {
             "type": "enrolment_status",
-            "msg": "Does not fulfil pre-requisites",
+            "completed": status,
         },
     }
     return jsonify(response), 200
 
 
-def add_enrolment(learner_id: int, class_id: int, is_approved: bool = False):
-    the_class: CClass = CClass.query.filter_by(id=class_id).first()
-    is_eligible = is_learner_eligible_for_enrolment(learner_id, the_class.course_id)
+def learner_class_enrolment_status(learner_id: int, class_id: int):
+    selected_class: Class = Class.query.filter_by(id=class_id).first()
 
-    if is_eligible == False:
-        return "not_eligible"
+    if selected_class is None:
+        raise Exception("Missing ClassID")
 
-    # add enrolment object
-    enroll: Enrolment = Enrolment(learner_id, class_id, is_approved=is_approved)
-    db.session.add(enroll)
-    db.session.commit()
-    return "OK"
-
-
-def class_enrolment_status(token: str, class_id: int):
-    session: LoginSession = LoginSession.query.filter_by(token=token).first()
-    selected_class: CClass = CClass.query.filter_by(id=class_id).first()
-    learner = session.get_learner()
-
-    if learner is None or selected_class is None:
-        return throw_error("Authorisation", "Not Authorised", 403)
-
-    status = "no_enroll"
-    enrolment: Enrolment = Enrolment.query.filter_by(
-        user_id=learner.id, class_id=class_id
-    ).first()
-    if enrolment != None:
-        if enrolment.is_approved:
-            status = "approve"
-        else:
-            status = "awaiting_approval"
+    status = EnrolmentController().check_learners_class_enrolment_status(
+        learner_id, class_id
+    )
 
     response = {
         "success": True,
