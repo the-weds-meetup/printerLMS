@@ -14,63 +14,6 @@ import datetime
 import pytz
 
 
-def get_approved_enrolments(user_id):
-    enrolment_list: Enrolment = Enrolment.query.filter_by(user_id=user_id).all()
-    time_now = datetime.datetime.now(pytz.utc)
-    upcoming = []
-    ongoing = []
-    past = []
-
-    for each_enrol in enrolment_list:
-        if each_enrol.is_approved:
-            a_class: Class = Class.query.filter_by(class_id=each_enrol.class_id).first()
-            class_start = dateutil.parser.parse(a_class.class_start_date)
-            class_end = dateutil.parser.parse(a_class.class_end_date)
-
-            # if a_class is None:
-            #     error_type = "Class"
-            #     message = "Invalid Class id"
-            #     return throw_error(type=error_type, message=message)
-
-            course: Course = Course.query.filter_by(id=a_class.course_id).first()
-            #serialise = course.to_dict()
-
-            if time_now < class_start:
-                upcoming.append(
-                    {
-                        "course_name": course.name,
-                        "class_id": a_class.class_id,
-                        "progress": each_enrol.course_progress,
-                        "class_start_date": a_class.class_start_date,
-                        "class_end_date": a_class.class_end_date,
-                    }
-                )
-
-            elif time_now >= class_start and time_now < class_end:
-                ongoing.append(
-                    {
-                        "course_name": course.name,
-                        "class_id": a_class.class_id,
-                        "progress": each_enrol.course_progress,
-                        "class_start_date": a_class.class_start_date,
-                        "class_end_date": a_class.class_end_date,
-                    }
-                )
-
-            elif time_now > class_end:
-                past.append(
-                    {
-                        "course_name": course.name,
-                        "class_id": a_class.class_id,
-                        "progress": each_enrol.course_progress,
-                        "class_start_date": a_class.class_start_date,
-                        "class_end_date": a_class.class_end_date,
-                    }
-                )
-
-    return {"upcoming": upcoming, "ongoing": ongoing, "past": past}
-
-
 def response_self_enrolment(class_id: int, learner_id: int):
     the_class: Class = Class.query.filter_by(id=class_id).first()
     if the_class is None:
@@ -175,3 +118,26 @@ def learner_class_enrolment_status(learner_id: int, class_id: int):
         },
     }
     return jsonify(response), 200
+
+
+def response_get_approved_enrolments(learner_id: int):
+    approved_enrols = EnrolmentController().get_approved_enrolments(learner_id)
+
+    if approved_enrols is None:
+        response = {
+            "success": False,
+            "results": {
+                "type": "class_approved_enrolments",
+                "msg": "Failed",
+            },
+        }
+        return jsonify(response), 400
+    else:
+        response = {
+            "success": True,
+            "results": {
+                "type": "class_enrolment_status",
+                "records": approved_enrols,
+            },
+        }
+        return jsonify(response), 200

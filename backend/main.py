@@ -218,14 +218,14 @@ def get_learner():
         return error.throw_error(type="Learner", message=str(e), status_code=400)
 
 
-@app.route("/api/enrolment/<int:user_id>")
-def get_approved_courses(user_id):
+@app.route("/api/enrolment/<int:learner_id>")
+def get_approved_courses(learner_id):
     try:
-        return enrolment.get_approved_enrolments(user_id=user_id)
+        return enrolment.response_get_approved_enrolments(learner_id)
 
     except Exception as e:
         print(e)
-        return auth.throw_error(type="Class", message=str(e), status_code=400)
+        return error.throw_error(type="Class", message=str(e), status_code=400)
 
 
 @app.route("/api/enroll/self/<int:class_id>", methods=["POST"])
