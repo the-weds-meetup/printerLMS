@@ -2,7 +2,7 @@
   <div class="body">
     <SideNav :email="email" :full-name="fullName" :is-admin="isAdmin" />
     <main>
-      <TopNav title="Manage Learners" />
+      <TopNav :title="title" />
       <Spinner v-if="!isDataFetched" />
       <div v-else id="content" class="container-fluid">
         <!-- ClassHeader -->
@@ -48,6 +48,12 @@ export default {
     countLearners() {
       return this.currentClass.learners.length || 0;
     },
+    title() {
+      if (!this.currentClass) {
+        return 'A Default Class';
+      }
+      return `${this.currentClass.course_name} G(${this.currentClass.class_id})`;
+    },
   },
   async created() {
     await checkSessionToken().then(() => {
@@ -81,56 +87,4 @@ export default {
 @use '@/assets/styles/shared';
 @import '~bootstrap/scss/bootstrap';
 @import '~bootstrap/scss/_variables.scss';
-
-.description {
-  display: flex;
-  flex-direction: row;
-
-  h1,
-  h3,
-  p {
-    margin: 0;
-  }
-
-  .name {
-    flex: 2;
-    h1 {
-      font-size: 2em;
-    }
-
-    h3 {
-      margin-top: 8px;
-      font-size: 1.8em;
-    }
-  }
-
-  .enrol-count {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-    justify-content: center;
-    font-size: 1.2em;
-
-    .enrol-container {
-      text-align: center;
-      background-color: $gray-300;
-      padding: 4px 24px;
-      border-radius: 8px;
-    }
-
-    h3 {
-      font-size: 1.8em;
-      margin-bottom: 8px;
-    }
-  }
-}
-
-.learners {
-  margin-top: 3em;
-}
-
-td {
-  vertical-align: middle;
-}
 </style>
