@@ -63,11 +63,13 @@ export default {
     async populateData() {
       this.isDataFetched = false;
       await axios
-        .get(`/api/class/${this.$route.params.id}`)
+        .post(`/api/class/${this.$route.params.id}`, {
+          token: window.localStorage.getItem('session_token'),
+        })
         .then((response) => {
           this.currentClass = response.data.result.records;
         })
-        .catch((error) => alert(error.response.data));
+        .catch((error) => alert(error.response.data.result.message));
 
       this.isDataFetched = true;
     },
