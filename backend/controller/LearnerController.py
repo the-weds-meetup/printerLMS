@@ -2,6 +2,7 @@ from typing import List
 
 from model.Course import Course
 from model.Class import Class
+from model.Enrolment import Enrolment
 from model.Learner import Learner
 from model.LoginSession import LoginSession
 from model.LearnerCourseCompletion import LearnerCourseCompletion
@@ -22,6 +23,12 @@ class LearnerController:
         if learner == None:
             raise Exception("Invalid LearnerID")
 
+        return learner
+
+    def get_learner_from_id(self, learner_id: int) -> Learner:
+        learner: Learner = Learner.query.filter_by(id=learner_id).first()
+        if learner == None:
+            raise Exception("Invalid LearnerID")
         return learner
 
     def is_learner_eligible_for_enrolment(
@@ -67,3 +74,10 @@ class LearnerController:
 
         # success, msg
         return "Does not fulfil pre-requisites"
+
+    def is_learner_enrolled_and_approve(self, learner_id: int, class_id: int) -> bool:
+        # check if enrolment obj exist
+        enrol: Enrolment = Enrolment.query.filter_by(
+            user_id=learner_id, class_id=class_id, is_approved=True, is_withdrawn=False
+        ).first()
+        return enrol != None

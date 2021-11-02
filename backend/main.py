@@ -185,11 +185,17 @@ def get_class(class_id):
 @app.route("/api/class/<int:class_id>", methods=["POST"])
 def get_class_post(class_id):
     try:
-        return classes.response_get_class_details(class_id=class_id)
+        request_data = request.get_json()
+        session = request_data["token"]
+        AuthController.AuthController().validate_token(session)
+        loginSession = AuthController.AuthController().return_login_session(session)
+        return classes.response_get_all_class_details(
+            learner_id=loginSession.get_learner().id, class_id=class_id
+        )
 
     except Exception as e:
         print(e, flush=True)
-        return error.throw_error(type="Class", message=str(e), status_code=400)
+        return error.throw_error(type="Class_POST", message=str(e), status_code=400)
 
 
 @app.route("/api/me/classes", methods=["POST"])

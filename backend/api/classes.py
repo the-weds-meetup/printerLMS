@@ -2,8 +2,10 @@ from flask import jsonify
 
 from main import db
 from model.Class import Class
+from model.Learner import Learner
 
 from controller.ClassController import ClassController
+from controller.LearnerController import LearnerController
 from controller.TrainerController import TrainerController
 from controller.EnrolmentController import EnrolmentController
 
@@ -66,6 +68,30 @@ def response_get_all_waiting_learners(class_id: int):
 
 
 def response_get_class_details(class_id: int):
+    serialised_class = ClassController().get_class(class_id)
+    response = {
+        "success": True,
+        "result": {"type": "Class", "records": serialised_class},
+    }
+    return jsonify(response), 200
+
+
+def response_get_all_class_details(learner_id: int, class_id: int):
+    """Pass more information such as lesson"""
+    # get permission level
+    learner: Learner = LearnerController().get_learner_from_id(learner_id)
+    print(learner.isTrainer(class_id), flush=True)
+
+    if (
+        learner.isAdmin() == False
+        and learner.isTrainer(class_id) == False
+        and LearnerController().is_learner_enrolled_and_approve(
+            learner_id=learner_id, class_id=class_id
+        )
+        == False
+    ):
+        raise Exception("Not Authenticated")
+
     serialised_class = ClassController().get_class(class_id)
     response = {
         "success": True,
@@ -155,13 +181,10 @@ def add_trainer_response(user_id: int, class_id: int):
 
 
 def get_all_learner_classes(user_id: int):
-    learner = {}
+    learner = EnrolmentController().get_approved_enrolments(user_id)
     trainer = {}
-    # merge code with upcoming methods
-    # get all enrolled courses here
 
     # get trainer courses here
-
     if TrainerController().is_trainer(user_id):
         trainer = {
             "past": TrainerController().get_past_classes_serialise(user_id),
