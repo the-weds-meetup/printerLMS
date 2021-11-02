@@ -182,6 +182,19 @@ def get_class(class_id):
         return error.throw_error(type="Class", message=str(e), status_code=400)
 
 
+@app.route("/api/me/class", methods=["POST"])
+def get_all_learner_courses():
+    try:
+        request_data = request.get_json()
+        session = request_data["token"]
+        AuthController.AuthController().validate_token(session)
+        loginSession = AuthController.AuthController().return_login_session(session)
+        return classes.get_all_learner_courses(user_id=loginSession.user_id)
+    except Exception as e:
+        print(e, flush=True)
+        return error.throw_error(type="me_class", message=str(e), status_code=400)
+
+
 @app.route("/api/course/<int:course_id>/learners/completed")
 def get_course_completed_learners(course_id):
     try:

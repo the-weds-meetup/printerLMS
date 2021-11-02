@@ -68,10 +68,8 @@ class Learner(db.Model):
         admin = Administrator.query.filter_by(user_id=self.id).first()
         return admin != None
 
-    def isTrainer(self, class_id):
-        trainer: Trainer = Trainer.query.filter_by(
-            user_id=self.id, class_id=class_id
-        ).first()
+    def isTrainer(self):
+        trainer: Trainer = Trainer.query.filter_by(user_id=self.id).first()
         return trainer != None
 
     def getDepartment(self):

@@ -4,6 +4,7 @@ from main import db
 from model.Class import Class
 
 from controller.ClassController import ClassController
+from controller.TrainerController import TrainerController
 from controller.EnrolmentController import EnrolmentController
 
 
@@ -149,5 +150,31 @@ def add_trainer_response(user_id: int, class_id: int):
     # queries a class according to what has been selected in AssignTrainers form
     a_class: Class = Class.query.filter_by(id=class_id).first()
     response = a_class.add_trainer(user_id)
+
+    return jsonify(response), 200
+
+
+def get_all_learner_courses(user_id: int):
+    learner = {}
+    trainer = {}
+    # merge code with upcoming methods
+    # get all enrolled courses here
+
+    # get trainer courses here
+
+    if TrainerController().is_trainer(user_id):
+        trainer = {
+            "past": TrainerController().get_past_classes_serialise(user_id),
+            "current": TrainerController().get_current_classes_serialise(user_id),
+            "future": TrainerController().get_future_classes_serialise(user_id),
+        }
+
+    response = {
+        "success": True,
+        "results": {
+            "type": "my_courses",
+            "records": {"learner": learner, "trainer": trainer},
+        },
+    }
 
     return jsonify(response), 200
