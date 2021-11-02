@@ -5,23 +5,13 @@
       <TopNav title="Manage Learners" />
       <Spinner v-if="!isDataFetched" />
       <div v-else id="content" class="container-fluid">
-        <!-- Description -->
-        <div class="description">
-          <div class="name">
-            <h1>
-              {{ currentClass.course_name }}
-            </h1>
-            <h3>{{ `G${currentClass.class_id}` }}</h3>
-          </div>
-          <div class="enrol-count">
-            <div class="enrol-container">
-              <h1>
-                {{ `${countLearners} / ${currentClass.max_capacity}` }}
-              </h1>
-              <p>students enrolled</p>
-            </div>
-          </div>
-        </div>
+        <!-- ClassHeader -->
+        <ClassHeader
+          :course-name="currentClass.course_name"
+          :class-name="currentClass.class_id"
+          :current-capacity="countLearners"
+          :max-capacity="currentClass.max_capacity"
+        />
 
         <!-- Table  -->
         <div class="learners">
