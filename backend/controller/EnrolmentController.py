@@ -1,11 +1,16 @@
 from typing import Any, List
 from main import db
 
+from model.Course import Course
 from model.Class import Class
 from model.Enrolment import Enrolment
 from model.Learner import Learner
 
 from controller.LearnerController import LearnerController
+
+import dateutil.parser
+import datetime
+import pytz
 
 
 class EnrolmentController:
@@ -57,3 +62,43 @@ class EnrolmentController:
             learners.append(learner)
 
         return learners
+
+    def get_approved_enrolments(self, learner_id: int):
+        # get all approved enrolments of a learner first
+        # for each class enrolment, get class details along with its corresponding course name
+        enrolment_list: Enrolment = Enrolment.query.filter_by(user_id=learner_id).all()
+        time_now = datetime.datetime.now(pytz.utc)
+        upcoming = []
+        ongoing = []
+        past = []
+
+        for each_enrol in enrolment_list:
+            if each_enrol.is_approved:
+                a_class: Class = Class.query.filter_by(id=each_enrol.class_id).first()
+                class_start = dateutil.parser.parse(a_class.class_start_date)
+                class_end = dateutil.parser.parse(a_class.class_end_date)
+
+                course = each_enrol.get_class()
+
+                progress = each_enrol.course_progress
+
+                if time_now < class_start:
+                    upcoming.append(self.approved_enrolments(course, a_class, progress))
+
+                elif time_now >= class_start and time_now < class_end:
+                    ongoing.append(self.approved_enrolments(course, a_class, progress))
+
+                elif time_now > class_end:
+                    past.append(self.approved_enrolments(course, a_class, progress))
+
+        return {"upcoming": upcoming, "ongoing": ongoing, "past": past}
+
+    def approved_enrolments(self, course, a_class, progress):
+        return {
+            "course_name": course.name,
+            "class_id": a_class.id,
+            "class_name": a_class.class_id,
+            "progress": progress,
+            "class_start_date": a_class.class_start_date,
+            "class_end_date": a_class.class_end_date,
+        }

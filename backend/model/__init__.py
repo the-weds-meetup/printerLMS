@@ -9,4 +9,5 @@ __all__ = [
     "Administrator",
     "Trainer",
     "LoginSession",
+    "Enrolment",
 ]

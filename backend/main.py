@@ -218,6 +218,24 @@ def get_learner():
         return error.throw_error(type="Learner", message=str(e), status_code=400)
 
 
+@app.route("/api/enrolment/approved", methods=["POST"])
+def get_approved_courses():
+    request_data = request.get_json()
+    session = request_data["token"]
+
+    try:
+        AuthController.AuthController().validate_token(session)
+        loginSession = AuthController.AuthController().return_login_session(session)
+
+        return enrolment.response_get_approved_enrolments(
+            learner_id=loginSession.get_learner().id
+        )
+
+    except Exception as e:
+        print(e)
+        return error.throw_error(type="Class", message=str(e), status_code=400)
+
+
 @app.route("/api/enroll/self/<int:class_id>", methods=["POST"])
 def self_enroll_learner(class_id):
     request_data = request.get_json()
