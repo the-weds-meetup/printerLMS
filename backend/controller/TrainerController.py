@@ -1,0 +1,69 @@
+from typing import List
+import dateutil.parser
+import datetime
+import pytz
+
+from model.Course import Course
+from model.Class import Class
+from model.Learner import Learner
+from model.Trainer import Trainer
+from model.LearnerCourseCompletion import LearnerCourseCompletion
+
+from controller.AuthController import AuthController
+from controller.CourseController import CourseController
+
+
+class TrainerController:
+    def get_current_classes(self, learner_id) -> List[Class]:
+        """Get Trainer's current classes"""
+        all_classes = self.get_all_classes(learner_id)
+        current_classes: List[Class] = []
+        time_now = datetime.datetime.now(pytz.utc)
+
+        for a_class in all_classes:
+            start = dateutil.parser.parse(a_class.class_start_date)
+            end = dateutil.parser.parse(a_class.class_end_date)
+            if time_now >= start and time_now < end:
+                current_classes.append(a_class)
+
+        return current_classes
+
+    def get_future_classes(self, learner_id) -> List[Class]:
+        """Get Trainer's upcoming/future classes"""
+        all_classes = self.get_all_classes(learner_id)
+        future_classes: List[Class] = []
+        time_now = datetime.datetime.now(pytz.utc)
+
+        for a_class in all_classes:
+            start = dateutil.parser.parse(a_class.class_start_date)
+            if time_now < start:
+                future_classes.append(a_class)
+
+        return future_classes
+
+    def get_past_classes(self, learner_id) -> List[Class]:
+        """Get Trainer's past classes they taught previously"""
+        all_classes = self.get_all_classes(learner_id)
+        past_classes: List[Class] = []
+        time_now = datetime.datetime.now(pytz.utc)
+
+        for a_class in all_classes:
+            end = dateutil.parser.parse(a_class.class_end_date)
+            if time_now > end:
+                past_classes.append(a_class)
+
+        return past_classes
+
+    def get_all_classes(self, learner_id) -> List[Class]:
+        all_classes_taught: List[Trainer] = Trainer.query.filter_by(
+            user_id=learner_id
+        ).first()
+        all_classes: List[Class] = []
+
+        for trainer_class in all_classes_taught:
+            class_taught: Class = Class.query.filter_by(
+                id=trainer_class.class_id
+            ).first()
+            all_classes.append(class_taught)
+
+        return all_classes

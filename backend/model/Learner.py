@@ -1,6 +1,7 @@
 from main import db
 from model.Administrator import Administrator
 from model.Department import Department
+from model.Trainer import Trainer
 
 
 class Learner(db.Model):
@@ -65,9 +66,13 @@ class Learner(db.Model):
 
     def isAdmin(self):
         admin = Administrator.query.filter_by(user_id=self.id).first()
-        if admin == None:
-            return False
-        return True
+        return admin != None
+
+    def isTrainer(self, class_id):
+        trainer: Trainer = Trainer.query.filter_by(
+            user_id=self.id, class_id=class_id
+        ).first()
+        return trainer != None
 
     def getDepartment(self):
         department: Department = Department.query.filter_by(
