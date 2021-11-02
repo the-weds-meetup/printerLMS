@@ -78,7 +78,7 @@ class EnrolmentController:
                 class_start = dateutil.parser.parse(a_class.class_start_date)
                 class_end = dateutil.parser.parse(a_class.class_end_date)
 
-                course: Course = Course.query.filter_by(id=a_class.course_id).first()
+                course = each_enrol.get_class()
 
                 if time_now < class_start:
                     upcoming.append(

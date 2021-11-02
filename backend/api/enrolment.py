@@ -136,7 +136,7 @@ def response_get_approved_enrolments(learner_id: int):
         response = {
             "success": True,
             "results": {
-                "type": "class_enrolment_status",
+                "type": "class_approved_enrolments",
                 "records": approved_enrols,
             },
         }
