@@ -218,7 +218,7 @@ def get_learner():
         return error.throw_error(type="Learner", message=str(e), status_code=400)
 
 
-@app.route("/api/enrollment/approved", methods=["POST"])
+@app.route("/api/enrolment/approved", methods=["POST"])
 def get_approved_courses():
     request_data = request.get_json()
     session = request_data["token"]
