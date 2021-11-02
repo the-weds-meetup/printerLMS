@@ -4,7 +4,6 @@ import datetime
 import pytz
 
 from model.Class import Class
-from model.Learner import Learner
 from model.Trainer import Trainer
 
 from controller.ClassController import ClassController
@@ -88,8 +87,5 @@ class TrainerController:
 
     def is_trainer(self, learner_id: int) -> bool:
         """Returns true if learner has been assigned to teach a class before"""
-        learner: Learner = Learner.query.filter_by(id=learner_id).first()
-        if learner is None:
-            raise Exception("Invalid LearnerID")
-
-        return learner.isTrainer()
+        trainer: Trainer = Trainer.query.filter_by(id=learner_id).first()
+        return trainer != None
