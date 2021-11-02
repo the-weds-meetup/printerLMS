@@ -80,37 +80,25 @@ class EnrolmentController:
 
                 course = each_enrol.get_class()
 
+                progress = each_enrol.course_progress
+
                 if time_now < class_start:
-                    upcoming.append(
-                        {
-                            "course_name": course.name,
-                            "class_name": a_class.class_id,
-                            "progress": each_enrol.course_progress,
-                            "class_start_date": a_class.class_start_date,
-                            "class_end_date": a_class.class_end_date,
-                        }
-                    )
+                    upcoming.append(self.approved_enrolments(course, a_class, progress))
 
                 elif time_now >= class_start and time_now < class_end:
-                    ongoing.append(
-                        {
-                            "course_name": course.name,
-                            "class_name": a_class.class_id,
-                            "progress": each_enrol.course_progress,
-                            "class_start_date": a_class.class_start_date,
-                            "class_end_date": a_class.class_end_date,
-                        }
-                    )
+                    ongoing.append(self.approved_enrolments(course, a_class, progress))
 
                 elif time_now > class_end:
-                    past.append(
-                        {
-                            "course_name": course.name,
-                            "class_name": a_class.class_id,
-                            "progress": each_enrol.course_progress,
-                            "class_start_date": a_class.class_start_date,
-                            "class_end_date": a_class.class_end_date,
-                        }
-                    )
+                    past.append(self.approved_enrolments(course, a_class, progress))
 
         return {"upcoming": upcoming, "ongoing": ongoing, "past": past}
+
+    def approved_enrolments(self, course, a_class, progress):
+        return {
+            "course_name": course.name,
+            "class_id": a_class.id,
+            "class_name": a_class.class_id,
+            "progress": progress,
+            "class_start_date": a_class.class_start_date,
+            "class_end_date": a_class.class_end_date,
+        }
