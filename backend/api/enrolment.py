@@ -121,7 +121,9 @@ def learner_class_enrolment_status(learner_id: int, class_id: int):
 
 
 def response_get_approved_enrolments(learner_id: int):
-    approved_enrols = EnrolmentController().get_approved_enrolments(learner_id)
+    approved_enrols = EnrolmentController().get_approved_enrolments(
+        learner_id=learner_id
+    )
 
     if approved_enrols is None:
         response = {
