@@ -154,7 +154,7 @@ def add_trainer_response(user_id: int, class_id: int):
     return jsonify(response), 200
 
 
-def get_all_learner_courses(user_id: int):
+def get_all_learner_classes(user_id: int):
     learner = {}
     trainer = {}
     # merge code with upcoming methods
@@ -165,8 +165,8 @@ def get_all_learner_courses(user_id: int):
     if TrainerController().is_trainer(user_id):
         trainer = {
             "past": TrainerController().get_past_classes_serialise(user_id),
-            "current": TrainerController().get_current_classes_serialise(user_id),
-            "future": TrainerController().get_future_classes_serialise(user_id),
+            "ongoing": TrainerController().get_current_classes_serialise(user_id),
+            "upcoming": TrainerController().get_future_classes_serialise(user_id),
         }
 
     response = {

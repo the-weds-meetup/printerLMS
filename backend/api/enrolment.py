@@ -104,7 +104,7 @@ def learner_class_enrolment_status(learner_id: int, class_id: int):
     selected_class: Class = Class.query.filter_by(id=class_id).first()
 
     if selected_class is None:
-        raise Exception("Missing ClassID")
+        raise Exception("Invalid ClassID")
 
     status = EnrolmentController().check_learners_class_enrolment_status(
         learner_id, class_id

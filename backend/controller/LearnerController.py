@@ -48,7 +48,7 @@ class LearnerController:
         return len(prereq_courses) == completed_count
 
     def check_learner_finish_course(self, learner_id: int, course_id: int):
-        if self.is_learner_eligible_for_enrolment():
+        if self.is_learner_eligible_for_enrolment(learner_id, course_id):
             # check if learner has completed
             is_completed = False
             completed_course: List[
