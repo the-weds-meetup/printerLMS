@@ -5,23 +5,13 @@
       <TopNav title="Manage Learners" />
       <Spinner v-if="!isDataFetched" />
       <div v-else id="content" class="container-fluid">
-        <!-- Description -->
-        <div class="description">
-          <div class="name">
-            <h1>
-              {{ currentClass.course_name }}
-            </h1>
-            <h3>{{ `G${currentClass.class_id}` }}</h3>
-          </div>
-          <div class="enrol-count">
-            <div class="enrol-container">
-              <h1>
-                {{ `${countLearners} / ${currentClass.max_capacity}` }}
-              </h1>
-              <p>students enrolled</p>
-            </div>
-          </div>
-        </div>
+        <!-- ClassHeader -->
+        <ClassHeader
+          :course-name="currentClass.course_name"
+          :class-name="currentClass.class_id"
+          :current-capacity="countLearners"
+          :max-capacity="currentClass.max_capacity"
+        />
 
         <!-- Table  -->
         <div class="learners">
@@ -62,6 +52,7 @@
 import axios from 'axios';
 
 import { checkSessionToken } from '@/assets/js/authentication.js';
+import ClassHeader from '@/components/Class/ClassHeader.vue';
 import SideNav from '@/components/Navigation/SideNav.vue';
 import TopNav from '@/components/Navigation/TopNav.vue';
 import Spinner from '@/components/Tools/Spinner.vue';
@@ -72,6 +63,7 @@ export default {
     SideNav,
     TopNav,
     Spinner,
+    ClassHeader,
   },
   data() {
     return {

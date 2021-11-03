@@ -129,8 +129,8 @@ def get_course_enrolment_status(class_id):
     try:
         AuthController.AuthController().validate_token(session)
         loginSession = AuthController.AuthController().return_login_session(session)
-        return enrolment.class_enrolment_status(
-            learner_id=loginSession.get_learner(), class_id=class_id
+        return enrolment.learner_class_enrolment_status(
+            learner_id=loginSession.get_learner().id, class_id=class_id
         )
 
     except Exception as e:
@@ -180,6 +180,35 @@ def get_class(class_id):
     except Exception as e:
         print(e, flush=True)
         return error.throw_error(type="Class", message=str(e), status_code=400)
+
+
+@app.route("/api/class/<int:class_id>", methods=["POST"])
+def get_class_post(class_id):
+    try:
+        request_data = request.get_json()
+        session = request_data["token"]
+        AuthController.AuthController().validate_token(session)
+        loginSession = AuthController.AuthController().return_login_session(session)
+        return classes.response_get_all_class_details(
+            learner_id=loginSession.get_learner().id, class_id=class_id
+        )
+
+    except Exception as e:
+        print(e, flush=True)
+        return error.throw_error(type="Class_POST", message=str(e), status_code=400)
+
+
+@app.route("/api/me/classes", methods=["POST"])
+def get_all_learner_classes():
+    try:
+        request_data = request.get_json()
+        session = request_data["token"]
+        AuthController.AuthController().validate_token(session)
+        loginSession = AuthController.AuthController().return_login_session(session)
+        return classes.get_all_learner_classes(user_id=loginSession.user_id)
+    except Exception as e:
+        print(e, flush=True)
+        return error.throw_error(type="me_class", message=str(e), status_code=400)
 
 
 @app.route("/api/course/<int:course_id>/learners/completed")
