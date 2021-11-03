@@ -52,6 +52,7 @@
 import axios from 'axios';
 
 import { checkSessionToken } from '@/assets/js/authentication.js';
+import ClassHeader from '@/components/Class/ClassHeader.vue';
 import SideNav from '@/components/Navigation/SideNav.vue';
 import TopNav from '@/components/Navigation/TopNav.vue';
 import Spinner from '@/components/Tools/Spinner.vue';
@@ -62,6 +63,7 @@ export default {
     SideNav,
     TopNav,
     Spinner,
+    ClassHeader,
   },
   data() {
     return {
