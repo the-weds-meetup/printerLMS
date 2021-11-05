@@ -68,12 +68,12 @@ class CourseController:
             return enrolment_class
 
         # determine which classes are being taught now
-        # ongoing enrolment start <= current time < ongoing enrolment end
+        # ongoing class start <= current time < class enrolment end
         for a_class in classes:
-            enrolment_start = dateutil.parser.parse(a_class.enrolment_start_date)
-            enrolment_end = dateutil.parser.parse(a_class.enrolment_end_date)
+            start = dateutil.parser.parse(a_class.class_start_date)
+            end = dateutil.parser.parse(a_class.class_end_date)
 
-            if time_now >= enrolment_start and time_now < enrolment_end:
+            if time_now >= start and time_now < end:
                 enrolment_class.append(a_class)
 
         return enrolment_class

@@ -9,6 +9,10 @@ from main import db
 from model.Class import Class
 from model.Learner import Learner
 
+import dateutil.parser
+import datetime
+import pytz
+
 
 def response_self_enrolment(class_id: int, learner_id: int):
     the_class: Class = Class.query.filter_by(id=class_id).first()
@@ -100,7 +104,7 @@ def learner_class_enrolment_status(learner_id: int, class_id: int):
     selected_class: Class = Class.query.filter_by(id=class_id).first()
 
     if selected_class is None:
-        raise Exception("Missing ClassID")
+        raise Exception("Invalid ClassID")
 
     status = EnrolmentController().check_learners_class_enrolment_status(
         learner_id, class_id
@@ -114,3 +118,28 @@ def learner_class_enrolment_status(learner_id: int, class_id: int):
         },
     }
     return jsonify(response), 200
+
+
+def response_get_approved_enrolments(learner_id: int):
+    approved_enrols = EnrolmentController().get_approved_enrolments(
+        learner_id=learner_id
+    )
+
+    if approved_enrols is None:
+        response = {
+            "success": False,
+            "results": {
+                "type": "class_approved_enrolments",
+                "msg": "Failed",
+            },
+        }
+        return jsonify(response), 400
+    else:
+        response = {
+            "success": True,
+            "results": {
+                "type": "class_approved_enrolments",
+                "records": approved_enrols,
+            },
+        }
+        return jsonify(response), 200
