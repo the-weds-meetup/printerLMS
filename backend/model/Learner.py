@@ -1,14 +1,13 @@
-"""
-Learner.py
-"""
-
 from main import db
+from model.Administrator import Administrator
+from model.Department import Department
+from model.Trainer import Trainer
 
 
 class Learner(db.Model):
     __tablename__ = "learner"
 
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True, nullable=True)
     email = db.Column(db.String(), unique=True, nullable=False)
     password = db.Column(db.String(), nullable=False)
     first_name = db.Column(db.String(), nullable=False)
@@ -44,14 +43,15 @@ class Learner(db.Model):
             "first_name": self.first_name,
             "middle_name": self.middle_name,
             "last_name": self.last_name,
-            "department_id": self.department_id,
+            "full_name": self.fullName(),
+            "department": self.getDepartment(),
+            "is_admin": self.isAdmin(),
         }
 
     def fullName(self):
         if self.middle_name != None:
             return "{} {} {}".format(self.first_name, self.middle_name, self.last_name)
         return "{} {}".format(self.first_name, self.last_name)
-
 
     def to_dict(self):
         """
@@ -64,3 +64,18 @@ class Learner(db.Model):
             result[column] = getattr(self, column)
         return result
 
+    def isAdmin(self):
+        admin = Administrator.query.filter_by(user_id=self.id).first()
+        return admin != None
+
+    def isTrainer(self, class_id: int):
+        trainer: Trainer = Trainer.query.filter_by(
+            user_id=self.id, class_id=class_id
+        ).first()
+        return trainer != None
+
+    def getDepartment(self):
+        department: Department = Department.query.filter_by(
+            id=self.department_id
+        ).first()
+        return department.name

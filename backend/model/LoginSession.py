@@ -1,17 +1,17 @@
-"""
-LoginSession.py
-"""
-
 from main import db
 from uuid import uuid4
+
 import dateutil.parser
 import datetime
+import pytz
+
+from model.Learner import Learner
 
 
 class LoginSession(db.Model):
     __tablename__ = "login_session"
 
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True, nullable=True)
     user_id = db.Column(db.Integer, unique=True, nullable=False)
     token = db.Column(db.String(), unique=True, nullable=False)
     creation_date = db.Column(db.String(), nullable=False)
@@ -39,19 +39,22 @@ class LoginSession(db.Model):
             "expiry_date": self.expiry_date,
         }
 
-    """
-    Checks if token is expired
-    """
-
     def isExpired(self):
-        diff = datetime.datetime.now() - dateutil.parser.parse(self.expiry_date)
+        """
+        Checks if token is expired
+        """
+        diff = datetime.datetime.now(pytz.utc) - dateutil.parser.parse(self.expiry_date)
 
         # less than 0 ms, current time is bigger than expiry_date
         return diff.microseconds <= 0
 
-    """
-    Mark token as expired when user signs out
-    """
-
-    def updateExpiryDate(self):
+    def expireToken(self):
+        """
+        Set token as expired when user signs out
+        """
         self.expiry_date = datetime.datetime.now().isoformat() + "Z"
+
+    def get_learner(self):
+        """Returns learner"""
+        learner: Learner = Learner.query.filter_by(id=self.user_id).first()
+        return learner

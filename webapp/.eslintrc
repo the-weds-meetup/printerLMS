@@ -1,7 +1,9 @@
 {
   "root": true,
   "env": {
-    "node": true
+    "node": true,
+    "browser": true,
+    "amd": true
   },
   "parser": "vue-eslint-parser",
   "parserOptions": {
@@ -16,7 +18,8 @@
   ],
   "plugins": ["simple-import-sort"],
   "rules": {
-    "no-unused-vars": "off",
+    "semi":2,
+    "no-unused-vars": "warn",
     "simple-import-sort/imports": "error",
     "simple-import-sort/exports": "error",
     "prettier/prettier":  [

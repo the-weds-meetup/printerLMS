@@ -1,52 +1,34 @@
-from main import db
-from model.Learner import Learner
-from model.LoginSession import LoginSession
 from flask import jsonify
 
-"""
-Checks if user record exists and if password is valid
-Returns:
-  @success: return user record if username exists, and password is correct
-  @error: status_code 500 if username does not exist or password is incorrect
-"""
+from model.LoginSession import LoginSession
+from controller.AuthController import AuthController
 
 
 def login(username: str, password: str):
-    learner = Learner.query.filter_by(email=username, password=password).first()
-
-    if learner is None:
-        error_type = "Login"
-        message = "Invalid Email or Password"
-        return throw_error(type=error_type, message=message)
-
-    session = LoginSession(learner.id)
-    db.session.add(session)
-    db.session.commit()
-
-    status_code = 200
+    """
+    Checks if user record exists and if password is valid
+    Returns:
+      @success: return user record if username exists, and password is correct
+      @error: status_code 500 if username does not exist or password is incorrect
+    """
+    session: LoginSession = AuthController().login(username=username, password=password)
     response = {
         "success": True,
         "result": {"type": "Login", "records": [session.serialise()]},
     }
-
-    return jsonify(response), status_code
-
-
-"""
-Throws an error status and message if something goes wrong during authentication
-"""
+    return jsonify(response), 200
 
 
-def throw_error(
-    type: str,
-    message: str,
-    status_code: int = 401,
-):
+def logout(token: str):
+    """
+    Invalidates a token by updating its expiry_date to now
+    Returns:
+      @success: success if expiry_date is updated
+      @error: status_code 500 if failure
+    """
+    AuthController().logout(token)
     response = {
-        "success": False,
-        "result": {
-            "type": type,
-            "message": message,
-        },
+        "success": True,
+        "result": {"type": "Logout", "message": "Success"},
     }
-    return jsonify(response), status_code
+    return jsonify(response), 200
