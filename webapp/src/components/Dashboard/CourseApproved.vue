@@ -36,7 +36,7 @@
           <p class="card-body">G{{ aClass.class_name }}</p>
         </div>
         <div class="card-bottom">
-          <p>Starting on: {{ convertIS8601Date(aClass.class_start_date) }}</p>
+          <p>Starting on {{ convertIS8601Date(aClass.class_start_date) }}</p>
         </div>
       </div>
     </div>
@@ -52,7 +52,7 @@
           <p class="card-body">G{{ aClass.class_name }}</p>
         </div>
         <div class="card-bottom">
-          <p>Ended on: {{ convertIS8601Date(aClass.class_end_date) }}</p>
+          <p>Ended on {{ convertIS8601Date(aClass.class_end_date) }}</p>
         </div>
       </div>
     </div>
