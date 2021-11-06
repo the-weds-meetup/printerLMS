@@ -3,11 +3,16 @@ from unittest.mock import Mock, MagicMock, patch
 import datetime
 import os, sys
 
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+sys.path.append(
+    os.path.abspath(os.path.join(os.path.dirname(__file__), "../controller"))
+)
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../model")))
+
 from controller import TrainerController
-from model import Class
+from model.Class import Class
 from main import app, db
 
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 basedir = os.path.abspath(os.path.dirname(__file__))
 
 
