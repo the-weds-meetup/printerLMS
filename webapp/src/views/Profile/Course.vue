@@ -39,7 +39,15 @@
           >
         </div>
         <!-- Learner -->
-        <LearnerView
+        <!-- <LearnerView
+          v-if="selected === 'class-learner'"
+          :past="learnerCourses.past"
+          :ongoing="learnerCourses.ongoing"
+          :upcoming="learnerCourses.upcoming"
+        /> -->
+
+        <!-- learner -->
+        <CourseApproved
           v-if="selected === 'class-learner'"
           :past="learnerCourses.past"
           :ongoing="learnerCourses.ongoing"
@@ -63,8 +71,8 @@
 import axios from 'axios';
 
 import { checkSessionToken } from '@/assets/js/authentication.js';
-import CourseApproved from '@/components/Course/CourseApproved.vue';
-import LearnerView from '@/components/Dashboard/LearnerView.vue';
+import CourseApproved from '@/components/Dashboard/CourseApproved.vue';
+//import LearnerView from '@/components/Dashboard/LearnerView.vue';
 import TrainerView from '@/components/Dashboard/TrainerView.vue';
 import SideNav from '@/components/Navigation/SideNav.vue';
 import TopNav from '@/components/Navigation/TopNav.vue';
@@ -77,7 +85,7 @@ export default {
     SideNav,
     Spinner,
     TopNav,
-    LearnerView,
+    //LearnerView,
     TrainerView,
   },
   data() {
@@ -114,14 +122,8 @@ export default {
     });
   },
   async mounted() {
-    await axios
-      .post('/api/enrollment/approved', {
-        token: window.localStorage.getItem('session_token'),
-      })
-      .then((response) => {
-        console.log(response);
-      });
-      axios.post('/api/me/classes', {
+    axios
+      .post('/api/me/classes', {
         token: window.localStorage.getItem('session_token'),
       })
       .then((response) => {
