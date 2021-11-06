@@ -38,14 +38,6 @@
             >Trainer</label
           >
         </div>
-        <!-- Learner -->
-        <!-- <LearnerView
-          v-if="selected === 'class-learner'"
-          :past="learnerCourses.past"
-          :ongoing="learnerCourses.ongoing"
-          :upcoming="learnerCourses.upcoming"
-        /> -->
-
         <!-- learner -->
         <CourseApproved
           v-if="selected === 'class-learner'"
@@ -72,7 +64,6 @@ import axios from 'axios';
 
 import { checkSessionToken } from '@/assets/js/authentication.js';
 import CourseApproved from '@/components/Dashboard/CourseApproved.vue';
-//import LearnerView from '@/components/Dashboard/LearnerView.vue';
 import TrainerView from '@/components/Dashboard/TrainerView.vue';
 import SideNav from '@/components/Navigation/SideNav.vue';
 import TopNav from '@/components/Navigation/TopNav.vue';
@@ -85,7 +76,6 @@ export default {
     SideNav,
     Spinner,
     TopNav,
-    //LearnerView,
     TrainerView,
   },
   data() {
