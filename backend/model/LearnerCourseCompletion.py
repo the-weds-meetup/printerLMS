@@ -13,15 +13,15 @@ class LearnerCourseCompletion(db.Model):
     class_id = db.Column(db.Integer, db.ForeignKey("class.id"), nullable=False)
     completion_date = db.Column(db.String(), nullable=False)
 
-    def __init__(
-        self,
-        user_id: int,
-        class_id: int,
-    ):
+    def __init__(self, user_id: int, class_id: int, completion_date=None):
         dt = datetime.datetime.now()
         self.user_id = user_id
         self.class_id = class_id
-        self.completion_date = dt.isoformat() + "Z"
+
+        if completion_date is None:
+            self.completion_date = dt.isoformat() + "Z"
+        else:
+            self.completion_date = completion_date
 
     def serialise(self):
         columns = self.__mapper__.column_attrs.keys()

@@ -1,6 +1,7 @@
 import unittest
 from unittest.mock import Mock, MagicMock, patch
 import datetime
+from freezegun import freeze_time
 import os, sys
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
@@ -9,37 +10,29 @@ sys.path.append(
 )
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../model")))
 
+
+from tests.TestApp import TestApp
 from controller import TrainerController
 from model.Class import Class
-from main import app, db
-
-basedir = os.path.abspath(os.path.dirname(__file__))
+from model.Learner import Learner
 
 
-class TestTrainerController(unittest.TestCase):
-    def setUp(self):
-        self.db_uri = "sqlite:///" + os.path.join(basedir, "database.db")
-        app.config["WTF_CSRF_ENABLED"] = False
-        app.config["SQLALCHEMY_ENGINE_OPTIONS"] = {}
-        app.config["TESTING"] = True
-        app.config["SQLALCHEMY_DATABASE_URI"] = self.db_uri
-        db.create_all()
-
-    def tearDown(self):
-        db.session.remove()
-        db.drop_all()
-
+class TestTrainerController(TestApp):
     def test_hi(self):
+        print(Learner.query.filter_by(id=3).first())
         shit = "hi"
         self.assertEqual("hi", shit)
 
-    @patch("TrainerController.datetime")
-    def test_get_current_class(self, datetime_mock):
+    # @patch("TrainerController.datetime.datetime.now")
+    @freeze_time("2021-10-22")
+    def test_get_current_class(self):
 
         # set date to 2021-10-22 (YYYY-MM-DD)
-        datetime_mock.datetime.now = Mock(return_value=datetime.datetime(2021, 10, 22))
+        # datetime_mock.datetime.datetime.now.return_value = Mock(
+        #     return_value=datetime.datetime(2021, 10, 22)
+        # )
         self.assertListEqual(
-            TrainerController.TrainerController().get_current_classes(5),
+            TrainerController.TrainerController().get_all_classes(2),
             [
                 Class(
                     1,
