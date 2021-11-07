@@ -4,4 +4,5 @@ __all__ = [
     "CourseController",
     "EnrolmentController",
     "LearnerController",
+    "TrainerController",
 ]

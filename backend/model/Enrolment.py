@@ -22,6 +22,7 @@ class Enrolment(db.Model):
         class_id: int,
         is_approved: bool = False,
         course_progress: float = 0,
+        enrolment_date=None,
     ):
         dt = datetime.datetime.now()
 
@@ -29,7 +30,11 @@ class Enrolment(db.Model):
         self.class_id = class_id
         self.is_approved = is_approved
         self.course_progress = course_progress
-        self.enrolment_date = dt.isoformat() + "Z"
+
+        if enrolment_date is None:
+            self.enrolment_date = dt.isoformat() + "Z"
+        else:
+            self.enrolment_date = enrolment_date
 
     def serialise(self):
         columns = self.__mapper__.column_attrs.keys()
