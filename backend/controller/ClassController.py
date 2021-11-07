@@ -9,7 +9,7 @@ from controller.CourseController import CourseController
 from controller.LearnerController import LearnerController
 
 
-class ClassController:
+class ClassController: 
     def get_all_enrollable_classes(self):
         course_list: List[Course] = Course.query.all()
         enrolling_class = []
