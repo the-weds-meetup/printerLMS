@@ -14,6 +14,8 @@
 
 ### Instructions
 
+#### Main
+
 Run the following commands
 
 ```bash
@@ -27,4 +29,23 @@ cp docker-compose.yml.example docker-compose.yml
 docker compose up
 
 # open localhost:5000 on your browser to access the backend server
+
+# remove containers and images
+docker compose down --rmi all
+```
+
+### Testing
+
+Run the following command
+
+```bash
+# enter the backend dir
+cd ./backend
+
+# ensure you installed all the modules within Requirements.txt
+pip install -r requirements.txt
+# pip3 install -r requirements.txt
+
+# Run integration_test.py
+python -m unittest integration_test
 ```

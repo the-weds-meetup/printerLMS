@@ -29,12 +29,5 @@ class TestTrainerController(TestApp):
         )
 
 
-def suite():
-    """This defines all the tests of a module"""
-    suite = unittest.TestSuite()
-    suite.addTest(unittest.makeSuite(TestTrainerController))
-    return suite
-
-
 if __name__ == "__main__":
-    unittest.TextTestRunner(verbosity=2).run(suite())
+    unittest.main()
