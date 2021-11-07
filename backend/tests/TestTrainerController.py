@@ -15,7 +15,6 @@ from controller import TrainerController
 
 
 class TestTrainerController(TestApp):
-    @freeze_time("2021-10-22")
     def test_get_trainer_all_classes(self):
         self.assertEqual(
             len(TrainerController.TrainerController().get_all_classes(2)),
