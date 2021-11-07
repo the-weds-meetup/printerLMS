@@ -23,10 +23,6 @@ class TestCoursePreq(TestApp):
         # course2.id = 1
         # course2.
         # course = CoursePreq.CoursePreq().get_course(1)
-        
-
-
-    def test_get_prereq_course(self):
         pass
 
 def suite():
