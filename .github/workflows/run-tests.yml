@@ -3,7 +3,7 @@ on: [pull_request]
 jobs:
   test-backend:
     runs-on: ubuntu-latest
-     strategy:
+    strategy:
       matrix:
         python-version: [3.6, 3.7, 3.8]
 
@@ -22,4 +22,3 @@ jobs:
       - name: Run TDDs
         working-directory: ./backend
         run: python -m unittest integration_test
-
