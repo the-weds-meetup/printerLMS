@@ -1,1 +1,1 @@
-web: python ./backend/main.py
+web: sh -c 'cd ./backend && python main.py'
