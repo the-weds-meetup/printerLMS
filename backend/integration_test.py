@@ -9,6 +9,10 @@ suite.addTests(
     loader.loadTestsFromTestCase(TestTrainerController.TestTrainerController)
 )
 
+suite.addTests(
+    loader.loadTestsFromTestCase(TestLearnerController.TestLearnerController)
+)
+
 # initialize a runner, pass it your suite and run it
 runner = unittest.TextTestRunner(verbosity=3)
 result = runner.run(suite)
