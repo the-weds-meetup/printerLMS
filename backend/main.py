@@ -4,11 +4,25 @@ from flask_sqlalchemy import SQLAlchemy
 from os import environ
 from flask_cors import CORS, cross_origin
 
+isDebug = True if environ["FLASK_ENV"] == "Development" else False
+isProduction = True if environ["FLASK_ENV"] == "Production" else False
+
 app = Flask(__name__)
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 app.config["SQLALCHEMY_ENGINE_OPTIONS"] = {"pool_size": 100, "pool_recycle": 280}
+app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite://"
 
+if isDebug is True:
+    app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql+psycopg2://{}:{}@{}/{}".format(
+        environ.get("DB_USER", ""),
+        environ.get("DB_PASSWORD", ""),
+        environ.get("DB_HOST", ""),
+        environ.get("DB_NAME", ""),
+    )
+if isProduction is True:
+    app.config["SQLALCHEMY_DATABASE_URI"] = environ.get("DATABASE_URL")
 
+CORS(app)
 db = SQLAlchemy(app)
 
 
@@ -349,13 +363,5 @@ if __name__ == "__main__":
     from api import *
     from controller import *
 
-    CORS(app)
-    app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql+psycopg2://{}:{}@{}/{}".format(
-        environ["DB_USER"],
-        environ["DB_PASSWORD"],
-        environ["DB_HOST"],
-        environ["DB_NAME"],
-    )
-
     db.create_all()
-    app.run(debug=True, host="0.0.0.0")
+    app.run(debug=isDebug, host="0.0.0.0")
