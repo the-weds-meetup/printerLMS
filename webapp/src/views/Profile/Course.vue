@@ -38,8 +38,8 @@
             >Trainer</label
           >
         </div>
-        <!-- Learner -->
-        <LearnerView
+        <!-- learner -->
+        <CourseApproved
           v-if="selected === 'class-learner'"
           :past="learnerCourses.past"
           :ongoing="learnerCourses.ongoing"
@@ -63,7 +63,7 @@
 import axios from 'axios';
 
 import { checkSessionToken } from '@/assets/js/authentication.js';
-import LearnerView from '@/components/Dashboard/LearnerView.vue';
+import CourseApproved from '@/components/Dashboard/CourseApproved.vue';
 import TrainerView from '@/components/Dashboard/TrainerView.vue';
 import SideNav from '@/components/Navigation/SideNav.vue';
 import TopNav from '@/components/Navigation/TopNav.vue';
@@ -72,10 +72,10 @@ import Spinner from '@/components/Tools/Spinner.vue';
 export default {
   name: 'MyCourses',
   components: {
+    CourseApproved,
     SideNav,
     Spinner,
     TopNav,
-    LearnerView,
     TrainerView,
   },
   data() {
@@ -83,6 +83,7 @@ export default {
       email: '',
       fullName: '',
       isAdmin: false,
+      courses: [],
       selected: 'class-learner',
       learnerCourses: undefined,
       trainerCourses: undefined,
@@ -111,7 +112,7 @@ export default {
     });
   },
   async mounted() {
-    await axios
+    axios
       .post('/api/me/classes', {
         token: window.localStorage.getItem('session_token'),
       })

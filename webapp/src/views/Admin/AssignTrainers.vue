@@ -65,7 +65,7 @@
               :key="each_class.id"
               :value="each_class.id"
             >
-              G{{ each_class.class_id }}:
+              G{{ each_class.class_name }}:
               {{ convertIS8601Date(each_class.class_start_date) }} -
               {{ convertIS8601Date(each_class.class_end_date) }}
             </option>
@@ -165,7 +165,7 @@ export default {
       .then((response) => {
         this.courses = response.data.result.records;
       })
-      .catch((error) => alert(error));
+      .catch((error) => console.log(error));
   },
   methods: {
     convertIS8601Date(dateString) {
@@ -181,7 +181,7 @@ export default {
             response.data.result.records.learners
           );
         })
-        .catch((error) => alert(error));
+        .catch((error) => console.log(error));
     },
 
     assignTrainer: async function () {
@@ -191,10 +191,10 @@ export default {
           class_id: this.class_id,
         })
         .then((response) => {
-          alert(response.data.message);
+          console.log(response);
         })
         .catch((error) => {
-          alert(error.response.data.message);
+          console.log(error);
         });
     },
   },
