@@ -4,6 +4,6 @@ setup:
       as: DATABASE
 build:
   docker:
-    web: webapp/Dockerfile.web
+    web: backend/Dockerfile.web
 run:
   web: python main.py
