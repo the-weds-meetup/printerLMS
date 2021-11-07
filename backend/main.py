@@ -5,18 +5,9 @@ from os import environ
 from flask_cors import CORS, cross_origin
 
 app = Flask(__name__)
-CORS(app)
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
-app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql+psycopg2://{}:{}@{}/{}".format(
-    environ["DB_USER"],
-    environ["DB_PASSWORD"],
-    environ["DB_HOST"],
-    environ["DB_NAME"],
-)
-app.config["SQLALCHEMY_ENGINE_OPTIONS"] = {"pool_size": 100, "pool_recycle": 280}
 
 db = SQLAlchemy(app)
-CORS(app)
 
 
 @app.route("/")
@@ -361,6 +352,15 @@ def learners():
 if __name__ == "__main__":
     from api import *
     from controller import *
+
+    CORS(app)
+    app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql+psycopg2://{}:{}@{}/{}".format(
+        environ["DB_USER"],
+        environ["DB_PASSWORD"],
+        environ["DB_HOST"],
+        environ["DB_NAME"],
+    )
+    app.config["SQLALCHEMY_ENGINE_OPTIONS"] = {"pool_size": 100, "pool_recycle": 280}
 
     db.create_all()
     app.run(debug=True, host="0.0.0.0")
