@@ -35,6 +35,13 @@ class TestTrainerController(TestApp):
             2,
         )
 
+    @freeze_time("2021-10-22")
+    def test_get_trainer_past_classes(self):
+        self.assertEqual(
+            len(TrainerController.TrainerController().get_past_classes(2)),
+            2,
+        )
+
     # Test if classes taught by Trainer is empty
     @freeze_time("2021-10-22")
     def test_get_trainer_all_classes_empty(self):
@@ -54,6 +61,13 @@ class TestTrainerController(TestApp):
     def test_get_trainer_future_classes_empty(self):
         self.assertEqual(
             len(TrainerController.TrainerController().get_future_classes(3)),
+            0,
+        )
+
+    @freeze_time("2021-10-22")
+    def test_get_trainer_past_classes_empty(self):
+        self.assertEqual(
+            len(TrainerController.TrainerController().get_past_classes(3)),
             0,
         )
 
