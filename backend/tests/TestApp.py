@@ -1,7 +1,6 @@
 import unittest
 from flask.app import Flask
 import flask_testing
-from flask_sqlalchemy import SQLAlchemy
 import os, sys
 
 from main import app, db
