@@ -28,6 +28,19 @@ class TestTrainerController(TestApp):
             2,
         )
 
+    @freeze_time("2021-10-22")
+    def test_get_trainer_future_classes(self):
+        self.assertEqual(
+            len(TrainerController.TrainerController().get_future_classes(2)),
+            2,
+        )
+
+    def test_is_trainer_true(self):
+        self.assertTrue(TrainerController.TrainerController().is_trainer(2))
+
+    def test_is_trainer_false(self):
+        self.assertFalse(TrainerController.TrainerController().is_trainer(3))
+
 
 if __name__ == "__main__":
     unittest.main()

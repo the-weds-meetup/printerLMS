@@ -87,5 +87,5 @@ class TrainerController:
 
     def is_trainer(self, learner_id: int) -> bool:
         """Returns true if learner has been assigned to teach a class before"""
-        trainer: Trainer = Trainer.query.filter_by(id=learner_id).first()
+        trainer: Trainer = Trainer.query.filter_by(user_id=learner_id).first()
         return trainer != None
