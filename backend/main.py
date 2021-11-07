@@ -6,6 +6,8 @@ from flask_cors import CORS, cross_origin
 
 app = Flask(__name__)
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+app.config["SQLALCHEMY_ENGINE_OPTIONS"] = {"pool_size": 100, "pool_recycle": 280}
+
 
 db = SQLAlchemy(app)
 
@@ -360,7 +362,6 @@ if __name__ == "__main__":
         environ["DB_HOST"],
         environ["DB_NAME"],
     )
-    app.config["SQLALCHEMY_ENGINE_OPTIONS"] = {"pool_size": 100, "pool_recycle": 280}
 
     db.create_all()
     app.run(debug=True, host="0.0.0.0")
