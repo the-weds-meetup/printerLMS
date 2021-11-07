@@ -19,6 +19,9 @@ from controller import TrainerController
 
 
 class TestTrainerController(TestApp):
+    def test_fail_test(self):
+        self.assertTrue(False)
+
     # Test if classes are returned as expected
     def test_get_trainer_all_classes(self):
         self.assertEqual(
