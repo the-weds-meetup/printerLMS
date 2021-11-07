@@ -51,6 +51,9 @@ class TrainerController:
         return past_classes
 
     def get_all_classes(self, learner_id: int) -> List[Class]:
+        if type(learner_id) is not int:
+            raise Exception("Invalid LearnerID")
+
         all_classes_taught: List[Trainer] = Trainer.query.filter_by(
             user_id=learner_id
         ).all()

@@ -57,6 +57,26 @@ class TestTrainerController(TestApp):
             0,
         )
 
+    # Test Exceptions
+    def test_get_trainer_get_all_classes_exception(self):
+        with self.assertRaises(Exception):
+            TrainerController.TrainerController().get_all_classes("string")
+
+    @freeze_time("2021-10-22")
+    def test_get_trainer_get_current_classes_exception(self):
+        with self.assertRaises(Exception):
+            TrainerController.TrainerController().get_current_classes("string")
+
+    @freeze_time("2021-10-22")
+    def test_get_trainer_future_classes_exception(self):
+        with self.assertRaises(Exception):
+            TrainerController.TrainerController().get_future_classes("string")
+
+    @freeze_time("2021-10-22")
+    def test_get_trainer_past_classes_exception(self):
+        with self.assertRaises(Exception):
+            TrainerController.TrainerController().get_future_classes("string")
+
     # Test if learners are trainers
     def test_is_trainer_true(self):
         self.assertTrue(TrainerController.TrainerController().is_trainer(2))
