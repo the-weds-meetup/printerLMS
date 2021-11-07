@@ -1,3 +1,8 @@
+"""
+TestTrainerController.py
+Authored by: Amos Tan
+"""
+
 import unittest
 from freezegun import freeze_time
 import os, sys
