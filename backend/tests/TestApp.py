@@ -1,10 +1,6 @@
 import unittest
 from flask.app import Flask
 import flask_testing
-<<<<<<< HEAD
-from flask_sqlalchemy import SQLAlchemy
-=======
->>>>>>> 9c82e49aa9812ad82518bee6c2adca9257a0932a
 import os, sys
 
 from main import app, db
@@ -161,10 +157,7 @@ class TestApp(flask_testing.TestCase):
         db.session.add(Trainer.Trainer(2, 3))
         db.session.add(Trainer.Trainer(2, 4))
         db.session.add(Trainer.Trainer(2, 5))
-<<<<<<< HEAD
-=======
         db.session.add(Trainer.Trainer(2, 6))
->>>>>>> 9c82e49aa9812ad82518bee6c2adca9257a0932a
         db.session.commit()
 
         # Add Enrolment (Engineer2 and 3)
