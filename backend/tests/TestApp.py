@@ -158,6 +158,7 @@ class TestApp(flask_testing.TestCase):
         db.session.add(Trainer.Trainer(2, 3))
         db.session.add(Trainer.Trainer(2, 4))
         db.session.add(Trainer.Trainer(2, 5))
+        db.session.add(Trainer.Trainer(2, 6))
         db.session.commit()
 
         # Add Enrolment (Engineer2 and 3)
