@@ -1,7 +1,9 @@
 setup:
-  addon:
+  addons:
     - plan: heroku-postgresql
       as: DATABASE
 build:
   docker:
     web: webapp/Dockerfile.web
+run:
+  web: python main.py
