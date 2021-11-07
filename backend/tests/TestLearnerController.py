@@ -1,3 +1,8 @@
+"""
+TestLearnerController
+Authored by: Jasmine Lim Hui Shan
+"""
+
 import unittest
 from unittest.mock import Mock, MagicMock, patch
 from freezegun import freeze_time
@@ -15,6 +20,24 @@ from controller import LearnerController
 
 
 class TestLearnerController(TestApp):
+    # def test_get_learner(self):
+    #     # session = AuthController.AuthController().login("admin@lms.com", "p@ssword")
+    #     # print(session)
+    #     learner = LearnerController.LearnerController().get_learner(mock_uuid)
+    #     self.assertEqual(
+    #         learner.serialise(),
+    #         {
+    #             "id": 1,
+    #             "email": "admin@lms.com",
+    #             "first_name": "Phris",
+    #             "middle_name": None,
+    #             "last_name": "Coskitt",
+    #             "full_name": "Phris Coskitt",
+    #             "department": "Human Resource and Admin",
+    #             "is_admin": True,
+    #         },
+    #     )
+
     def test_get_learner_from_id(self):
         learner = LearnerController.LearnerController().get_learner_from_id(1)
         self.assertEqual(
@@ -29,6 +52,11 @@ class TestLearnerController(TestApp):
                 "department": "Human Resource and Admin",
                 "is_admin": True,
             },
+        )
+
+    def test_get_learner_from_id_fail(self):
+        self.assertRaises(
+            Exception, LearnerController.LearnerController().get_learner_from_id, 5
         )
 
     def test_is_learner_eligible_for_enrolment_true(self):
