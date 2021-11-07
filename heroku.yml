@@ -1,4 +1,4 @@
-seetup:
+setup:
   addon:
     - plan: heroku-postgresql
       as: DATABASE
