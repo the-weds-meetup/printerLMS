@@ -1,6 +1,9 @@
 import unittest
 from unittest.mock import Mock, MagicMock, patch
+<<<<<<< HEAD
 import datetime
+=======
+>>>>>>> 9c82e49aa9812ad82518bee6c2adca9257a0932a
 from freezegun import freeze_time
 import os, sys
 
@@ -13,6 +16,7 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../mode
 
 from tests.TestApp import TestApp
 from controller import TrainerController
+<<<<<<< HEAD
 from model.Class import Class
 from model.Learner import Learner
 
@@ -64,6 +68,23 @@ class TestTrainerController(TestApp):
                     "2021-11-01T08:00:00.000Z",
                 ),
             ],
+=======
+
+
+class TestTrainerController(TestApp):
+    @freeze_time("2021-10-22")
+    def test_get_trainer_all_classes(self):
+        self.assertEqual(
+            len(TrainerController.TrainerController().get_all_classes(2)),
+            6,
+        )
+
+    @freeze_time("2021-10-22")
+    def test_get_trainer_current_classes(self):
+        self.assertEqual(
+            len(TrainerController.TrainerController().get_current_classes(2)),
+            2,
+>>>>>>> 9c82e49aa9812ad82518bee6c2adca9257a0932a
         )
 
 
