@@ -21,8 +21,6 @@ class TestTrainerController(TestApp):
             6,
         )
 
-  
-
     @freeze_time("2021-10-22")
     def test_get_trainer_current_classes(self):
         self.assertEqual(
