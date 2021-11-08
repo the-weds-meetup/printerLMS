@@ -143,6 +143,13 @@ CREATE TABLE course_material_hyperlink (
 
 
 -- Quiz
+CREATE TABLE question
+(
+  id SERIAL PRIMARY KEY,
+  question text NOT NULL,
+  choices text NOT NULL,
+  answer text NOT NULL
+); 
 
 CREATE TABLE quiz
 (

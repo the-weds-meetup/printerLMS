@@ -32,7 +32,7 @@
   
       <!-- Start of form -->
   
-      <form @submit="onSubmit">
+      <form @submit="onSubmit()">
   
         <!-- Start of mcq quiz format-->
         <br>
@@ -80,7 +80,8 @@
   
   
   <script>
-  
+  import axios from 'axios';
+
   export default {
     name: 'Createmcq',
     data(){
