@@ -25,7 +25,7 @@
 
     <!-- Start of form -->
 
-    <form @submit="onSubmit">
+    <form @click="onSubmit()">
 
       <!-- Start of true/false format -->
 
@@ -66,6 +66,7 @@
 
 
 <script>
+import axios from 'axios';
 
 export default {
   name: 'Createtf',
@@ -75,8 +76,32 @@ export default {
       question: '',
       option1: '',
       option2: '',
-      answer: ''
+      answer: '',
+      choices: '',
     }
+  },
+  methods:{
+    onSubmit() {
+      /* console.log("Class created and updated to database!") */
+      console.log("reached here")
+      console.log(option1)
+      console.log(option2)
+      console.log(choices)
+      axios
+        .post('/api/quiz/add', {
+            question: this.question,
+            choices: this.choices.append(this.option1,this.option2),
+            answer: this.answer,
+          })
+        .then(() => {
+          console.log(choices)
+          this.$router.push('/quiz/createtf');
+        })
+        .catch((error) => {
+          alert(error.response.data.message);
+          this.error = error.response.data.message;
+        });
+    },
   }
 };
     
