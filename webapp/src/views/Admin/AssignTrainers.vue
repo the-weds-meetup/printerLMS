@@ -143,12 +143,7 @@ export default {
           for (var each_class of enrol_classes) {
             this.classes = this.classes.concat(each_class);
           }
-
-          var past_classes = response.data.result.records.class.past;
-
-          for (var each_past_class of past_classes) {
-            this.getTrainers(each_past_class);
-          }
+          this.getTrainers(this.course_id);
         })
         .catch((error) => {
           console.log(error);
@@ -177,17 +172,15 @@ export default {
       return momentDate.format('DD MMM YYYY');
     },
 
-    getTrainers: async function (each_past_class) {
+    getTrainers: async function (course_id) {
       await axios
         .get(
           process.env.VUE_APP_BACKEND +
-            '/api/class/' +
-            parseInt(each_past_class.id)
+            `/api/course/${course_id}/learners/completed`
         )
         .then((response) => {
-          this.trainers = this.trainers.concat(
-            response.data.result.records.learners
-          );
+          console.log(response.data.result.records.learners);
+          this.trainers = this.trainers.concat(response.data.result.records);
         })
         .catch((error) => console.log(error));
     },
