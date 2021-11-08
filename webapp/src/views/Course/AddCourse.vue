@@ -169,7 +169,7 @@ export default {
             prerequisites: this.coursePreReqs,
           })
           .then(() => {
-            window.location.href = '/catalog';
+            this.$router.push('/catalog');
           })
           .catch((error) => {
             console.log(error);

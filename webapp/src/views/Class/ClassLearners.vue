@@ -74,7 +74,7 @@ export default {
     },
     navigateToAdd() {
       if (this.isAdmin) {
-        window.location.href = `/class/${this.$route.params.id}/learners/add`;
+        this.$router.push(`/class/${this.$route.params.id}/learners/add`);
       }
     },
   },

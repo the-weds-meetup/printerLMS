@@ -67,7 +67,7 @@ export default {
   },
   methods: {
     navigateToAddCourse() {
-      window.location.href = '/course/add';
+      $this.router.push('/course/add');
     },
   },
 };

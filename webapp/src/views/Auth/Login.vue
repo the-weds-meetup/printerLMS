@@ -44,7 +44,7 @@ export default {
       window.localStorage.getItem('session_token') &&
       window.localStorage.getItem('token_expiry')
     ) {
-      window.location.replace('/');
+      this.$router.replace('/');
     }
   },
   methods: {
@@ -71,7 +71,7 @@ export default {
           window.localStorage.setItem('token_expiry', expiry_seconds);
 
           // redirect to dashboard
-          window.location.replace('/');
+          this.$router.replace('/');
         })
         .catch((error) => {
           this.isError = true;

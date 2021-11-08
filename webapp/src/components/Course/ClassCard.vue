@@ -156,12 +156,12 @@ export default {
     },
     navigateToEditClass() {
       if (this.isAdmin) {
-        window.location.href = `/class/${this.classId}/edit`;
+        this.$router.push(`/class/${this.classId}/edit`);
       }
     },
     navigateToLearnerClass() {
       if (this.isAdmin) {
-        window.location.href = `/class/${this.classId}/learners`;
+        this.$router.push(`/class/${this.classId}/learners`);
       }
     },
   },
