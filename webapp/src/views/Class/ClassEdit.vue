@@ -182,7 +182,7 @@ export default {
   },
   async mounted() {
     const course_id = await axios
-      .get(`/api/class/${this.$route.params.id}`)
+      .get(process.env.VUE_APP_BACKEND + `/api/class/${this.$route.params.id}`)
       .then((response) => {
         return response.data.result.records.course_id;
       })
@@ -193,7 +193,10 @@ export default {
     }
     this.course_id = course_id;
     this.trainers = await axios
-      .get(`/api/course/${course_id}/learners/completed`)
+      .get(
+        process.env.VUE_APP_BACKEND +
+          `/api/course/${course_id}/learners/completed`
+      )
       .then((response) => response.data.result.records)
       .catch((error) => {
         console.log(error.response.data);
@@ -235,7 +238,6 @@ export default {
       this.enrolment_end_date = date.format('YYYY-MM-DDTHH:mm:ss');
     },
     submitform() {
-      /* console.log("Class created and updated to database!") */
       const variables = {
         token: window.localStorage.getItem('session_token'),
         class_id: this.$route.params.id,
@@ -248,7 +250,7 @@ export default {
       };
 
       axios
-        .post('/api/class/edit', variables)
+        .post(process.env.VUE_APP_BACKEND + '/api/class/edit', variables)
         .then(() => {
           this.$router.push('/course/' + this.course_id);
         })

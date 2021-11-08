@@ -79,7 +79,7 @@ export default {
       this.isAdmin = window.sessionStorage.getItem('learner_isAdmin') == 'true';
     });
     if (!this.isAdmin) {
-      location.replace('/');
+      this.$router.replace('/');
     }
   },
 };

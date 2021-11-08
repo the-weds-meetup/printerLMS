@@ -125,7 +125,11 @@ export default {
     course_id: async function () {
       //get classes according to course selected
       await axios
-        .get('http://localhost:5000/api/course/' + parseInt(this.course_id))
+        .get(
+          process.env.VUE_APP_BACKEND +
+            '/api/course/' +
+            parseInt(this.course_id)
+        )
         .then((response) => {
           //reset classes and trainers of previous query
           this.classes = [];
@@ -139,12 +143,7 @@ export default {
           for (var each_class of enrol_classes) {
             this.classes = this.classes.concat(each_class);
           }
-
-          var past_classes = response.data.result.records.class.past;
-
-          for (var each_past_class of past_classes) {
-            this.getTrainers(each_past_class);
-          }
+          this.getTrainers(this.course_id);
         })
         .catch((error) => {
           console.log(error);
@@ -161,7 +160,7 @@ export default {
   },
   mounted: async function () {
     await axios
-      .get('/api/course/all')
+      .get(process.env.VUE_APP_BACKEND + '/api/course/all')
       .then((response) => {
         this.courses = response.data.result.records;
       })
@@ -173,25 +172,23 @@ export default {
       return momentDate.format('DD MMM YYYY');
     },
 
-    getTrainers: async function (each_past_class) {
+    getTrainers: async function (course_id) {
       await axios
-        .get('/api/class/' + parseInt(each_past_class.id))
+        .get(
+          process.env.VUE_APP_BACKEND +
+            `/api/course/${course_id}/learners/completed`
+        )
         .then((response) => {
-          this.trainers = this.trainers.concat(
-            response.data.result.records.learners
-          );
+          this.trainers = this.trainers.concat(response.data.result.records);
         })
         .catch((error) => console.log(error));
     },
 
     assignTrainer: async function () {
       await axios
-        .post('/api/trainer/add', {
+        .post(process.env.VUE_APP_BACKEND + '/api/trainer/add', {
           user_id: this.user_id,
           class_id: this.class_id,
-        })
-        .then((response) => {
-          console.log(response);
         })
         .catch((error) => {
           console.log(error);

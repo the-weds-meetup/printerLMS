@@ -413,7 +413,7 @@ VALUES
     3,
     20,
     '2021-10-22T16:00:00.000Z',
-    '2021-11-05T16:00:00.000Z',
+    '2021-11-12T16:00:00.000Z',
     '2021-10-04T00:00:00.000Z',
     '2021-10-21T04:00:00.000Z'
   );
@@ -426,10 +426,10 @@ VALUES
     1,
     2,
     20,
-    '2021-11-01T16:00:00.000Z',
     '2021-11-12T16:00:00.000Z',
+    '2021-12-01T16:00:00.000Z',
     '2021-10-04T00:00:00.000Z',
-    '2021-11-08T04:00:00.000Z'
+    '2021-11-12T04:00:00.000Z'
   );
 INSERT INTO class
   (course_id, class_id, max_capacity, class_start_date, class_end_date, enrolment_start_date, enrolment_end_date)
@@ -438,10 +438,10 @@ VALUES
     1,
     3,
     20,
-    '2021-10-22T16:00:00.000Z',
-    '2021-11-05T16:00:00.000Z',
+    '2021-11-12T16:00:00.000Z',
+    '2021-12-01T16:00:00.000Z',
     '2021-10-04T00:00:00.000Z',
-    '2021-11-08T04:00:00.000Z'
+    '2021-11-12T04:00:00.000Z'
   );
 INSERT INTO class
   (course_id, class_id, max_capacity, class_start_date, class_end_date, enrolment_start_date, enrolment_end_date)
@@ -450,10 +450,10 @@ VALUES
     1,
     4,
     20,
-    '2021-10-22T16:00:00.000Z',
-    '2021-11-05T16:00:00.000Z',
+    '2021-12-01T16:00:00.000Z',
+    '2021-12-01T16:00:00.000Z',
     '2021-10-04T00:00:00.000Z',
-    '2021-11-15T04:00:00.000Z'
+    '2021-11-30T04:00:00.000Z'
   );
 
 -- classes for course_id 2
@@ -464,10 +464,10 @@ VALUES
     2,
     2,
     20,
-    '2021-11-01T16:00:00.000Z',
     '2021-11-12T16:00:00.000Z',
+    '2021-12-01T16:00:00.000Z',
     '2021-10-04T00:00:00.000Z',
-    '2021-11-08T04:00:00.000Z'
+    '2021-11-12T04:00:00.000Z'
   );
 INSERT INTO class
   (course_id, class_id, max_capacity, class_start_date, class_end_date, enrolment_start_date, enrolment_end_date)
@@ -476,60 +476,22 @@ VALUES
     2,
     3,
     20,
-    '2021-10-22T16:00:00.000Z',
-    '2021-11-05T16:00:00.000Z',
-    '2021-10-04T00:00:00.000Z',
-    '2021-11-08T04:00:00.000Z'
-  );
-INSERT INTO class
-  (course_id, class_id, max_capacity, class_start_date, class_end_date, enrolment_start_date, enrolment_end_date)
-VALUES
-  (
-    2,
-    4,
-    20,
-    '2021-10-22T16:00:00.000Z',
-    '2021-11-05T16:00:00.000Z',
-    '2021-10-04T00:00:00.000Z',
-    '2021-11-15T04:00:00.000Z'
-  );
-
--- classes for course_id 4
-INSERT INTO class
-  (course_id, class_id, max_capacity, class_start_date, class_end_date, enrolment_start_date, enrolment_end_date)
-VALUES
-  (
-    4,
-    2,
-    20,
-    '2021-11-01T16:00:00.000Z',
     '2021-11-12T16:00:00.000Z',
+    '2021-12-01T16:00:00.000Z',
     '2021-10-04T00:00:00.000Z',
-    '2021-11-01T08:00:00.000Z'
+    '2021-11-12T04:00:00.000Z'
   );
 INSERT INTO class
   (course_id, class_id, max_capacity, class_start_date, class_end_date, enrolment_start_date, enrolment_end_date)
 VALUES
   (
-    4,
-    3,
-    20,
-    '2021-10-22T16:00:00.000Z',
-    '2021-11-05T16:00:00.000Z',
-    '2021-10-04T00:00:00.000Z',
-    '2021-11-01T08:00:00.000Z'
-  );
-INSERT INTO class
-  (course_id, class_id, max_capacity, class_start_date, class_end_date, enrolment_start_date, enrolment_end_date)
-VALUES
-  (
-    4,
+    2,
     4,
     20,
-    '2021-10-22T16:00:00.000Z',
-    '2021-11-05T16:00:00.000Z',
+    '2021-12-01T16:00:00.000Z',
+    '2021-12-01T16:00:00.000Z',
     '2021-10-04T00:00:00.000Z',
-    '2021-11-14T08:00:00.000Z'
+    '2021-11-30T04:00:00.000Z'
   );
 
 -- classes for course_id 3
@@ -540,10 +502,10 @@ VALUES
     3,
     2,
     20,
-    '2021-11-01T16:00:00.000Z',
     '2021-11-12T16:00:00.000Z',
+    '2021-12-01T16:00:00.000Z',
     '2021-10-04T00:00:00.000Z',
-    '2021-11-01T08:00:00.000Z'
+    '2021-11-12T04:00:00.000Z'
   );
 INSERT INTO class
   (course_id, class_id, max_capacity, class_start_date, class_end_date, enrolment_start_date, enrolment_end_date)
@@ -552,10 +514,10 @@ VALUES
     3,
     3,
     20,
-    '2021-10-22T16:00:00.000Z',
-    '2021-11-05T16:00:00.000Z',
+    '2021-11-12T16:00:00.000Z',
+    '2021-12-01T16:00:00.000Z',
     '2021-10-04T00:00:00.000Z',
-    '2021-11-01T08:00:00.000Z'
+    '2021-11-12T04:00:00.000Z'
   );
 INSERT INTO class
   (course_id, class_id, max_capacity, class_start_date, class_end_date, enrolment_start_date, enrolment_end_date)
@@ -564,10 +526,48 @@ VALUES
     3,
     4,
     20,
-    '2021-10-22T16:00:00.000Z',
-    '2021-11-05T16:00:00.000Z',
+    '2021-12-01T16:00:00.000Z',
+    '2021-12-01T16:00:00.000Z',
     '2021-10-04T00:00:00.000Z',
-    '2021-11-14T08:00:00.000Z'
+    '2021-11-30T04:00:00.000Z'
+  );
+
+-- classes for course_id 4
+INSERT INTO class
+  (course_id, class_id, max_capacity, class_start_date, class_end_date, enrolment_start_date, enrolment_end_date)
+VALUES
+  (
+    4,
+    2,
+    20,
+    '2021-11-12T16:00:00.000Z',
+    '2021-12-01T16:00:00.000Z',
+    '2021-10-04T00:00:00.000Z',
+    '2021-11-12T04:00:00.000Z'
+  );
+INSERT INTO class
+  (course_id, class_id, max_capacity, class_start_date, class_end_date, enrolment_start_date, enrolment_end_date)
+VALUES
+  (
+    4,
+    3,
+    20,
+    '2021-11-12T16:00:00.000Z',
+    '2021-12-01T16:00:00.000Z',
+    '2021-10-04T00:00:00.000Z',
+    '2021-11-12T04:00:00.000Z'
+  );
+INSERT INTO class
+  (course_id, class_id, max_capacity, class_start_date, class_end_date, enrolment_start_date, enrolment_end_date)
+VALUES
+  (
+    4,
+    4,
+    20,
+    '2021-12-01T16:00:00.000Z',
+    '2021-12-01T16:00:00.000Z',
+    '2021-10-04T00:00:00.000Z',
+    '2021-11-30T04:00:00.000Z'
   );
 
 -- TRAINER
@@ -729,15 +729,3 @@ INSERT INTO learner_course_completion
   (user_id, class_id, completion_date)
 VALUES
   (3, 3, '2021-10-12T11:00:00.000Z');
-INSERT INTO learner_course_completion
-  (user_id, class_id, completion_date)
-VALUES
-  (3, 4, '2021-10-11T12:00:00.000Z');
-INSERT INTO learner_course_completion
-  (user_id, class_id, completion_date)
-VALUES
-  (3, 5, '2021-10-11T12:00:00.000Z');
-INSERT INTO learner_course_completion
-  (user_id, class_id, completion_date)
-VALUES
-  (3, 6, '2021-10-12T11:00:00.000Z');

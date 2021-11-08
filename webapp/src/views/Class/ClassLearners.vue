@@ -11,11 +11,14 @@
         <Spinner v-if="!isDataFetched" />
 
         <div v-else>
-          <ol>
+          <ol v-if="learners.length > 0">
             <li v-for="learner in learners" :key="learner.id">
               {{ learner.full_name }}
             </li>
           </ol>
+          <p v-else class="text-secondary">
+            No learners have been added to this class
+          </p>
         </div>
       </div>
     </main>
@@ -56,7 +59,10 @@ export default {
   },
   async mounted() {
     this.learners = await axios
-      .get(`/api/class/${this.$route.params.id}/learners`)
+      .get(
+        process.env.VUE_APP_BACKEND +
+          `/api/class/${this.$route.params.id}/learners`
+      )
       .then((response) => {
         this.isDataFetched = true;
         return response.data.results.records;
@@ -71,7 +77,7 @@ export default {
     },
     navigateToAdd() {
       if (this.isAdmin) {
-        window.location.href = `/class/${this.$route.params.id}/learners/add`;
+        this.$router.push(`/class/${this.$route.params.id}/learners/add`);
       }
     },
   },

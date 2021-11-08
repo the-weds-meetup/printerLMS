@@ -12,7 +12,15 @@
         <Spinner v-if="!isDataFetched" />
 
         <div v-else>
-          <div v-for="learner in learners" :key="learner.id" class="form-check">
+          <p v-if="learners.length === 0" class="text-secondary">
+            No available learners found
+          </p>
+          <div
+            v-for="learner in learners"
+            v-else
+            :key="learner.id"
+            class="form-check"
+          >
             <input
               :id="'flex-check' + learner.id"
               v-model="checkedNames"
@@ -75,7 +83,10 @@ export default {
   },
   async mounted() {
     this.learners = await axios
-      .get(`/api/class/${this.$route.params.id}/nonlearners`)
+      .get(
+        process.env.VUE_APP_BACKEND +
+          `/api/class/${this.$route.params.id}/nonlearners`
+      )
       .then((response) => {
         this.isDataFetched = true;
         return response.data.results.records;
@@ -93,10 +104,14 @@ export default {
         return;
       }
       const errorNames = await axios
-        .post(`/api/enroll/manual/${this.$route.params.id}`, {
-          token: window.localStorage.getItem('session_token'),
-          learners: this.checkedNames,
-        })
+        .post(
+          process.env.VUE_APP_BACKEND +
+            `/api/enroll/manual/${this.$route.params.id}`,
+          {
+            token: window.localStorage.getItem('session_token'),
+            learners: this.checkedNames,
+          }
+        )
         .then((response) => response.data.results.records)
         .catch((error) => {
           console.error(error);
@@ -105,7 +120,7 @@ export default {
       if (errorNames) {
         alert('This learners are not added\n' + errorNames.join('\n'));
       } else {
-        window.location.href = `/class/${this.$route.params.id}/learners`;
+        $this.router.push(`/class/${this.$route.params.id}/learners`);
       }
     },
   },

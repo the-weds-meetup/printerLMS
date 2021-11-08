@@ -49,9 +49,9 @@
         <!-- Trainer -->
         <TrainerView
           v-else-if="selected === 'class-trainer'"
-          :past="trainerCourses.past"
-          :ongoing="trainerCourses.ongoing"
-          :upcoming="trainerCourses.upcoming"
+          :past="trainerCourses.past || []"
+          :ongoing="trainerCourses.ongoing || []"
+          :upcoming="trainerCourses.upcoming || []"
         />
       </div>
     </main>
@@ -91,7 +91,6 @@ export default {
   },
   computed: {
     isTrainer() {
-      console.log(this.trainerCourses);
       if (
         this.trainerCourses &&
         Object.keys(this.trainerCourses) > 0 &&
@@ -113,7 +112,7 @@ export default {
   },
   async mounted() {
     axios
-      .post('/api/me/classes', {
+      .post(process.env.VUE_APP_BACKEND + '/api/me/classes', {
         token: window.localStorage.getItem('session_token'),
       })
       .then((response) => {
@@ -124,8 +123,6 @@ export default {
       .catch((error) => {
         console.error(error.response.data.message);
       });
-
-    console.log(this.learnerCourses, this.trainerCourses);
   },
 };
 </script>

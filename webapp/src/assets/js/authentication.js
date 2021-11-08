@@ -25,7 +25,7 @@ export async function checkSessionToken() {
     !window.sessionStorage.getItem('learner_isAdmin')
   ) {
     await axios
-      .post('/api/learner', {
+      .post(process.env.VUE_APP_BACKEND + '/api/learner', {
         token: window.localStorage.getItem('session_token'),
       })
       .then((response) => {
@@ -42,7 +42,7 @@ export async function checkSessionToken() {
 
 export async function cleanupSession() {
   await axios
-    .post('/api/auth/logout', {
+    .post(process.env.VUE_APP_BACKEND + '/api/auth/logout', {
       token: window.localStorage.getItem('session_token'),
     })
     .catch((error) => {

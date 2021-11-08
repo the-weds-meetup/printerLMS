@@ -39,7 +39,7 @@ export default {
   },
   async mounted() {
     await axios
-      .get('/api/course/' + this.$route.params.id)
+      .get(process.env.VUE_APP_BACKEND + '/api/course/' + this.$route.params.id)
       .then((response) => {
         const data = response.data.result.records;
         this.course = data;

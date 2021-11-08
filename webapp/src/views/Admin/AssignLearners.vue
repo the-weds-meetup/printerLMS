@@ -96,7 +96,9 @@ export default {
     async populateData() {
       this.isDataFetched = false;
       await axios
-        .get(`/api/class/${this.$route.params.id}`)
+        .get(
+          process.env.VUE_APP_BACKEND + `/api/class/${this.$route.params.id}`
+        )
         .then((response) => {
           this.currentClass = response.data.result.records;
         })
@@ -104,7 +106,8 @@ export default {
 
       await axios
         .get(
-          `http://localhost:5000/api/class/${this.$route.params.id}/waiting-list`
+          process.env.VUE_APP_BACKEND +
+            `/api/class/${this.$route.params.id}/waiting-list`
         )
         .then((response) => {
           this.waitingList = response.data.results.records;
@@ -116,12 +119,15 @@ export default {
     },
     async enrolLearner(learner_id) {
       this.isAdding = true;
-      console.log(learner_id);
       await axios
-        .post(`/api/enroll/manual/${this.$route.params.id}`, {
-          token: window.localStorage.getItem('session_token'),
-          learners: [learner_id],
-        })
+        .post(
+          process.env.VUE_APP_BACKEND +
+            `/api/enroll/manual/${this.$route.params.id}`,
+          {
+            token: window.localStorage.getItem('session_token'),
+            learners: [learner_id],
+          }
+        )
         .then(async () => {
           await this.populateData();
         })
