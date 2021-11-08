@@ -11,9 +11,9 @@ suite.addTests(
         loader.loadTestsFromTestCase(TestTrainerController.TestTrainerController),
         loader.loadTestsFromTestCase(TestClassController.TestClassController),
         loader.loadTestsFromTestCase(TestCourseController.TestCourseController),
+        loader.loadTestsFromTestCase(TestLearnerController.TestLearnerController),
     ]
 )
-
 
 # initialize a runner, pass it your suite and run it
 runner = unittest.TextTestRunner(verbosity=3)
