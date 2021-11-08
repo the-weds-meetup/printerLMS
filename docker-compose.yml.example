@@ -30,7 +30,7 @@ services:
       - "POSTGRES_USER=postgres"
       - "POSTGRES_PASSWORD=password"
     volumes:
-      - "./database.sql:/docker-entrypoint-initdb.d/database.sql"
+      - "./scripts/database.sql:/docker-entrypoint-initdb.d/database.sql"
 
   webapp:
     build:
@@ -40,6 +40,9 @@ services:
       - 3000:8080
     depends_on:
       - db
+      - webserver
     restart: always
+    environment:
+      - "VUE_APP_BACKEND="
     volumes:
       - "./webapp:/webapp"

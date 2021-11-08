@@ -113,7 +113,7 @@ export default {
   },
   async mounted() {
     axios
-      .post('/api/me/classes', {
+      .post(process.env.VUE_APP_BACKEND + '/api/me/classes', {
         token: window.localStorage.getItem('session_token'),
       })
       .then((response) => {

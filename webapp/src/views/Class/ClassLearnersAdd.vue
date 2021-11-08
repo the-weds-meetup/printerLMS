@@ -75,7 +75,10 @@ export default {
   },
   async mounted() {
     this.learners = await axios
-      .get(`/api/class/${this.$route.params.id}/nonlearners`)
+      .get(
+        process.env.VUE_APP_BACKEND +
+          `/api/class/${this.$route.params.id}/nonlearners`
+      )
       .then((response) => {
         this.isDataFetched = true;
         return response.data.results.records;
@@ -93,10 +96,14 @@ export default {
         return;
       }
       const errorNames = await axios
-        .post(`/api/enroll/manual/${this.$route.params.id}`, {
-          token: window.localStorage.getItem('session_token'),
-          learners: this.checkedNames,
-        })
+        .post(
+          process.env.VUE_APP_BACKEND +
+            `/api/enroll/manual/${this.$route.params.id}`,
+          {
+            token: window.localStorage.getItem('session_token'),
+            learners: this.checkedNames,
+          }
+        )
         .then((response) => response.data.results.records)
         .catch((error) => {
           console.error(error);

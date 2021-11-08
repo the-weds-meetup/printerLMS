@@ -56,7 +56,10 @@ export default {
   },
   async mounted() {
     this.learners = await axios
-      .get(`/api/class/${this.$route.params.id}/learners`)
+      .get(
+        process.env.VUE_APP_BACKEND +
+          `/api/class/${this.$route.params.id}/learners`
+      )
       .then((response) => {
         this.isDataFetched = true;
         return response.data.results.records;

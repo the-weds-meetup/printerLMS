@@ -69,9 +69,12 @@ export default {
     async populateData() {
       this.isDataFetched = false;
       await axios
-        .post(`/api/class/${this.$route.params.id}`, {
-          token: window.localStorage.getItem('session_token'),
-        })
+        .post(
+          process.env.VUE_APP_BACKEND + `/api/class/${this.$route.params.id}`,
+          {
+            token: window.localStorage.getItem('session_token'),
+          }
+        )
         .then((response) => {
           this.currentClass = response.data.result.records;
         })

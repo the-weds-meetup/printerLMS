@@ -105,7 +105,7 @@ export default {
   },
   async mounted() {
     await axios
-      .get('/api/course/' + this.$route.params.id)
+      .get(process.env.VUE_APP_BACKEND + '/api/course/' + this.$route.params.id)
       .then((response) => {
         const data = response.data.result.records;
         this.course = data;
@@ -118,9 +118,12 @@ export default {
     // to check if allowed to enrol in course
     if (!this.isAdmin) {
       await axios
-        .post('/api/course/' + this.$route.params.id, {
-          token: window.localStorage.getItem('session_token'),
-        })
+        .post(
+          process.env.VUE_APP_BACKEND + '/api/course/' + this.$route.params.id,
+          {
+            token: window.localStorage.getItem('session_token'),
+          }
+        )
         .then((response) => {
           const data = response.data;
           // prereqs not met, show error message for prereqs

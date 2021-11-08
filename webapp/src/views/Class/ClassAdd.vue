@@ -180,7 +180,10 @@ export default {
     });
 
     this.trainers = await axios
-      .get(`/api/course/${this.$route.params.id}/learners/completed`)
+      .get(
+        process.env.VUE_APP_BACKEND +
+          `/api/course/${this.$route.params.id}/learners/completed`
+      )
       .then((response) => response.data.result.records)
       .catch((error) => {
         alert(error);
@@ -245,7 +248,7 @@ export default {
           };
 
       axios
-        .post('/api/class/add', variables)
+        .post(process.env.VUE_APP_BACKEND + '/api/class/add', variables)
         .then(() => {
           this.$router.push('/course/' + this.$route.params.id);
         })

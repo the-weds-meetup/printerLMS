@@ -126,7 +126,7 @@ export default {
   },
   async mounted() {
     this.courseList = await axios
-      .get('/api/course/all')
+      .get(process.env.VUE_APP_BACKEND + '/api/course/all')
       .then((response) => {
         const data = response.data.result.records;
         return data;
@@ -161,7 +161,7 @@ export default {
 
       if (isNamePassed && isDescriptionPassed) {
         await axios
-          .post('/api/course/add', {
+          .post(process.env.VUE_APP_BACKEND + '/api/course/add', {
             token: window.localStorage.getItem('session_token'),
             name: this.courseName,
             description: this.courseDescription,

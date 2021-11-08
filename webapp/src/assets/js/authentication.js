@@ -42,7 +42,7 @@ export async function checkSessionToken() {
 
 export async function cleanupSession() {
   await axios
-    .post('/api/auth/logout', {
+    .post(process.env.VUE_APP_BACKEND + '/api/auth/logout', {
       token: window.localStorage.getItem('session_token'),
     })
     .catch((error) => {

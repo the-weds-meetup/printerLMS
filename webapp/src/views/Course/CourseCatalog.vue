@@ -56,7 +56,7 @@ export default {
   },
   async mounted() {
     const data = await axios
-      .get('/api/course/all')
+      .get(process.env.VUE_APP_BACKEND + '/api/course/all')
       .then((response) => response.data.result.records)
       .catch((error) => {
         console.error(error);

@@ -51,7 +51,7 @@ export default {
   },
   async mounted() {
     await axios
-      .get('/api/course/enrol')
+      .get(process.env.VUE_APP_BACKEND + '/api/course/enrol')
       .then((response) => {
         const data = response.data.results.records;
         this.classes = data;

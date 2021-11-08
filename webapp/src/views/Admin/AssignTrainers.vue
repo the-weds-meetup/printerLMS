@@ -125,7 +125,11 @@ export default {
     course_id: async function () {
       //get classes according to course selected
       await axios
-        .get('http://localhost:5000/api/course/' + parseInt(this.course_id))
+        .get(
+          process.env.VUE_APP_BACKEND +
+            '/api/course/' +
+            parseInt(this.course_id)
+        )
         .then((response) => {
           //reset classes and trainers of previous query
           this.classes = [];
@@ -161,7 +165,7 @@ export default {
   },
   mounted: async function () {
     await axios
-      .get('/api/course/all')
+      .get(process.env.VUE_APP_BACKEND + '/api/course/all')
       .then((response) => {
         this.courses = response.data.result.records;
       })
@@ -175,7 +179,11 @@ export default {
 
     getTrainers: async function (each_past_class) {
       await axios
-        .get('/api/class/' + parseInt(each_past_class.id))
+        .get(
+          process.env.VUE_APP_BACKEND +
+            '/api/class/' +
+            parseInt(each_past_class.id)
+        )
         .then((response) => {
           this.trainers = this.trainers.concat(
             response.data.result.records.learners
@@ -186,7 +194,7 @@ export default {
 
     assignTrainer: async function () {
       await axios
-        .post('/api/trainer/add', {
+        .post(process.env.VUE_APP_BACKEND + '/api/trainer/add', {
           user_id: this.user_id,
           class_id: this.class_id,
         })

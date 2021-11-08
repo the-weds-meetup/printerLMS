@@ -125,9 +125,12 @@ export default {
     async learnerEnrollStatus() {
       if (!this.isAdmin) {
         await axios
-          .post(`/api/class/${this.classId}/status`, {
-            token: window.localStorage.getItem('session_token'),
-          })
+          .post(
+            process.env.VUE_APP_BACKEND + `/api/class/${this.classId}/status`,
+            {
+              token: window.localStorage.getItem('session_token'),
+            }
+          )
           .then((response) => {
             this.enrollState = response.data.results.status;
           })
@@ -138,9 +141,12 @@ export default {
     },
     async enrollClass() {
       await axios
-        .post(`/api/enroll/self/${this.classId}`, {
-          token: window.localStorage.getItem('session_token'),
-        })
+        .post(
+          process.env.VUE_APP_BACKEND + `/api/enroll/self/${this.classId}`,
+          {
+            token: window.localStorage.getItem('session_token'),
+          }
+        )
         .then(() => {
           location.reload();
         })
