@@ -4,8 +4,8 @@ from flask_sqlalchemy import SQLAlchemy
 from os import environ
 from flask_cors import CORS, cross_origin
 
-isDebug = True if environ["FLASK_ENV"] == "development" else False
-isProduction = True if environ["FLASK_ENV"] == "production" else False
+isDebug = True if environ.get("FLASK_ENV", "") == "development" else False
+isProduction = True if environ.get("FLASK_ENV", "") == "production" else False
 
 app = Flask(__name__)
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
