@@ -2,10 +2,10 @@ name: Deploy
 on:
   push:
     branches:
-      - alphatrl/deploy
+      - main
   workflow_dispatch:
     branches:
-      - alphatrl/deploy
+      - main
 
 jobs:
   deploy-backend:
@@ -19,5 +19,5 @@ jobs:
           heroku_api_key: ${{secrets.HEROKU_API_KEY}}
           heroku_app_name: ${{secrets.HEROKU_APP_NAME}}
           heroku_email: ${{secrets.HEROKU_EMAIL}}
-          branch: alphatrl/deploy
+          branch: main
           appdir: backend
