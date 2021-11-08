@@ -335,6 +335,16 @@ def edit_class():
         return error.throw_error(type="create_class", message=str(e), status_code=400)
 
 
+@app.route("/api/quiz/add", methods=["POST"])
+def add_quiz():
+    request_data = request.get_json()
+    try:
+        return quiz.add_quiz(request_data)
+    except Exception as e:
+        print(e, flush=True)
+        return auth.throw_error(type="create_quiz", message=str(e), status_code=400)
+
+
 if __name__ == "__main__":
     from api import *
     from controller import *

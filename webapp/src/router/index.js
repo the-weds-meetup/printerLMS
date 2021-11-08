@@ -87,6 +87,21 @@ const routes = [
     component: () => import('../views/Profile/Course.vue'),
   },
   {
+    path: '/quiz',
+    name: 'Quiz',
+    component: () => import('../views/Quiz/Quiz.vue'),
+  },
+  {
+    path: '/quiz/createmcq',
+    name: 'CreateMCQ',
+    component: () => import('../views/Quiz/CreateMcq.vue'),
+  },
+  {
+    path: '/quiz/createtf',
+    name: 'CreateTF',
+    component: () => import('../views/Quiz/CreateTf.vue'),
+  },
+  {
     path: '/login',
     name: 'Login',
     component: () => import('../views/Auth/Login.vue'),
