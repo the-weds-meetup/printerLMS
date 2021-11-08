@@ -224,8 +224,6 @@ export default {
       this.enrolment_end_date = date.format('YYYY-MM-DDTHH:mm:ss');
     },
     submitform() {
-      /* console.log("Class created and updated to database!") */
-
       const variables = this.user_id
         ? {
             token: window.localStorage.getItem('session_token'),

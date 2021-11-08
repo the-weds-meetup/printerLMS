@@ -119,7 +119,6 @@ export default {
     },
     async enrolLearner(learner_id) {
       this.isAdding = true;
-      console.log(learner_id);
       await axios
         .post(
           process.env.VUE_APP_BACKEND +
