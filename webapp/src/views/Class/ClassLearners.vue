@@ -11,11 +11,14 @@
         <Spinner v-if="!isDataFetched" />
 
         <div v-else>
-          <ol>
+          <ol v-if="learners.length > 0">
             <li v-for="learner in learners" :key="learner.id">
               {{ learner.full_name }}
             </li>
           </ol>
+          <p v-else class="text-secondary">
+            No learners have been added to this class
+          </p>
         </div>
       </div>
     </main>

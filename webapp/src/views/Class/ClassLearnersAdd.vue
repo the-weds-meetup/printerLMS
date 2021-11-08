@@ -12,7 +12,15 @@
         <Spinner v-if="!isDataFetched" />
 
         <div v-else>
-          <div v-for="learner in learners" :key="learner.id" class="form-check">
+          <p v-if="learners.length === 0" class="text-secondary">
+            No available learners found
+          </p>
+          <div
+            v-for="learner in learners"
+            v-else
+            :key="learner.id"
+            class="form-check"
+          >
             <input
               :id="'flex-check' + learner.id"
               v-model="checkedNames"

@@ -9,7 +9,8 @@
         :button-action="navigateToAddCourse"
       />
       <TopNav v-else title="Course Catalog" />
-      <div id="content">
+      <Spinner v-if="!isFetched" />
+      <div v-else id="content">
         <OverviewCard
           v-for="course in courses"
           :key="course.id"
@@ -31,12 +32,14 @@ import { checkSessionToken } from '@/assets/js/authentication.js';
 import OverviewCard from '@/components/Course/OverviewCard.vue';
 import SideNav from '@/components/Navigation/SideNav.vue';
 import TopNav from '@/components/Navigation/TopNav.vue';
+import Spinner from '@/components/Tools/Spinner.vue';
 
 export default {
   name: 'Home',
   components: {
     SideNav,
     TopNav,
+    Spinner,
     OverviewCard,
   },
   data() {
@@ -45,6 +48,7 @@ export default {
       fullName: '',
       isAdmin: false,
       courses: [],
+      isFetched: false,
     };
   },
   async created() {
@@ -55,14 +59,15 @@ export default {
     });
   },
   async mounted() {
-    const data = await axios
+    await axios
       .get(process.env.VUE_APP_BACKEND + '/api/course/all')
-      .then((response) => response.data.result.records)
+      .then((response) => {
+        this.courses = response.data.result.records;
+        this.isFetched = true;
+      })
       .catch((error) => {
         console.error(error);
-        return [];
       });
-    this.courses = data;
   },
   methods: {
     navigateToAddCourse() {

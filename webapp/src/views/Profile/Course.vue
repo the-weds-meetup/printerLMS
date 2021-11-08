@@ -49,9 +49,9 @@
         <!-- Trainer -->
         <TrainerView
           v-else-if="selected === 'class-trainer'"
-          :past="trainerCourses.past"
-          :ongoing="trainerCourses.ongoing"
-          :upcoming="trainerCourses.upcoming"
+          :past="trainerCourses.past || []"
+          :ongoing="trainerCourses.ongoing || []"
+          :upcoming="trainerCourses.upcoming || []"
         />
       </div>
     </main>
