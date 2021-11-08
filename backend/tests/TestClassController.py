@@ -80,13 +80,13 @@ class TestClassController(TestApp):
         self.assertRaises(Exception, ClassController.ClassController().get_class, 10)
 
     # Get number of learners in class_id: 3 which will return 1. 
-    # There is only one learner enrol into class_id: 3 so it should return 1. 
+    # There is only one learner enrolled into class_id: 3 so it should return 1. 
     def test_get_class_learners1(self):
         get_learners1 = ClassController.ClassController().get_class_learners(3)
         self.assertEqual(len(get_learners1), 1)
     
     # Get number of learners in class_id: 4 which will return 1. 
-    # Even though there are two learners enrol into class_id: 4 , one is_approved = True while another one is_approved = False. 
+    # Even though there are two learners enrolled into class_id: 4 , one is_approved = True while another one is_approved = False. 
     # This means that there will only be one learner in class_id: 4
     def test_get_class_learners2(self):
         get_learners2 = ClassController.ClassController().get_class_learners(4)
