@@ -457,12 +457,16 @@ def edit_class():
 
 @app.route("/api/quiz/add", methods=["POST"])
 def add_quiz():
-    request_data = request.get_json()
-    try:
-        return quiz.add_quiz(request_data)
-    except Exception as e:
-        print(e, flush=True)
-        return auth.throw_error(type="create_quiz", message=str(e), status_code=400)
+    return auth.throw_error(type="quiz", message="Work In Progress", status_code=500)
+    # request_data = request.get_json()
+    # try:
+    #     response = quiz.add_quiz(request_data)
+    # except Exception as e:
+    #     print(e, flush=True)
+    #     response = auth.throw_error(type="create_quiz", message=str(e), status_code=400)
+    # finally:
+    #     db.session.remove()
+    #     return response
 
 
 if __name__ == "__main__":
