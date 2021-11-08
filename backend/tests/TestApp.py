@@ -194,4 +194,3 @@ class TestApp(flask_testing.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
-    
