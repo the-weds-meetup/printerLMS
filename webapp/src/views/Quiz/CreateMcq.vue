@@ -1,119 +1,141 @@
 <template>
+  <div class="container">
+    <!-- Start -> Preview of quiz format -->
+    <h1>Preview of MCQ or True/False quiz format</h1>
+    <br />
 
-    <div class="container">
-  
-        <!-- Start -> Preview of quiz format -->
-        <h1>Preview of MCQ or True/False quiz format</h1><br>
+    <h2>Question - MCQ</h2>
+    <br />
 
-        <h2>Question - MCQ</h2><br>
+    <div v-if="question.length > 0">{{ count }}. {{ question }}</div>
 
-        <div v-if="question.length >0">{{count}}. {{question}}</div>
+    <span v-if="option1.length > 0">
+      <label for="option1"
+        ><input name="answers" type="radio" :value="option1" />
+        {{ option1 }}</label
+      ><br />
+    </span>
 
-        <span v-if="option1.length > 0">
-            <label for="option1"><input name="answers" type="radio" :value="option1"> {{option1}}</label><br>
-        </span>
-        
-        <span v-if="option2.length > 0">
-            <label for="option2"><input name="answers" type="radio" :value="option2"> {{option2}}</label><br>
-        </span>
+    <span v-if="option2.length > 0">
+      <label for="option2"
+        ><input name="answers" type="radio" :value="option2" />
+        {{ option2 }}</label
+      ><br />
+    </span>
 
-        <span v-if="option3.length > 0">
-            <label for="option3"><input name="answers" type="radio" :value="option3"> {{option3}}</label><br>
-        </span>
+    <span v-if="option3.length > 0">
+      <label for="option3"
+        ><input name="answers" type="radio" :value="option3" />
+        {{ option3 }}</label
+      ><br />
+    </span>
 
-        <span v-if="option4.length > 0">
-            <label for="option4"><input name="answers" type="radio" :value="option4"> {{option4}}</label><br>
-            </span>
-            
-      <!-- End -> Preview of quiz format -->
-      <hr>
-  
-      <h1 class="text-center bg-primary text-white" style="border-radius:10px">Create Quiz</h1>
-  
-      <!-- Start of form -->
-  
-      <form @submit.prevent="onSubmit()">
-  
-        <!-- Start of mcq quiz format-->
-        <br>
-        <label for="question">Question: 
-        <textarea cols="30" rows="3" v-model="question" id="question"></textarea>
-        </label><br><br>
+    <span v-if="option4.length > 0">
+      <label for="option4"
+        ><input name="answers" type="radio" :value="option4" />
+        {{ option4 }}</label
+      ><br />
+    </span>
 
-        <label for="option1">Option 1:
-        <input type="text" v-model="option1">
-        </label>
+    <!-- End -> Preview of quiz format -->
+    <hr />
 
-        <label class="option2" for="option2">Option 2:
-        <input type="text" v-model="option2">
-        </label><br><br>
+    <h1 class="text-center bg-primary text-white" style="border-radius: 10px">
+      Create Quiz
+    </h1>
 
-        <label for="option2">Option 3:
-        <input type="text" v-model="option3">
-        </label>
+    <!-- Start of form -->
 
-        <label class="option4" for="option2">Option 4:
-        <input type="text" v-model="option4">
-        </label><br><br>
+    <form @submit.prevent="onSubmit()">
+      <!-- Start of mcq quiz format-->
+      <br />
+      <label for="question"
+        >Question:
+        <textarea
+          cols="30"
+          rows="3"
+          v-model="question"
+          id="question"
+        ></textarea></label
+      ><br /><br />
 
-        <label class="answer" for="answer">Answer:
-        <input type="text" v-model="answer">
-        </label><br><br>
+      <label for="option1"
+        >Option 1:
+        <input type="text" v-model="option1" />
+      </label>
 
-        <button class="btn btn-primary submit" type = "submit">
-        Add Quiz
-        </button>
+      <label class="option2" for="option2"
+        >Option 2:
+        <input type="text" v-model="option2" /> </label
+      ><br /><br />
 
-        <!-- Button to toggle between mcq and true/false -->
-        <button type="button" class="btn btn-dark toggle" v-on:click="this.$router.push('/quiz/createtf')"> 
-          Toggle between MCQ and true/false
-        </button>
-  
-        <!-- End of mcq quiz format -->
-      
-      </form>
-      <!-- End of form -->
-  
-    </div>
-  
-  </template>
-  
-  
-  <script>
-  import axios from 'axios';
+      <label for="option2"
+        >Option 3:
+        <input type="text" v-model="option3" />
+      </label>
 
-  export default {
+      <label class="option4" for="option2"
+        >Option 4:
+        <input type="text" v-model="option4" /> </label
+      ><br /><br />
+
+      <label class="answer" for="answer"
+        >Answer:
+        <input type="text" v-model="answer" /> </label
+      ><br /><br />
+
+      <button class="btn btn-primary submit" type="submit">Add Quiz</button>
+
+      <!-- Button to toggle between mcq and true/false -->
+      <button
+        type="button"
+        class="btn btn-dark toggle"
+        v-on:click="this.$router.push('/quiz/createtf')"
+      >
+        Toggle between MCQ and true/false
+      </button>
+
+      <!-- End of mcq quiz format -->
+    </form>
+    <!-- End of form -->
+  </div>
+</template>
+
+<script>
+import axios from 'axios';
+
+export default {
   name: 'Createmcq',
-  data(){
-    return{
+  data() {
+    return {
       count: '1',
       question: '',
       option1: '',
       option2: '',
       option3: '',
       option4: '',
-      answer: ''
-    }
+      answer: '',
+    };
   },
-  methods:{
+  methods: {
     onSubmit() {
       /* console.log("Class created and updated to database!") */
-      console.log("reached here")
-      console.log(option1)
-      console.log(option2)
-      console.log(choices)
-      choices = this.choice.append(option1)
-      choices = this.choice.append(option2)
-      choices = this.choice.append(option3)
-      choices = this.choice.append(option4)
+      console.log('reached here');
+      console.log(option1);
+      console.log(option2);
+      console.log(choices);
+      choices = this.choice.append(option1);
+      choices = this.choice.append(option2);
+      choices = this.choice.append(option3);
+      choices = this.choice.append(option4);
       axios
         .post('/api/quiz/add', {
-            question: this.question,
-            choices: this.choices,
-            answer: this.answer,
-          })
+          question: this.question,
+          choices: this.choices,
+          answer: this.answer,
+        })
         .then(() => {
-          console.log(choices)
+          console.log(choices);
           this.$router.push('/quiz/createmcq');
         })
         .catch((error) => {
@@ -121,35 +143,33 @@
           this.error = error.response.data.message;
         });
     },
-  }
+  },
 };
-    
-      
-  </script>
-  
-    <style>
-    button.submit{
-    position: relative;
-    left: 170px;
-    }
+</script>
 
-    button.toggle{
-    position: relative;
-    left: 350px;
-    bottom: 265px;
-    }
+<style>
+button.submit {
+  position: relative;
+  left: 170px;
+}
 
-    .option2{
-    position:relative; left:10px;
-    }
-    .option4{
-    position:relative; left:10px;
-    }
+button.toggle {
+  position: relative;
+  left: 350px;
+  bottom: 265px;
+}
 
-    .answer{
-    position:relative; left:10px;
-    }
+.option2 {
+  position: relative;
+  left: 10px;
+}
+.option4 {
+  position: relative;
+  left: 10px;
+}
 
-  
-  </style>
-    
+.answer {
+  position: relative;
+  left: 10px;
+}
+</style>

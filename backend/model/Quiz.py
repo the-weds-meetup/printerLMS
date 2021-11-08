@@ -1,5 +1,6 @@
 from main import db
 
+
 class Question(db.Model):
     __tablename__ = "question"
 
@@ -17,7 +18,6 @@ class Question(db.Model):
         self.question = question
         self.choices = choices
         self.answer = answer
-
 
     def __repr__(self):
         return "<id: {}, question: {}, choices: {}, answer: {}>".format(
