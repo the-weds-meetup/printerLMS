@@ -32,7 +32,7 @@
   
       <!-- Start of form -->
   
-      <form @submit="onSubmit()">
+      <form @submit.prevent="onSubmit()">
   
         <!-- Start of mcq quiz format-->
         <br>
@@ -60,7 +60,7 @@
         <input type="text" v-model="answer">
         </label><br><br>
 
-        <button class="btn btn-primary submit" type = "button">
+        <button class="btn btn-primary submit" type = "submit">
         Add Quiz
         </button>
 
@@ -83,19 +83,47 @@
   import axios from 'axios';
 
   export default {
-    name: 'Createmcq',
-    data(){
-      return{
-        count: '1',
-        question: '',
-        option1: '',
-        option2: '',
-        option3: '',
-        option4: '',
-        answer: ''
-      }
+  name: 'Createmcq',
+  data(){
+    return{
+      count: '1',
+      question: '',
+      option1: '',
+      option2: '',
+      option3: '',
+      option4: '',
+      answer: ''
     }
-  };
+  },
+  methods:{
+    onSubmit() {
+      /* console.log("Class created and updated to database!") */
+      console.log("reached here")
+      console.log(option1)
+      console.log(option2)
+      console.log(choices)
+      choices = this.choice.append(option1)
+      choices = this.choice.append(option2)
+      choices = this.choice.append(option3)
+      choices = this.choice.append(option4)
+      axios
+        .post('/api/quiz/add', {
+            question: this.question,
+            choices: this.choices,
+            answer: this.answer,
+          })
+        .then(() => {
+          console.log(choices)
+          this.$router.push('/quiz/createmcq');
+        })
+        .catch((error) => {
+          alert(error.response.data.message);
+          this.error = error.response.data.message;
+        });
+    },
+  }
+};
+    
       
   </script>
   

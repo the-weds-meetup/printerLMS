@@ -25,7 +25,7 @@
 
     <!-- Start of form -->
 
-    <form @click="onSubmit()">
+    <form @submit.prevent="onSubmit()">
 
       <!-- Start of true/false format -->
 
@@ -46,7 +46,7 @@
         <input type="text" v-model="answer">
       </label><br><br>
 
-      <button class="btn btn-primary submit" type = "button">
+      <button class="btn btn-primary submit" type = "submit">
         Add Quiz
       </button>
 
@@ -77,7 +77,7 @@ export default {
       option1: '',
       option2: '',
       answer: '',
-      choices: '',
+      choices: [],
     }
   },
   methods:{
@@ -87,10 +87,12 @@ export default {
       console.log(option1)
       console.log(option2)
       console.log(choices)
+      choices = this.choice.append(option1)
+      choices = this.choice.append(option2)
       axios
         .post('/api/quiz/add', {
             question: this.question,
-            choices: this.choices.append(this.option1,this.option2),
+            choices: this.choices,
             answer: this.answer,
           })
         .then(() => {
