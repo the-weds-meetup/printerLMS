@@ -3,7 +3,6 @@ from flask import request
 from flask_sqlalchemy import SQLAlchemy
 from os import environ
 from flask_cors import CORS, cross_origin
-from sqlalchemy.pool import NullPool
 
 isDebug = True if environ.get("FLASK_ENV", "") == "development" else False
 isProduction = True if environ.get("FLASK_ENV", "") == "production" else False
@@ -28,7 +27,7 @@ if isProduction is True:
     )
     app.config["SQLALCHEMY_ENGINE_OPTIONS"] = {
         "pool_size": 20,
-        "pool_recycle": NullPool,
+        "pool_recycle": 0,
     }
 
 
