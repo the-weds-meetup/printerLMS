@@ -21,39 +21,32 @@ from model import LoginSession
 
 
 class TestLearnerController(TestApp):
-    # def test_get_learner(self):
-    #     session = LoginSession.LoginSession(1)
-    #     session_serialise = session.serialise()
-    #     # print(uuid_mock())
-    #     #print(type(session_serialise["token"]))
-    #     # session = MagicMock(
-    #     #     session.serialise(),
-    #     #     return_value={
-    #     #         "token": uuid_mock(),
-    #     #         "expiry_date": "2021-11-08T06:49:05.095056Z",
-    #     #     },
-    #     # )
-    #     # print(session())
-    #     # # session = AuthController.AuthController().login("admin@lms.com", "p@ssword")
-    #     # # print(session)
-    #     learner = LearnerController.LearnerController().get_learner(
-    #         str(session_serialise["token"])
-    #     )
-    #     print(learner)
+    def test_get_learner(self):
+        session = LoginSession.LoginSession(1)
+        session_serialise = session.serialise()
+        print(session_serialise)
+        # session_serialise["token"] = "fc361853-2529-4e6d-a18e-1d7bec47dfa7"
 
-    #     # self.assertEqual(
-    #     #     learner.serialise(),
-    #     #     {
-    #     #         "id": 1,
-    #     #         "email": "admin@lms.com",
-    #     #         "first_name": "Phris",
-    #     #         "middle_name": None,
-    #     #         "last_name": "Coskitt",
-    #     #         "full_name": "Phris Coskitt",
-    #     #         "department": "Human Resource and Admin",
-    #     #         "is_admin": True,
-    #     #     },
-    #     # )
+        # # session = AuthController.AuthController().login("admin@lms.com", "p@ssword")
+        # # print(session)
+        # learner = LearnerController.LearnerController().get_learner(
+        #     session_serialise["token"]
+        # )
+        # print(learner)
+
+        # self.assertEqual(
+        #     learner.serialise(),
+        #     {
+        #         "id": 1,
+        #         "email": "admin@lms.com",
+        #         "first_name": "Phris",
+        #         "middle_name": None,
+        #         "last_name": "Coskitt",
+        #         "full_name": "Phris Coskitt",
+        #         "department": "Human Resource and Admin",
+        #         "is_admin": True,
+        #     },
+        # )
 
     def test_get_learner_from_id(self):
         learner = LearnerController.LearnerController().get_learner_from_id(1)
