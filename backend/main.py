@@ -20,7 +20,9 @@ if isDebug is True:
         environ.get("DB_NAME", ""),
     )
 if isProduction is True:
-    app.config["SQLALCHEMY_DATABASE_URI"] = environ.get("DATABASE_URL")
+    app.config["SQLALCHEMY_DATABASE_URI"] = environ.get("DATABASE_URL").replace(
+        "://", "ql://", 1
+    )
 
 CORS(app)
 db = SQLAlchemy(app)
