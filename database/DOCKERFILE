@@ -1,5 +1,0 @@
-FROM postgres:13
-
-RUN mkdir -p /tmp/psql_data/
-
-COPY ./database.sql /docker-entrypoint-initdb.d
