@@ -191,7 +191,6 @@ class TestApp(flask_testing.TestCase):
         )
         db.session.commit()
 
-
         # id = 7
         db.session.add(
             Class.Class(
