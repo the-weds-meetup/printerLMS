@@ -95,7 +95,7 @@ export default {
       choices = this.choice.append(option1);
       choices = this.choice.append(option2);
       axios
-        .post('/api/quiz/add', {
+        .post(process.env.VUE_APP_BACKEND + '/api/quiz/add', {
           question: this.question,
           choices: this.choices,
           answer: this.answer,
