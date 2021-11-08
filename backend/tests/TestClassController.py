@@ -27,6 +27,7 @@ class TestClassController(TestApp):
         enrollable_classes = ClassController.ClassController().get_all_enrollable_classes()
         self.assertEqual(len(enrollable_classes),0)
 
+    # Pass test case 1
     # Get class by id = 1. 
     def test_get_class_pass1(self):
         classes1 = ClassController.ClassController().get_class(1)
@@ -47,6 +48,7 @@ class TestClassController(TestApp):
             },
         )
     
+    # Pass test case 2
     # Get class by id = 2. 
     def test_get_class_pass2(self):
         classes2 = ClassController.ClassController().get_class(2)
@@ -67,11 +69,12 @@ class TestClassController(TestApp):
             },
         )
 
+    # Fail test case 1
     # Since there are 7 classes now in TestApp.py, putting 0 class will raise an exception.
     def test_get_class_fail1(self):
         self.assertRaises(Exception, ClassController.ClassController().get_class, 0)
 
-
+    # Fail test case 2
     # Since there are 7 classes now in TestApp.py, any number above 7 will raise an exception.
     def test_get_class_fail2(self):
         self.assertRaises(Exception, ClassController.ClassController().get_class, 10)
