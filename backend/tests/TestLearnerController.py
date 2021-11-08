@@ -16,38 +16,12 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../mode
 
 
 from tests.TestApp import TestApp
+from controller import AuthController
 from controller import LearnerController
 from model import LoginSession
 
 
 class TestLearnerController(TestApp):
-    def test_get_learner(self):
-        session = LoginSession.LoginSession(1)
-        session_serialise = session.serialise()
-        print(session_serialise)
-        # session_serialise["token"] = "fc361853-2529-4e6d-a18e-1d7bec47dfa7"
-
-        # # session = AuthController.AuthController().login("admin@lms.com", "p@ssword")
-        # # print(session)
-        # learner = LearnerController.LearnerController().get_learner(
-        #     session_serialise["token"]
-        # )
-        # print(learner)
-
-        # self.assertEqual(
-        #     learner.serialise(),
-        #     {
-        #         "id": 1,
-        #         "email": "admin@lms.com",
-        #         "first_name": "Phris",
-        #         "middle_name": None,
-        #         "last_name": "Coskitt",
-        #         "full_name": "Phris Coskitt",
-        #         "department": "Human Resource and Admin",
-        #         "is_admin": True,
-        #     },
-        # )
-
     def test_get_learner_from_id(self):
         learner = LearnerController.LearnerController().get_learner_from_id(1)
         self.assertEqual(
