@@ -52,8 +52,8 @@
       <label for="question"
         >Question:
         <textarea
-          v-model="question"
           id="question"
+          v-model="question"
           cols="30"
           rows="3"
         ></textarea></label
@@ -87,7 +87,7 @@
       <button
         type="button"
         class="btn btn-dark toggle"
-        v-on:click="this.$router.push('/quiz/createtf')"
+        @click="$router.push('/quiz/createtf')"
       >
         Toggle between MCQ and true/false
       </button>
