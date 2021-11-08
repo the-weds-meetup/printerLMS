@@ -68,7 +68,7 @@
         >Option 2: <input v-model="option2" type="text" /> </label
       ><br /><br />
 
-      <label for="option2"
+      <label for="option3"
         >Option 3:
         <input v-model="option3" type="text" />
       </label>
