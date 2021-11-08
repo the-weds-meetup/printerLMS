@@ -12,6 +12,9 @@ from model.LearnerCourseCompletion import LearnerCourseCompletion
 
 class CourseController:
     def get_prereq_courses(self, course_id: int):
+        if type(course_id) is not int:
+            raise Exception("Invalid CourseID")
+
         prereqs_list: List[CoursePreq] = CoursePreq.query.filter_by(
             course_id=course_id, is_active=True
         ).all()
