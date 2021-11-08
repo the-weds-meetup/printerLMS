@@ -17,3 +17,8 @@ suite.addTests(
 # initialize a runner, pass it your suite and run it
 runner = unittest.TextTestRunner(verbosity=3)
 result = runner.run(suite)
+
+if result.wasSuccessful():
+    exit(0)
+else:
+    exit(1)
