@@ -92,11 +92,6 @@ export default {
   },
   methods: {
     onSubmit() {
-      /* console.log("Class created and updated to database!") */
-      console.log('reached here');
-      console.log(option1);
-      console.log(option2);
-      console.log(choices);
       choices = this.choice.append(option1);
       choices = this.choice.append(option2);
       axios
@@ -106,7 +101,6 @@ export default {
           answer: this.answer,
         })
         .then(() => {
-          console.log(choices);
           this.$router.push('/quiz/createtf');
         })
         .catch((error) => {
