@@ -57,7 +57,7 @@ export default {
       }
 
       await axios
-        .post('/api/auth/login', {
+        .post(process.env.VUE_APP_BACKEND + '/api/auth/login', {
           email: email,
           password: password,
         })

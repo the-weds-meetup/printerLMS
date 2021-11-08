@@ -25,7 +25,7 @@ export async function checkSessionToken() {
     !window.sessionStorage.getItem('learner_isAdmin')
   ) {
     await axios
-      .post('/api/learner', {
+      .post(process.env.VUE_APP_BACKEND + '/api/learner', {
         token: window.localStorage.getItem('session_token'),
       })
       .then((response) => {
