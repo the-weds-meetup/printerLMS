@@ -11,7 +11,7 @@ suite.addTests(
         loader.loadTestsFromTestCase(TestTrainerController.TestTrainerController),
         loader.loadTestsFromTestCase(TestClassController.TestClassController),
         loader.loadTestsFromTestCase(TestCourseController.TestCourseController),
-        loader.loadTestsFromTestCase(TestLearnerController.TestLearnerController)
+        loader.loadTestsFromTestCase(TestLearnerController.TestLearnerController),
     ]
 )
 

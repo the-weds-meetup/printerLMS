@@ -18,7 +18,6 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../mode
 from tests.TestApp import TestApp
 from controller import AuthController
 from controller import LearnerController
-from model import LoginSession
 
 
 class TestLearnerController(TestApp):
