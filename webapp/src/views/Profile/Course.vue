@@ -91,7 +91,6 @@ export default {
   },
   computed: {
     isTrainer() {
-      console.log(this.trainerCourses);
       if (
         this.trainerCourses &&
         Object.keys(this.trainerCourses) > 0 &&
@@ -124,8 +123,6 @@ export default {
       .catch((error) => {
         console.error(error.response.data.message);
       });
-
-    console.log(this.learnerCourses, this.trainerCourses);
   },
 };
 </script>

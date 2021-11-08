@@ -179,7 +179,6 @@ export default {
             `/api/course/${course_id}/learners/completed`
         )
         .then((response) => {
-          console.log(response.data.result.records.learners);
           this.trainers = this.trainers.concat(response.data.result.records);
         })
         .catch((error) => console.log(error));
@@ -190,9 +189,6 @@ export default {
         .post(process.env.VUE_APP_BACKEND + '/api/trainer/add', {
           user_id: this.user_id,
           class_id: this.class_id,
-        })
-        .then((response) => {
-          console.log(response);
         })
         .catch((error) => {
           console.log(error);

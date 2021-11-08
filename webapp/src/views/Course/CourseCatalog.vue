@@ -63,7 +63,6 @@ export default {
         return [];
       });
     this.courses = data;
-    console.log(data);
   },
   methods: {
     navigateToAddCourse() {
