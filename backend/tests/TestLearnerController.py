@@ -17,26 +17,43 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../mode
 
 from tests.TestApp import TestApp
 from controller import LearnerController
+from model import LoginSession
 
 
 class TestLearnerController(TestApp):
     # def test_get_learner(self):
-    #     # session = AuthController.AuthController().login("admin@lms.com", "p@ssword")
-    #     # print(session)
-    #     learner = LearnerController.LearnerController().get_learner(mock_uuid)
-    #     self.assertEqual(
-    #         learner.serialise(),
-    #         {
-    #             "id": 1,
-    #             "email": "admin@lms.com",
-    #             "first_name": "Phris",
-    #             "middle_name": None,
-    #             "last_name": "Coskitt",
-    #             "full_name": "Phris Coskitt",
-    #             "department": "Human Resource and Admin",
-    #             "is_admin": True,
-    #         },
+    #     session = LoginSession.LoginSession(1)
+    #     session_serialise = session.serialise()
+    #     # print(uuid_mock())
+    #     #print(type(session_serialise["token"]))
+    #     # session = MagicMock(
+    #     #     session.serialise(),
+    #     #     return_value={
+    #     #         "token": uuid_mock(),
+    #     #         "expiry_date": "2021-11-08T06:49:05.095056Z",
+    #     #     },
+    #     # )
+    #     # print(session())
+    #     # # session = AuthController.AuthController().login("admin@lms.com", "p@ssword")
+    #     # # print(session)
+    #     learner = LearnerController.LearnerController().get_learner(
+    #         str(session_serialise["token"])
     #     )
+    #     print(learner)
+
+    #     # self.assertEqual(
+    #     #     learner.serialise(),
+    #     #     {
+    #     #         "id": 1,
+    #     #         "email": "admin@lms.com",
+    #     #         "first_name": "Phris",
+    #     #         "middle_name": None,
+    #     #         "last_name": "Coskitt",
+    #     #         "full_name": "Phris Coskitt",
+    #     #         "department": "Human Resource and Admin",
+    #     #         "is_admin": True,
+    #     #     },
+    #     # )
 
     def test_get_learner_from_id(self):
         learner = LearnerController.LearnerController().get_learner_from_id(1)
@@ -85,12 +102,25 @@ class TestLearnerController(TestApp):
         )
         self.assertEqual(complete, True)
 
+    def test_check_learner_finish_course_fail(self):
+        complete = LearnerController.LearnerController().check_learner_finish_course(
+            3, 1
+        )
+        self.assertEqual(complete, False)
+
     def test_is_learner_enrolled_and_approve(self):
         learner_enrol = (
             LearnerController.LearnerController().is_learner_enrolled_and_approve(3, 3)
         )
 
         self.assertEqual(learner_enrol, True)
+
+    def test_is_learner_enrolled_and_approve_fail(self):
+        learner_enrol = (
+            LearnerController.LearnerController().is_learner_enrolled_and_approve(3, 6)
+        )
+
+        self.assertEqual(learner_enrol, False)
 
 
 if __name__ == "__main__":
