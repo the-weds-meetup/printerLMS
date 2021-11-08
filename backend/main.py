@@ -1,15 +1,14 @@
 from flask import Flask
-from flask import request, jsonify
+from flask import request
 from flask_sqlalchemy import SQLAlchemy
 from os import environ
 from flask_cors import CORS, cross_origin
 
-isDebug = True if environ["FLASK_ENV"] == "Development" else False
-isProduction = True if environ["FLASK_ENV"] == "Production" else False
+isDebug = True if environ["FLASK_ENV"] == "development" else False
+isProduction = True if environ["FLASK_ENV"] == "production" else False
 
 app = Flask(__name__)
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
-app.config["SQLALCHEMY_ENGINE_OPTIONS"] = {"pool_size": 100, "pool_recycle": 280}
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite://"
 
 if isDebug is True:
@@ -19,10 +18,15 @@ if isDebug is True:
         environ.get("DB_HOST", ""),
         environ.get("DB_NAME", ""),
     )
+    app.config["SQLALCHEMY_ENGINE_OPTIONS"] = {"pool_size": 100, "pool_recycle": 280}
+
 if isProduction is True:
+    # fix heroku using postgres (unsupported) instead of postgresql
     app.config["SQLALCHEMY_DATABASE_URI"] = environ.get("DATABASE_URL").replace(
         "://", "ql://", 1
     )
+    app.config["SQLALCHEMY_ENGINE_OPTIONS"] = {"pool_size": 100, "pool_recycle": 280}
+
 
 CORS(app)
 db = SQLAlchemy(app)
