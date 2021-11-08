@@ -366,4 +366,4 @@ if __name__ == "__main__":
     from controller import *
 
     db.create_all()
-    app.run(debug=isDebug, host="0.0.0.0")
+    app.run(debug=isDebug, host="0.0.0.0", port=environ.get("PORT", 5000))
