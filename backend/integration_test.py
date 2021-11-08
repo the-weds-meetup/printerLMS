@@ -6,7 +6,10 @@ loader = unittest.TestLoader()
 suite = unittest.TestSuite()
 
 suite.addTests(
-    loader.loadTestsFromTestCase(TestTrainerController.TestTrainerController)
+    [
+        loader.loadTestsFromTestCase(TestCoursePreqModel.TestCoursePreq),
+        loader.loadTestsFromTestCase(TestTrainerController.TestTrainerController),
+    ]
 )
 
 # initialize a runner, pass it your suite and run it
