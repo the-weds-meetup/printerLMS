@@ -191,6 +191,20 @@ class TestApp(flask_testing.TestCase):
         )
         db.session.commit()
 
+        # id = 7
+        db.session.add(
+            Class.Class(
+                3,
+                1,
+                20,
+                "2021-11-01T16:00:00.000Z",
+                "2021-11-20T16:00:00.000Z",
+                "2021-10-15T00:00:00.000Z",
+                "2021-10-31T04:00:00.000Z",
+            )
+        )
+        db.session.commit()
+
 
 if __name__ == "__main__":
     unittest.main()
