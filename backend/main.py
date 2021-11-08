@@ -334,22 +334,6 @@ def edit_class():
         print(e, flush=True)
         return error.throw_error(type="create_class", message=str(e), status_code=400)
 
-@app.route("/api/learners")
-def learners():
-    search_first_name = request.args.get('first_name')
-    if search_first_name:
-        learner_list = Learner.Learner.query.filter(Learner.Learner.name.contains(search_first_name))
-    else:
-        learner_list = Learner.Learner.query.all()
-    
-    
-    return jsonify(
-        {
-            "data": [learner.to_dict() for learner in learner_list]
-        }
-    ), 200
-
-
 
 if __name__ == "__main__":
     from api import *

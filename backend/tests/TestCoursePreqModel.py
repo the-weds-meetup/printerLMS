@@ -1,5 +1,5 @@
 """
-TestCoursePreqModule.py
+TestCoursePreqModel.py
 Done by: Djulian Naval
 Email ID: dbnaval.2019
 """

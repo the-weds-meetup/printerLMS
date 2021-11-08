@@ -16,7 +16,6 @@ suite.addTests(
 runner = unittest.TextTestRunner(verbosity=3)
 result = runner.run(suite)
 
-
 if result.wasSuccessful():
     exit(0)
 else:
