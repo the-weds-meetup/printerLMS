@@ -7,9 +7,9 @@
         <br />
         <div v-for="choice of question.choices" :key="choice">
           <input
+            v-model="answer"
             type="radio"
             name="choice"
-            v-model="answer"
             :value="choice"
             required
           />
@@ -37,13 +37,6 @@
     <br />
   </div>
 </template>
-
-<style>
-button.verify {
-  position: relative;
-  left: 10px;
-}
-</style>
 
 <script>
 const questions = [
@@ -84,7 +77,7 @@ export default {
   },
   methods: {
     submit() {
-      const { answer, question, questions, questionIndex } = this;
+      const { questions, questionIndex } = this;
 
       if (questionIndex < questions.length) {
         this.questionIndex++;
@@ -116,3 +109,10 @@ export default {
   },
 };
 </script>
+
+<style>
+button.verify {
+  position: relative;
+  left: 10px;
+}
+</style>

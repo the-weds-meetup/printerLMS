@@ -52,36 +52,33 @@
       <label for="question"
         >Question:
         <textarea
-          cols="30"
-          rows="3"
           v-model="question"
           id="question"
+          cols="30"
+          rows="3"
         ></textarea></label
       ><br /><br />
 
       <label for="option1"
         >Option 1:
-        <input type="text" v-model="option1" />
+        <input v-model="option1" type="text" />
       </label>
 
       <label class="option2" for="option2"
-        >Option 2:
-        <input type="text" v-model="option2" /> </label
+        >Option 2: <input v-model="option2" type="text" /> </label
       ><br /><br />
 
       <label for="option2"
         >Option 3:
-        <input type="text" v-model="option3" />
+        <input v-model="option3" type="text" />
       </label>
 
       <label class="option4" for="option2"
-        >Option 4:
-        <input type="text" v-model="option4" /> </label
+        >Option 4: <input v-model="option4" type="text" /> </label
       ><br /><br />
 
       <label class="answer" for="answer"
-        >Answer:
-        <input type="text" v-model="answer" /> </label
+        >Answer: <input v-model="answer" type="text" /> </label
       ><br /><br />
 
       <button class="btn btn-primary submit" type="submit">Add Quiz</button>
