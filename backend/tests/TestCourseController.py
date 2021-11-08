@@ -26,15 +26,15 @@ class TestCourseController(TestApp):
             len(CourseController.CourseController().get_prereq_courses(3)),
             1,
         )
-        
-    @freeze_time("2021-10-22") #needed
+
+    @freeze_time("2021-10-22")  # needed
     def testPastClassesCourses(self):
         self.assertEqual(
             len(CourseController.CourseController().get_past_classes_courses(1)),
             1,
         )
 
-    @freeze_time("2021-10-22") #needed
+    @freeze_time("2021-10-22")  # needed
     def testEnrollingClassesCourses(self):
         self.assertEqual(
             len(CourseController.CourseController().get_enrolling_classes_course(1)),
@@ -46,13 +46,13 @@ class TestCourseController(TestApp):
             len(CourseController.CourseController().get_ongoing_classes_course(1)),
             1,
         )
-        
+
     def testCourseCompletedLearners(self):
         self.assertEqual(
             len(CourseController.CourseController().get_course_completed_learners(1)),
             1,
         )
-        
+
     def testCourseIncompletedLearners(self):
         self.assertEqual(
             len(CourseController.CourseController().get_course_incompleted_learners(1)),
@@ -62,8 +62,7 @@ class TestCourseController(TestApp):
     # Test Exceptions
     def testPrereqException(self):
         with self.assertRaises(Exception):
-            CourseController.CourseController().get_prereq_courses('string')
-
+            CourseController.CourseController().get_prereq_courses("string")
 
 
 if __name__ == "__main__":

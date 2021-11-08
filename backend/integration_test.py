@@ -10,7 +10,7 @@ suite.addTests(
         loader.loadTestsFromTestCase(TestCoursePreqModel.TestCoursePreq),
         loader.loadTestsFromTestCase(TestTrainerController.TestTrainerController),
         loader.loadTestsFromTestCase(TestClassController.TestClassController),
-        loader.loadTestsFromTestCase(TestCourseController.TestCourseController)
+        loader.loadTestsFromTestCase(TestCourseController.TestCourseController),
     ]
 )
 
