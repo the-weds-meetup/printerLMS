@@ -1,0 +1,24 @@
+name: Reset Database Data
+on:
+  workflow_dispatch:
+  schedule:
+    # run job every 1 hour
+    - cron: "0 * * * *"
+
+jobs:
+  reset-database-data-staging:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Create credentials to login to Heroku
+        uses: akhileshns/heroku-deploy@v3.12.12
+        with:
+          heroku_api_key: ${{secrets.HEROKU_API_KEY}}
+          heroku_app_name: ${{secrets.HEROKU_APP_NAME}}
+          heroku_email: ${{secrets.HEROKU_EMAIL}}
+          justlogin: true
+      - name: Wipe Database Data & Reload from database.sql
+        run: |
+          heroku pg:reset DATABASE_URL -a ${{secrets.HEROKU_APP_NAME}} --confirm ${{secrets.HEROKU_APP_NAME}}
+          heroku pg:psql -a ${{secrets.HEROKU_APP_NAME}} < scripts/database.sql
