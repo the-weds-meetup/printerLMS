@@ -3,6 +3,7 @@ from flask import request
 from flask_sqlalchemy import SQLAlchemy
 from os import environ
 from flask_cors import CORS, cross_origin
+from sqlalchemy.orm.scoping import scoped_session
 from sqlalchemy.pool import NullPool
 
 isDebug = True if environ.get("FLASK_ENV", "") == "development" else False
@@ -33,6 +34,16 @@ if isProduction is True:
 
 CORS(app)
 db = SQLAlchemy(app)
+engine_container = db.get_engine(app)
+
+
+def cleanup(session: scoped_session):
+    """
+    This method cleans up the session object and closes the connection pool using the dispose
+    method
+    """
+    session.remove()
+    engine_container.dispose()
 
 
 @app.route("/")
@@ -55,7 +66,7 @@ def login():
         response = error.throw_error(type="Login", message=str(e), status_code=400)
 
     finally:
-        db.session.remove()
+        cleanup(db.session)
         return response
 
 
@@ -72,7 +83,7 @@ def logout():
         response = error.throw_error(type="Logout", message=str(e), status_code=500)
 
     finally:
-        db.session.remove()
+        cleanup(db.session)
         return response
 
 
@@ -90,7 +101,7 @@ def add_course():
         response = error.throw_error(type="course_add", message=str(e), status_code=500)
 
     finally:
-        db.session.remove()
+        cleanup(db.session)
         return response
 
 
@@ -105,7 +116,7 @@ def get_course_all():
         response = error.throw_error(type="Course", message=str(e), status_code=400)
 
     finally:
-        db.session.remove()
+        cleanup(db.session)
         return response
 
 
@@ -119,7 +130,7 @@ def get_course_enrolling():
             type="course_enrolling", message=str(e), status_code=400
         )
     finally:
-        db.session.remove()
+        cleanup(db.session)
         return response
 
 
@@ -134,7 +145,7 @@ def get_course(course_id):
             response = error.throw_error(type="Course", message=str(e), status_code=400)
 
         finally:
-            db.session.remove()
+            cleanup(db.session)
             return response
 
     if request.method == "POST":
@@ -154,7 +165,7 @@ def get_course(course_id):
                 type="course_enrolement_valid", message=str(e), status_code=400
             )
         finally:
-            db.session.remove()
+            cleanup(db.session)
             return response
 
 
@@ -177,7 +188,7 @@ def get_course_enrolment_status(class_id):
         )
 
     finally:
-        db.session.remove()
+        cleanup(db.session)
         return response
 
 
@@ -193,7 +204,7 @@ def get_class_nonlearners(class_id):
         )
 
     finally:
-        db.session.remove()
+        cleanup(db.session)
         return response
 
 
@@ -209,7 +220,7 @@ def get_class_learners(class_id):
         )
 
     finally:
-        db.session.remove()
+        cleanup(db.session)
         return response
 
 
@@ -225,7 +236,7 @@ def get_class_awaiting_learners(class_id):
         )
 
     finally:
-        db.session.remove()
+        cleanup(db.session)
         return response
 
 
@@ -239,7 +250,7 @@ def get_class(class_id):
         response = error.throw_error(type="Class", message=str(e), status_code=400)
 
     finally:
-        db.session.remove()
+        cleanup(db.session)
         return response
 
 
@@ -259,7 +270,7 @@ def get_class_post(class_id):
         response = error.throw_error(type="Class_POST", message=str(e), status_code=400)
 
     finally:
-        db.session.remove()
+        cleanup(db.session)
         return response
 
 
@@ -276,7 +287,7 @@ def get_all_learner_classes():
         response = error.throw_error(type="me_class", message=str(e), status_code=400)
 
     finally:
-        db.session.remove()
+        cleanup(db.session)
         return response
 
 
@@ -292,7 +303,7 @@ def get_course_completed_learners(course_id):
         )
 
     finally:
-        db.session.remove()
+        cleanup(db.session)
         return response
 
 
@@ -308,7 +319,7 @@ def add_trainer():
         response = error.throw_error(type="Trainer", message=str(e), status_code=400)
 
     finally:
-        db.session.remove()
+        cleanup(db.session)
         return response
 
 
@@ -324,7 +335,7 @@ def get_learner():
         response = error.throw_error(type="Learner", message=str(e), status_code=400)
 
     finally:
-        db.session.remove()
+        cleanup(db.session)
         return response
 
 
@@ -346,7 +357,7 @@ def get_approved_courses():
         response = error.throw_error(type="Class", message=str(e), status_code=400)
 
     finally:
-        db.session.remove()
+        cleanup(db.session)
         return response
 
 
@@ -370,7 +381,7 @@ def self_enroll_learner(class_id):
         )
 
     finally:
-        db.session.remove()
+        cleanup(db.session)
         return response
 
 
@@ -387,7 +398,7 @@ def manual_enroll_learner(class_id):
             response = error.throw_error(
                 type="Authorisation", message="Not Authorised", status_code=403
             )
-            db.session.remove()
+            cleanup(db.session)
             return response
 
         if learner_id_list == None:
@@ -402,7 +413,7 @@ def manual_enroll_learner(class_id):
         )
 
     finally:
-        db.session.remove()
+        cleanup(db.session)
         return response
 
 
@@ -419,7 +430,7 @@ def add_class():
             response = error.throw_error(
                 type="Authorisation", message="Not Authorised", status_code=403
             )
-            db.session.remove()
+            cleanup(db.session)
             return response
 
         response = classes.add_class(request_data)
@@ -431,7 +442,7 @@ def add_class():
         )
 
     finally:
-        db.session.remove()
+        cleanup(db.session)
         return response
 
 
@@ -451,7 +462,7 @@ def edit_class():
         )
 
     finally:
-        db.session.remove()
+        cleanup(db.session)
         return response
 
 
@@ -465,7 +476,7 @@ def add_quiz():
     #     print(e, flush=True)
     #     response = auth.throw_error(type="create_quiz", message=str(e), status_code=400)
     # finally:
-    #     db.session.remove()
+    #     cleanup(db.session)
     #     return response
 
 
