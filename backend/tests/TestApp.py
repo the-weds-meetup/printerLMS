@@ -205,6 +205,11 @@ class TestApp(flask_testing.TestCase):
         )
         db.session.commit()
 
+        session_test = LoginSession.LoginSession(1)
+        session_test.token = "testtoken123"
+        db.session.add(session_test)
+        db.session.commit()
+
 
 if __name__ == "__main__":
     unittest.main()

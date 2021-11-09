@@ -21,6 +21,30 @@ from controller import LearnerController
 
 
 class TestLearnerController(TestApp):
+    def test_get_learner(self):
+        learner = LearnerController.LearnerController().get_learner("testtoken123")
+
+        self.assertEqual(
+            learner.serialise(),
+            {
+                "id": 1,
+                "email": "admin@lms.com",
+                "first_name": "Phris",
+                "middle_name": None,
+                "last_name": "Coskitt",
+                "full_name": "Phris Coskitt",
+                "department": "Human Resource and Admin",
+                "is_admin": True,
+            },
+        )
+
+    def test_get_learner_fail(self):
+        self.assertRaises(
+            Exception,
+            LearnerController.LearnerController().get_learner,
+            "thistokendoesnotexist666",
+        )
+
     def test_get_learner_from_id(self):
         learner = LearnerController.LearnerController().get_learner_from_id(1)
         self.assertEqual(
