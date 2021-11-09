@@ -71,7 +71,7 @@ export default {
   },
   methods: {
     navigateToAddCourse() {
-      $this.router.push('/course/add');
+      this.$router.push('/course/add');
     },
   },
 };

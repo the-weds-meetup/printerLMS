@@ -120,7 +120,7 @@ export default {
       if (errorNames) {
         alert('This learners are not added\n' + errorNames.join('\n'));
       } else {
-        $this.router.push(`/class/${this.$route.params.id}/learners`);
+        this.$router.push(`/class/${this.$route.params.id}/learners`);
       }
     },
   },
