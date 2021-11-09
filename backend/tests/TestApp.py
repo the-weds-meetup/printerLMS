@@ -210,6 +210,12 @@ class TestApp(flask_testing.TestCase):
         db.session.add(session_test)
         db.session.commit()
 
+        # for testing invalid learner id
+        session_test = LoginSession.LoginSession(7)
+        session_test.token = "testtoken456"
+        db.session.add(session_test)
+        db.session.commit()
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -38,11 +38,18 @@ class TestLearnerController(TestApp):
             },
         )
 
-    def test_get_learner_fail(self):
+    def test_get_learner_token_fail(self):
         self.assertRaises(
             Exception,
             LearnerController.LearnerController().get_learner,
-            "thistokendoesnotexist666",
+            "thistokendoesnotexist123",
+        )
+
+    def test_get_learner_invalid_learner(self):
+        self.assertRaises(
+            Exception,
+            LearnerController.LearnerController().get_learner,
+            "testtoken456",
         )
 
     def test_get_learner_from_id(self):
