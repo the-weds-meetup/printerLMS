@@ -1,0 +1,23 @@
+name: Restart Database Connnection
+on:
+  workflow_dispatch:
+  schedule:
+    # run job every 15 mins
+    - cron: "0,15,30,45 * * * *"
+
+jobs:
+  restart-backend-staging:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Create credentials to login to Heroku
+        uses: akhileshns/heroku-deploy@v3.12.12
+        with:
+          heroku_api_key: ${{secrets.HEROKU_API_KEY}}
+          heroku_app_name: ${{secrets.HEROKU_APP_NAME}}
+          heroku_email: ${{secrets.HEROKU_EMAIL}}
+          justlogin: true
+      - name: Restart Backend
+        run: |
+          heroku restart -a ${{secrets.HEROKU_APP_NAME}}
