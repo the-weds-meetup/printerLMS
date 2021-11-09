@@ -77,13 +77,13 @@
 
               <div class="form-group">
                 <label for="enrolmentEndDateInput" class="form-label"
-                  >End Date</label
+                  >Enrolment End Date</label
                 >
                 <input
                   id="enrolmentEndDateInput"
                   v-model="enrolment_end_date"
                   type="datetime-local"
-                  placeholder="Start Date"
+                  placeholder="End Date"
                   class="form-control"
                   :onchange="onSelectEnrolmentEndDate()"
                   :min="getMinDate2"
